@@ -1,0 +1,4 @@
+[27-Sep-2020 17:21:16 UTC] PHP Warning:  include(header.php): failed to open stream: No such file or directory in /home/leysner/public_html/clients/pdc/index2.php on line 5
+[27-Sep-2020 17:21:16 UTC] PHP Warning:  include(): Failed opening 'header.php' for inclusion (include_path='.:/opt/alt/php72/usr/share/pear') in /home/leysner/public_html/clients/pdc/index2.php on line 5
+[27-Sep-2020 17:21:16 UTC] PHP Warning:  include(footer.php): failed to open stream: No such file or directory in /home/leysner/public_html/clients/pdc/index2.php on line 76
+[27-Sep-2020 17:21:16 UTC] PHP Warning:  include(): Failed opening 'footer.php' for inclusion (include_path='.:/opt/alt/php72/usr/share/pear') in /home/leysner/public_html/clients/pdc/index2.php on line 76
