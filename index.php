@@ -9,9 +9,13 @@
 ===================================================*/
 require_once "./controllers/plantilla_controlador.php";
 require_once "./controllers/users.controller.php";
+require_once "./controllers/operations.controller.php";
 
 /* ===================================================
    MODELS REQUIRED FOR THE PROJECT
 ===================================================*/
+require_once "./models/operations.model.php";
+
+
 $plantilla = new ControladorPlantilla();
 $plantilla->ctrTraerPlantilla();
