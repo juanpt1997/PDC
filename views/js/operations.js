@@ -35,6 +35,7 @@ if (window.location.href.includes("operations-companies")) {
                         // Titulo modal
                         $(".companyTitle").html(response.Name);
                         // Inputs de la modal
+                        $("#idcompany").val(response.id_companies);
                         $("#country").val(response.Country);
                         $("#company").val(response.Name);
                         $("#ID").val(response.ID);
@@ -47,6 +48,7 @@ if (window.location.href.includes("operations-companies")) {
                         $("#phone").val(response.Phone_Number);
                         $("#email").val(response.Email);
                         $("#comments").val(response.Comments);
+
                     }
                 }
             });

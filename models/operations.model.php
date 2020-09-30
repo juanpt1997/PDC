@@ -78,4 +78,38 @@ class CompaniesModel
 
         return $retorno;
     }
+
+    /* ===================================================
+       EDIT COMPANY INFO
+    ===================================================*/
+    static public function mdlUpdateCompany($datos)
+    {
+        $conexion = Conexion::conectar();
+        $stmt = $conexion->prepare("UPDATE Companies SET
+                                    id_companies = :id_companies, Country = :Country, Name = :Name, ID = :ID, Address_Line1 = :Address_Line1, Address_Line2 = :Address_Line2, City = :City, State_Province_Region = :State_Province_Region, Zip_Code = :Zip_Code, Contact_Name = :Contact_Name, Phone_Number = :Phone_Number, Email = :Email, Comments = :Comments
+                                    WHERE id_companies = :id_companies");
+        
+        $stmt->bindParam(":id_companies", $datos['idcompany'], PDO::PARAM_INT);
+        $stmt->bindParam(":Country", $datos['country'], PDO::PARAM_STR);
+        $stmt->bindParam(":Name", $datos['company'], PDO::PARAM_STR);
+        $stmt->bindParam(":ID", $datos['ID'], PDO::PARAM_STR);
+        $stmt->bindParam(":Address_Line1", $datos['addrLine1'], PDO::PARAM_STR);
+        $stmt->bindParam(":Address_Line2", $datos['addrLine2'], PDO::PARAM_STR);
+        $stmt->bindParam(":City", $datos['city'], PDO::PARAM_STR);
+        $stmt->bindParam(":State_Province_Region", $datos['state'], PDO::PARAM_STR);
+        $stmt->bindParam(":Zip_Code", $datos['zipcode'], PDO::PARAM_STR);
+        $stmt->bindParam(":Contact_Name", $datos['contact'], PDO::PARAM_STR);
+        $stmt->bindParam(":Phone_Number", $datos['phone'], PDO::PARAM_STR);
+        $stmt->bindParam(":Email", $datos['email'], PDO::PARAM_STR);
+        $stmt->bindParam(":Comments", $datos['comments'], PDO::PARAM_STR);
+
+        if ($stmt->execute()) {
+            $id = $conexion->lastInsertId();
+        } else {
+            $id = "error";
+        }
+        $stmt->closeCursor();
+        $conexion = null;
+        return $id;
+    }
 }

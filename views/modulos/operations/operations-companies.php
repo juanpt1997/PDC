@@ -328,6 +328,8 @@ $Companies = CompaniesController::ctrShowCompanies();
                 </div>
                 <div class="modal-body">
                     <div class="row">
+                        <!-- ID LEAD -->
+                        <input type="hidden" class="editCompany" name="idcompany" id="idcompany" value="1">
                         <!-- ===================================================
                             COUNTRY
                         =================================================== -->
@@ -515,7 +517,7 @@ $Companies = CompaniesController::ctrShowCompanies();
                 </div>
 
                 <?php 
-                    $newCompany = CompaniesController::ctrNewCompany();
+                    $modifyCompany = CompaniesController::ctrUpdateCompany();
                 ?>
             </div>
             <!-- /.modal-content -->
