@@ -107,7 +107,7 @@ $Companies = CompaniesController::ctrShowCompanies();
 =================================================== -->
 <div class="modal fade" id="modal-newcompany">
     <div class="modal-dialog modal-lg">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">New Company</h4>
@@ -318,7 +318,7 @@ $Companies = CompaniesController::ctrShowCompanies();
 =================================================== -->
 <div class="modal fade" id="modal-editcompany">
     <div class="modal-dialog modal-lg">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title companyTitle"></h4>

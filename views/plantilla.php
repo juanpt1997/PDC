@@ -106,7 +106,8 @@ session_start();
                     include "modulos/{$ruta}.php";
                 } else if ( # Operations
                     $ruta == "operations-index" ||
-                    $ruta == "operations-companies"
+                    $ruta == "operations-companies" ||
+                    $ruta == "operations-products"
                 ) {
                     include "modulos/operations/" . $ruta . ".php";
                 } else { # Página no válida

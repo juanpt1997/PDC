@@ -48,7 +48,7 @@
   							</a>
   						</li>
   						<li class="nav-item">
-  							<a href="products.html" class="nav-link">
+  							<a href="operations-products" class="nav-link">
   								<i class="far fa-circle nav-icon"></i>
   								<p>Products</p>
   							</a>

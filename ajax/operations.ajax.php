@@ -4,6 +4,9 @@
     require_once '../controllers/operations.controller.php';
     require_once '../models/operations.model.php';
 
+/* ===================================================
+   * AJAX COMPANIES
+===================================================*/
 class CompaniesAjax
 {
     /* ===================================================
@@ -18,4 +21,23 @@ class CompaniesAjax
 
 if (isset($_POST['CompanyInfo']) && $_POST['CompanyInfo'] == "ok") {
     CompaniesAjax::ajaxCompanyInfo($_POST['idcompany']);
+}
+
+/* ===================================================
+   * AJAX PRODUCTS
+===================================================*/
+class ProductsAjax
+{
+    /* ===================================================
+       SINGLE PRODUCT INFORMATION
+    ===================================================*/
+    static public function ajaxProductInfo($value)
+    {
+        $response = ProductsController::ctrProductInfo($value);
+        echo json_encode($response);
+    }
+}
+
+if (isset($_POST['ProductInfo']) && $_POST['ProductInfo'] == "ok") {
+    ProductsAjax::ajaxProductInfo($_POST['idproduct']);
 }
