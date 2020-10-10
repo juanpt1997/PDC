@@ -488,3 +488,10 @@ class ProductsController
         }
     }
 }
+
+/* ===================================================
+    CONTROLADOR DE ORDERS
+===================================================*/
+class OrdersController{
+    
+}

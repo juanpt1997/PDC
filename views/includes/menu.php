@@ -54,7 +54,7 @@
   							</a>
   						</li>
   						<li class="nav-item">
-  							<a href="clients_orders.html" class="nav-link">
+  							<a href="orders" class="nav-link">
   								<i class="far fa-circle nav-icon"></i>
   								<p>Orders</p>
   							</a>

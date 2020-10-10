@@ -75,7 +75,7 @@ if (window.location.href.includes("operations-products")) {
         $(document).on("click", ".productInfo", function () {
             $(".editProduct").val("");
             $(".productTitle").html("");
-            $("#Image").attr("src", ``);
+            $("#Image").attr("src", "");
             
             var idproduct = $(this).attr("idproduct");
             
