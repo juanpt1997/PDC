@@ -492,6 +492,82 @@ class ProductsController
 /* ===================================================
     CONTROLADOR DE ORDERS
 ===================================================*/
-class OrdersController{
-    
+class OrdersController
+{
+    /* ===================================================
+       SHOW ALL ORDERS
+    ===================================================*/
+    static public function ctrShowOrders()
+    {
+        $response = OrdersModel::mdlShowOrders();
+
+        return $response;
+    }
+
+    /* ===================================================
+       NEW ORDER
+    ===================================================*/
+    static public function ctrNewOrder()
+    {
+        if (isset($_POST['client'])) {
+            $datos = array(
+                'id_companies' => $_POST['client'],
+                'id_products' => $_POST['id_products'],
+                'Weight_Each_Bag' => $_POST['Weight_Each_Bag'],
+                'Total_Bags' => $_POST['Total_Bags'],
+                'Total_Skids' => $_POST['Total_Skids'],
+                'Customer_PO' => $_POST['Customer_PO'],
+                'Arrange_Pickup' => $_POST['Arrange_Pickup'],
+                'From_Release' => $_POST['From_Release'],
+                'Pickup_Date' => $_POST['Pickup_Date'],
+                'PO_Reference' => $_POST['PO_Reference'],
+                'Delivery_From_Name' => $_POST['Delivery_From_Name'],
+                'Delivery_Address' => $_POST['Delivery_Address'],
+                'Delivery_Phone' => $_POST['Delivery_Phone'],
+                'Delivery_Contact' => $_POST['Delivery_Contact'],
+                'Delivery_Date' => $_POST['Delivery_Date'],
+                'Delivery_Real_Date' => $_POST['Delivery_Real_Date'],
+                'Delivery_Destination_Name' => $_POST['Delivery_Destination_Name'],
+                'Delivery_Destination_Address' => $_POST['Delivery_Destination_Address'],
+                'Delivery_Destination_Phone' => $_POST['Delivery_Destination_Phone'],
+                'Delivery_Destination_Contact' => $_POST['Delivery_Destination_Contact'],
+                'Delivery_Destination_Confirmed_Trucking_Charge' => $_POST['Delivery_Destination_Confirmed_Trucking_Charge'],
+                'Delivery_Destination_Comments' => $_POST['Delivery_Destination_Comments'],
+                'audit_user' => $_SESSION['user_id']
+            );
+
+            $newOrder = OrdersModel::mdlNewOrder($datos);
+
+            if ($newOrder != "error") {
+                echo "
+						<script>
+							Swal.fire({
+								icon: 'success',
+								title: '¡Order successfully created!',						
+								showConfirmButton: true,
+								confirmButtonText: 'Cerrar',
+								allowOutsideClick: false,
+							}).then((result)=>{
+								if(result.value){
+									window.location = 'orders';
+								}
+
+							})
+						</script>
+					    ";
+            } else {
+                echo "
+						<script>
+							Swal.fire({
+								icon: 'error',
+								title: 'Oops, there was a problem, please try again later',						
+								showConfirmButton: true,
+								confirmButtonText: 'Cerrar',
+								closeOnConfirm: false
+							})
+						</script>
+					    ";
+            }
+        }
+    }
 }

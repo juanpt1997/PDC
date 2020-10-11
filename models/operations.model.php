@@ -7,7 +7,7 @@ if (file_exists('./config/conexion.php')) {
 }
 
 /* ===================================================
-   COMPANIES
+   * COMPANIES
 ===================================================*/
 class CompaniesModel
 {
@@ -118,7 +118,7 @@ class CompaniesModel
 }
 
 /* ===================================================
-   PRODUCTS
+    * PRODUCTS
 ===================================================*/
 class ProductsModel
 {
@@ -229,6 +229,76 @@ class ProductsModel
         $stmt->bindParam(":Weight", $datos['Weight'], PDO::PARAM_STR);
         $stmt->bindParam(":Unit", $datos['Unit'], PDO::PARAM_STR);
         $stmt->bindParam(":Price", $datos['Price'], PDO::PARAM_STR);
+
+        if ($stmt->execute()) {
+            $id = $conexion->lastInsertId();
+        } else {
+            $id = "error";
+        }
+        $stmt->closeCursor();
+        $conexion = null;
+        return $id;
+    }
+}
+
+/* ===================================================
+   * ORDERS
+===================================================*/
+class OrdersModel
+{
+    /* ===================================================
+       SHOW ALL ORDERS
+    ===================================================*/
+    static public function mdlShowOrders()
+    {
+        $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, o.*
+                                                FROM Orders o
+                                                INNER JOIN Companies c ON c.id_companies = o.id_companies
+                                                INNER JOIN Products p ON p.id_products = o.id_products");
+
+        $stmt->execute();
+
+        $retorno = $stmt->fetchAll();
+
+        $stmt->closeCursor();
+        $stmt = null;
+
+        return $retorno;
+    
+    }
+
+    /* ===================================================
+       NEW ORDER
+    ===================================================*/
+    static public function mdlNewOrder($datos)
+    {
+        $conexion = Conexion::conectar();
+        $stmt = $conexion->prepare("INSERT INTO Orders (id_companies, id_products, Weight_Each_Bag, Total_Bags, Total_Skids, Customer_PO, Arrange_Pickup, From_Release, Pickup_Date, PO_Reference, Delivery_From_Name, Delivery_Address, Delivery_Phone, Delivery_Contact, Delivery_Date, Delivery_Real_Date, Delivery_Destination_Name, Delivery_Destination_Address, Delivery_Destination_Phone, Delivery_Destination_Contact, Delivery_Destination_Confirmed_Trucking_Charge, Delivery_Destination_Comments, audit_user) VALUES
+(:id_companies, :id_products, :Weight_Each_Bag, :Total_Bags, :Total_Skids, :Customer_PO, :Arrange_Pickup, :From_Release, :Pickup_Date, :PO_Reference, :Delivery_From_Name, :Delivery_Address, :Delivery_Phone, :Delivery_Contact, :Delivery_Date, :Delivery_Real_Date, :Delivery_Destination_Name, :Delivery_Destination_Address, :Delivery_Destination_Phone, :Delivery_Destination_Contact, :Delivery_Destination_Confirmed_Trucking_Charge, :Delivery_Destination_Comments, :audit_user)");
+
+        $stmt->bindParam(":id_companies", $datos['id_companies'], PDO::PARAM_INT);
+        $stmt->bindParam(":id_products", $datos['id_products'], PDO::PARAM_INT);
+        $stmt->bindParam(":Weight_Each_Bag", $datos['Weight_Each_Bag'], PDO::PARAM_STR);
+        $stmt->bindParam(":Total_Bags", $datos['Total_Bags'], PDO::PARAM_STR);
+        $stmt->bindParam(":Total_Skids", $datos['Total_Skids'], PDO::PARAM_STR);
+        $stmt->bindParam(":Customer_PO", $datos['Customer_PO'], PDO::PARAM_STR);
+        $stmt->bindParam(":Arrange_Pickup", $datos['Arrange_Pickup'], PDO::PARAM_STR);
+        $stmt->bindParam(":From_Release", $datos['From_Release'], PDO::PARAM_STR);
+        $stmt->bindParam(":Pickup_Date", $datos['Pickup_Date'], PDO::PARAM_STR);
+        $stmt->bindParam(":PO_Reference", $datos['PO_Reference'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_From_Name", $datos['Delivery_From_Name'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Address", $datos['Delivery_Address'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Phone", $datos['Delivery_Phone'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Contact", $datos['Delivery_Contact'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Date", $datos['Delivery_Date'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Real_Date", $datos['Delivery_Real_Date'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Destination_Name", $datos['Delivery_Destination_Name'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Destination_Address", $datos['Delivery_Destination_Address'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Destination_Phone", $datos['Delivery_Destination_Phone'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Destination_Contact", $datos['Delivery_Destination_Contact'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Destination_Confirmed_Trucking_Charge", $datos['Delivery_Destination_Confirmed_Trucking_Charge'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Destination_Comments", $datos['Delivery_Destination_Comments'], PDO::PARAM_STR);
+        $stmt->bindParam(":audit_user", $datos['audit_user'], PDO::PARAM_INT);
 
         if ($stmt->execute()) {
             $id = $conexion->lastInsertId();

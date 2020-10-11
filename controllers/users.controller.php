@@ -11,6 +11,7 @@ class UsersController
         if (isset($_POST["email"])) {
             # Session variables
             $_SESSION['logged_in'] = "ok";
+            $_SESSION['user_id'] = 111;
 
             # Log in 
             echo '<script>

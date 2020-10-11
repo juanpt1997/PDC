@@ -1,4 +1,5 @@
 <?php
+$Orders = OrdersController::ctrShowOrders();
 $Companies = CompaniesController::ctrShowCompanies();
 $Products = ProductsController::ctrShowProducts();
 ?>
@@ -41,8 +42,8 @@ $Products = ProductsController::ctrShowProducts();
                                     <thead>
                                         <tr>
                                             <th>Order</th>
+                                            <th>Client</th>
                                             <th>Date</th>
-
                                             <th>Delivery</th>
                                             <th>Real Delivery</th>
                                             <th>Product</th>
@@ -53,84 +54,45 @@ $Products = ProductsController::ctrShowProducts();
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="modal-vieworder">
-                                                    9842
-                                                </button>
-                                            </td>
-                                            <td>30/08/2020</td>
+                                        <?php foreach ($Orders as $key => $value) : ?>
+                                            <?php
+                                            $BtnOrder = "<button type='button' class='btn btn-default' data-toggle='modal' data-target='#modal-vieworder'>{$value['id_orders']}</button>";
 
-                                            <td>15/09/2020</td>
-                                            <td>17/09/2020</td>
-                                            <td>Luna</td>
-                                            <td>120</td>
-                                            <td>
-                                                <span class="badge badge-warning">Shipped</span>
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-coa">
-                                                    <i class="far fa-file-pdf"></i>
-                                                </button>
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-pod">
-                                                    <i class="far fa-file-pdf"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="modal-vieworder">
-                                                    9842
-                                                </button>
-                                            </td>
-                                            <td>15/08/2020</td>
+                                            $BtnCOA = "<button type='button' class='btn btn-default' data-toggle='modal' data-target='#modal-coa'>
+                                                        <i class='far fa-file-pdf'></i>
+                                                    </button>";
 
-                                            <td>05/09/2020</td>
-                                            <td>05/09/2020</td>
-                                            <td>Black Beans</td>
-                                            <td>565</td>
-                                            <td>
-                                                <span class="badge badge-warning">Shipped</span>
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-coa">
-                                                    <i class="far fa-file-pdf"></i>
-                                                </button>
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-pod">
-                                                    <i class="far fa-file-pdf"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="modal-vieworder">
-                                                    9842
-                                                </button>
-                                            </td>
-                                            <td>31/08/2020</td>
+                                            $BtnPOD = "<button type='button' class='btn btn-default' data-toggle='modal' data-target='#modal-pod'>
+                                                        <i class='far fa-file-pdf'></i>
+                                                    </button>";
 
-                                            <td>20/09/2020</td>
-                                            <td>21/09/2020</td>
-                                            <td>Cane World</td>
-                                            <td>740</td>
-                                            <td>
-                                                <span class="badge badge-danger">On Process</span>
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-coa">
-                                                    <i class="far fa-file-pdf"></i>
-                                                </button>
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-pod">
-                                                    <i class="far fa-file-pdf"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
+                                            switch ($value['Status']) {
+                                                case 'On Process':
+                                                    $Status = "<span class='badge badge-danger'>On Process</span>";
+                                                    break;
+
+                                                case 'Shipped':
+                                                    $Status = "<span class='badge badge-warning'>Shipped</span>";
+                                                    break;
+                                                
+                                                default:
+                                                    $Status = $value['Status'];
+                                                    break;
+                                            }
+                                            ?>
+                                            <tr>
+                                                <td><?= $BtnOrder ?></td>
+                                                <td><?= $value['Company'] ?></td>
+                                                <td><?= $value['Pickup_Date'] ?></td>
+                                                <td><?= $value['Delivery_Date'] ?></td>
+                                                <td><?= $value['Delivery_Real_Date'] ?></td>
+                                                <td><?= $value['Product'] ?></td>
+                                                <td><?= $value['Total_Bags'] ?></td>
+                                                <td><?= $Status ?></td>
+                                                <td><?= $BtnCOA ?></td>
+                                                <td><?= $BtnPOD ?></td>
+                                            </tr>
+                                        <?php endforeach ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -171,340 +133,345 @@ $Products = ProductsController::ctrShowProducts();
                 </button>
             </div>
             <div class="modal-body">
-                <!-- PO Content  -->
+                <!-- FORMULARIO -->
+                <form id="formNewOrder" method="post">
+                    <!-- PO Content  -->
 
-                <div class="row">
+                    <div class="row">
 
-                    <!-- ===================================================
+                        <!-- ===================================================
                         Client
                     =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>Client</label>
-                            <select class="form-control select2" name="client" style="width: 100%" required>
-                                <option value="" selected disabled>Choose an option</option>
-                                <?php foreach ($Companies as $key => $value) : ?>
-                                    <option value="<?= $value['id_companies'] ?>"><?= $value['Name'] ?></option>
-                                <?php endforeach ?>
-                            </select>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Client</label>
+                                <select class="form-control select2" name="client" style="width: 100%" required>
+                                    <option value="" selected disabled>Choose an option</option>
+                                    <?php foreach ($Companies as $key => $value) : ?>
+                                        <option value="<?= $value['id_companies'] ?>"><?= $value['Name'] ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                            <!-- /.form-group -->
                         </div>
-                        <!-- /.form-group -->
-                    </div>
 
-                    <!-- ===================================================
+                        <!-- ===================================================
                         Product
                     =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>Product</label>
-                            <select class="form-control select2" style="width: 100%" required>
-                                <option value="" selected disabled>Choose an option</option>
-                                <?php foreach ($Products as $key => $value) : ?>
-                                    <option value="<?= $value['id_products'] ?>"><?= $value['Name'] ?></option>
-                                <?php endforeach ?>
-                            </select>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Product</label>
+                                <select class="form-control select2" name="id_products" style="width: 100%" required>
+                                    <option value="" selected disabled>Choose an option</option>
+                                    <?php foreach ($Products as $key => $value) : ?>
+                                        <option value="<?= $value['id_products'] ?>"><?= $value['Name'] ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                            <!-- /.form-group -->
                         </div>
-                        <!-- /.form-group -->
-                    </div>
-                    <!-- /.col -->
+                        <!-- /.col -->
 
-                    <!-- ===================================================
+                        <!-- ===================================================
                         Weight of Each Bag
                     =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>Weight of Each Bag</label>
-                            <div class="select2-purple">
-                                <input type="text" class="form-control" name="Weight_Each_Bag" data-placeholder="lbs" style="width: 100%" maxlength="5" required>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Weight of Each Bag</label>
+                                <div class="select2-purple">
+                                    <input type="text" class="form-control" name="Weight_Each_Bag" data-placeholder="lbs" style="width: 100%" maxlength="5" required>
+                                </div>
                             </div>
+                            <!-- /.form-group -->
                         </div>
-                        <!-- /.form-group -->
-                    </div>
-                    <!-- /.col -->
+                        <!-- /.col -->
 
-                    <!-- ===================================================
+                        <!-- ===================================================
                         Total Bags
                     =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>Total Bags</label>
-                            <input type="text" class="form-control" name="Total_Bags" data-placeholder="" style="width: 100%" maxlength="5" required>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Total Bags</label>
+                                <input type="text" class="form-control" name="Total_Bags" data-placeholder="" style="width: 100%" maxlength="5" required>
+                            </div>
+                            <!-- /.form-group -->
                         </div>
-                        <!-- /.form-group -->
-                    </div>
-                    <!-- /.col -->
+                        <!-- /.col -->
 
-                    <!-- ===================================================
+                        <!-- ===================================================
                         Total Skids
                     =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>Total Skids</label>
-                            <div class="select2-purple">
-                                <input type="text" class="form-control" name="Total_Skids" data-placeholder="" style="width: 100%" maxlength="5" required>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Total Skids</label>
+                                <div class="select2-purple">
+                                    <input type="text" class="form-control" name="Total_Skids" data-placeholder="" style="width: 100%" maxlength="5" required>
+                                </div>
                             </div>
+                            <!-- /.form-group -->
                         </div>
-                        <!-- /.form-group -->
-                    </div>
-                    <!-- /.col -->
+                        <!-- /.col -->
 
-                    <!-- ===================================================
+                        <!-- ===================================================
                         Customer PO#
                     =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>Customer PO#</label>
-                            <input type="text" class="form-control" name="Customer_PO" data-placeholder="" style="width: 100%" maxlength="10" required>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Customer PO#</label>
+                                <input type="text" class="form-control" name="Customer_PO" data-placeholder="" style="width: 100%" maxlength="10" required>
+                            </div>
+                            <!-- /.form-group -->
                         </div>
-                        <!-- /.form-group -->
+                        <!-- /.col -->
                     </div>
-                    <!-- /.col -->
-                </div>
 
-                <hr>
+                    <hr>
 
-                <div class="row">
+                    <div class="row">
 
-                    <!-- ===================================================
+                        <!-- ===================================================
                         Arrange Pickup
                     =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>Please Arrange The Pickup of</label>
-                            <input type="text" class="form-control" name="Arrange_Pickup" data-placeholder="" style="width: 100%" maxlength="10" required>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Please Arrange The Pickup of</label>
+                                <input type="text" class="form-control" name="Arrange_Pickup" data-placeholder="" style="width: 100%" maxlength="10" required>
+                            </div>
+                            <!-- /.form-group -->
                         </div>
-                        <!-- /.form-group -->
-                    </div>
-                    <!-- /.col -->
+                        <!-- /.col -->
 
-                    <!-- ===================================================
+                        <!-- ===================================================
                         From Release
                     =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>From Release #</label>
-                            <div class="select2-purple">
-                                <input type="text" class="form-control" name="From_Release" data-placeholder="" style="width: 100%" maxlength="10" required>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>From Release #</label>
+                                <div class="select2-purple">
+                                    <input type="text" class="form-control" name="From_Release" data-placeholder="" style="width: 100%" maxlength="10" required>
+                                </div>
                             </div>
+                            <!-- /.form-group -->
                         </div>
-                        <!-- /.form-group -->
-                    </div>
-                    <!-- /.col -->
+                        <!-- /.col -->
 
-                    <!-- ===================================================
+                        <!-- ===================================================
                         Pick Up Date
                     =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>Pick Up Date</label>
-                            <input type="date" class="form-control" name="Pickup_Date" data-placeholder="" style="width: 100%" required>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Pick Up Date</label>
+                                <input type="date" class="form-control" name="Pickup_Date" data-placeholder="" style="width: 100%" required>
+                            </div>
+                            <!-- /.form-group -->
                         </div>
-                        <!-- /.form-group -->
-                    </div>
-                    <!-- /.col -->
+                        <!-- /.col -->
 
-                    <!-- ===================================================
+                        <!-- ===================================================
                             P.O. Reference
                     =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>P.O. Reference #</label>
-                            <div class="select2-purple">
-                                <input type="text" class="form-control" name="PO_Reference" data-placeholder="" style="width: 100%" maxlength="10" required>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>P.O. Reference #</label>
+                                <div class="select2-purple">
+                                    <input type="text" class="form-control" name="PO_Reference" data-placeholder="" style="width: 100%" maxlength="10" required>
+                                </div>
                             </div>
+                            <!-- /.form-group -->
                         </div>
-                        <!-- /.form-group -->
+                        <!-- /.col -->
                     </div>
-                    <!-- /.col -->
-                </div>
 
-                <hr>
+                    <hr>
 
-                <h4 class="text-muted">Delivery</h4>
+                    <h4 class="text-muted">Delivery</h4>
 
-                <div class="row mt-3">
-                    <!-- ===================================================
+                    <div class="row mt-3">
+                        <!-- ===================================================
                         From Name
                     =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>From Name</label>
-                            <input type="text" class="form-control" name="Devilery_From_Name" data-placeholder="" style="width: 100%" maxlength="100" required>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>From Name</label>
+                                <input type="text" class="form-control" name="Delivery_From_Name" data-placeholder="" style="width: 100%" maxlength="100" required>
+                            </div>
+                            <!-- /.form-group -->
                         </div>
-                        <!-- /.form-group -->
-                    </div>
-                    <!-- /.col -->
+                        <!-- /.col -->
 
-                    <!-- ===================================================
+                        <!-- ===================================================
                         Address
                     =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>Address</label>
-                            <div class="select2-purple">
-                                <input type="text" class="form-control" name="Delivery_Address" data-placeholder="" style="width: 100%" maxlength="50" required>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Address</label>
+                                <div class="select2-purple">
+                                    <input type="text" class="form-control" name="Delivery_Address" data-placeholder="" style="width: 100%" maxlength="50" required>
+                                </div>
                             </div>
+                            <!-- /.form-group -->
                         </div>
-                        <!-- /.form-group -->
-                    </div>
-                    <!-- /.col -->
+                        <!-- /.col -->
 
-                    <!-- ===================================================
+                        <!-- ===================================================
                         Delivery_Phone
                     =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>Phone</label>
-                            <input type="text" name="Delivery_Phone" class="form-control" data-placeholder="" style="width: 100%" maxlength="50" required>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Phone</label>
+                                <input type="text" name="Delivery_Phone" class="form-control" data-placeholder="" style="width: 100%" maxlength="50" required>
+                            </div>
+                            <!-- /.form-group -->
                         </div>
-                        <!-- /.form-group -->
-                    </div>
-                    <!-- /.col -->
+                        <!-- /.col -->
 
-                    <!-- ===================================================
+                        <!-- ===================================================
                         Delivery_Contact
                     =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>Contact</label>
-                            <div class="select2-purple">
-                                <input type="text" name="Delivery_Contact" class="form-control" data-placeholder="" style="width: 100%" maxlength="50" required>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Contact</label>
+                                <div class="select2-purple">
+                                    <input type="text" name="Delivery_Contact" class="form-control" data-placeholder="" style="width: 100%" maxlength="50" required>
+                                </div>
                             </div>
+                            <!-- /.form-group -->
                         </div>
-                        <!-- /.form-group -->
-                    </div>
-                    <!-- /.col -->
+                        <!-- /.col -->
 
-                    <!-- ===================================================
+                        <!-- ===================================================
                         Delivery_Date
                     =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>Delivery Date</label>
-                            <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                <input type="date" name="Delivery_Date" class="form-control datetimepicker-input" data-target="#reservationdate" required>
-                                <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                                    <div class="input-group-text">
-                                        <i class="fa fa-calendar"></i>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Delivery Date</label>
+                                <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                                    <input type="date" name="Delivery_Date" class="form-control datetimepicker-input" data-target="#reservationdate" required>
+                                    <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                                        <div class="input-group-text">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <!-- /.form-group -->
                         </div>
-                        <!-- /.form-group -->
-                    </div>
-                    <!-- /.col -->
+                        <!-- /.col -->
 
-                    <!-- ===================================================
+                        <!-- ===================================================
                         Delivery_Real_Date
                     =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>Real Delivery Date</label>
-                            <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                <input type="date" name="Delivery_Real_Date" class="form-control datetimepicker-input" data-target="#reservationdate" required>
-                                <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                                    <div class="input-group-text">
-                                        <i class="fa fa-calendar"></i>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Real Delivery Date</label>
+                                <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                                    <input type="date" name="Delivery_Real_Date" class="form-control datetimepicker-input" data-target="#reservationdate" required>
+                                    <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                                        <div class="input-group-text">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <!-- /.form-group -->
                         </div>
-                        <!-- /.form-group -->
+                        <!-- /.col -->
                     </div>
-                    <!-- /.col -->
-                </div>
-                <hr>
+                    <hr>
 
-                <h4 class="text-muted">Delivery Destination</h4>
+                    <h4 class="text-muted">Delivery Destination</h4>
 
-                <div class="row">
+                    <div class="row">
 
-                    <!-- ===================================================
-                        Delivery_Destination_Name
-                    =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>Name</label>
-                            <input type="text" name="Delivery_Destination_Name" class="form-control" data-placeholder="" style="width: 100%" maxlength="100" required>
+                        <!-- ===================================================
+                            Delivery_Destination_Name
+                        =================================================== -->
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" name="Delivery_Destination_Name" class="form-control" data-placeholder="" style="width: 100%" maxlength="100" required>
+                            </div>
+                            <!-- /.form-group -->
                         </div>
-                        <!-- /.form-group -->
-                    </div>
-                    <!-- /.col -->
+                        <!-- /.col -->
 
-                    <!-- ===================================================
+                        <!-- ===================================================
                         Delivery_Destination_Address
                     =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>Address</label>
-                            <div class="select2-purple">
-                                <input type="text" name="Delivery_Destination_Address" class="form-control" data-placeholder="" style="width: 100%" maxlength="100" required>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Address</label>
+                                <div class="select2-purple">
+                                    <input type="text" name="Delivery_Destination_Address" class="form-control" data-placeholder="" style="width: 100%" maxlength="100" required>
+                                </div>
                             </div>
+                            <!-- /.form-group -->
                         </div>
-                        <!-- /.form-group -->
-                    </div>
-                    <!-- /.col -->
+                        <!-- /.col -->
 
-                    <!-- ===================================================
+                        <!-- ===================================================
                         Delivery_Destination_Phone
                     =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>Phone</label>
-                            <input type="text" name="Delivery_Destination_Phone" class="form-control" data-placeholder="" maxlength="100" style="width: 100%" required>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Phone</label>
+                                <input type="text" name="Delivery_Destination_Phone" class="form-control" data-placeholder="" maxlength="100" style="width: 100%" required>
+                            </div>
+                            <!-- /.form-group -->
                         </div>
-                        <!-- /.form-group -->
-                    </div>
-                    <!-- /.col -->
+                        <!-- /.col -->
 
-                    <!-- ===================================================
+                        <!-- ===================================================
                         Delivery_Destination_Contact
                     =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>Contact</label>
-                            <div class="select2-purple">
-                                <input type="text" name="Delivery_Destination_Contact" class="form-control" data-placeholder="" maxlength="100" style="width: 100%" required>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Contact</label>
+                                <div class="select2-purple">
+                                    <input type="text" name="Delivery_Destination_Contact" class="form-control" data-placeholder="" maxlength="100" style="width: 100%" required>
+                                </div>
                             </div>
+                            <!-- /.form-group -->
                         </div>
-                        <!-- /.form-group -->
-                    </div>
-                    <!-- /.col -->
+                        <!-- /.col -->
 
-                    <!-- ===================================================
+                        <!-- ===================================================
                         Delivery_Destination_Confirmed_Trucking_Charge
                     =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>Confirmed Trucking Charge</label>
-                            <input type="text" name="Delivery_Destination_Confirmed_Trucking_Charge" class="form-control" data-placeholder="" maxlength="100" style="width: 100%" required>
-                        </div>
-                        <!-- /.form-group -->
-                    </div>
-                    <!-- /.col -->
-
-                    <!-- ===================================================
-                        Delivery_Destination_Comments
-                    =================================================== -->
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label>Comments</label>
-                            <div class="select2-purple">
-                                <textarea class="form-control" name="Delivery_Destination_Comments" rows="3" placeholder="Enter ..." maxlength="255"></textarea>
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Confirmed Trucking Charge</label>
+                                <input type="text" name="Delivery_Destination_Confirmed_Trucking_Charge" class="form-control" data-placeholder="" maxlength="100" style="width: 100%" required>
                             </div>
+                            <!-- /.form-group -->
                         </div>
-                        <!-- /.form-group -->
-                    </div>
-                    <!-- /.col -->
-                </div>
+                        <!-- /.col -->
 
-                <!-- -->
+                        <!-- ===================================================
+                            Delivery_Destination_Comments
+                        =================================================== -->
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Comments</label>
+                                <div class="select2-purple">
+                                    <textarea class="form-control" name="Delivery_Destination_Comments" rows="3" placeholder="Enter ..." maxlength="255"></textarea>
+                                </div>
+                            </div>
+                            <!-- /.form-group -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+
+                </form>
+                <!-- /.form -->
             </div>
-            <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">
-                    Close
-                </button>
+            <div class="modal-footer">
+                <button class="btn btn-success" type="submit" form="formNewOrder"><i class="fas fa-save"></i> Save</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
+            <?php
+            $newOrder = OrdersController::ctrNewOrder();
+            ?>
         </div>
         <!-- /.modal-content -->
     </div>
