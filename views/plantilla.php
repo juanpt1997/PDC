@@ -59,6 +59,8 @@ session_start();
     <script src="views/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
     <!-- Sweearlet2 -->
     <script src="views/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+    <!-- PDF JS -->
+    <script src="views/plugins/pdf-js/pdf.js"></script>
 
     <!-- OPTIONAL SCRIPTS -->
     <script src="views/dist/js/demo.js"></script>

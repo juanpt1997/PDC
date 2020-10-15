@@ -59,7 +59,7 @@
   								<p>Orders</p>
   							</a>
   						</li>
-  						<li class="nav-item">
+  						<li class="nav-item d-none">
   							<a href="bol.html" class="nav-link">
   								<i class="far fa-circle nav-icon"></i>
   								<p>Bill of Lading</p>

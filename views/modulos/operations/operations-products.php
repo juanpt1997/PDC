@@ -47,6 +47,7 @@ $Products = ProductsController::ctrShowProducts();
                                     <td>Weight</td>
                                     <td>Unit</td>
                                     <td>Price</td>
+                                    <td>Image</td>
                                     <td>Actions</td>
                                 </tr>
                             </thead>
@@ -58,6 +59,7 @@ $Products = ProductsController::ctrShowProducts();
                                         <td><?= $value['Weight'] ?></td>
                                         <td><?= $value['Unit'] ?></td>
                                         <td><?= $value['Price'] ?></td>
+                                        <td><img class="img-thumbnail img-fluid btn-imgproduct" idproduct="<?= $value['id_products'] ?>" src="<?= "." . $value['Image'] ?>" width="100" alt="" style="cursor: pointer;" data-target="#modal-imgproduct" data-toggle="modal"></td>
                                         <td><button class="btn btn-info btn-sm productInfo" data-target="#modal-editproduct" data-toggle="modal" idproduct="<?= $value['id_products'] ?>"><i class="fas fa-pencil-alt"></i></button></td>
                                     </tr>
                                 <?php endforeach ?>
@@ -353,11 +355,33 @@ $Products = ProductsController::ctrShowProducts();
                 </div>
 
                 <?php
-                    $updateproduct = ProductsController::ctrUpdateProduct();
+                $updateproduct = ProductsController::ctrUpdateProduct();
                 ?>
             </div>
             <!-- /.modal-content -->
         </form>
     </div>
     <!-- /.modal-dialog -->
+</div>
+
+<!-- ===================================================
+    MODAL VIEW IMAGE PRODUCT
+=================================================== -->
+<div id="modal-imgproduct" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title nameTitleImg" id="my-modal-title"></h5>
+                <button class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img id="imgproduct" class="img-fluid" src="" alt="">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>

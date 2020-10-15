@@ -41,3 +41,58 @@ class ProductsAjax
 if (isset($_POST['ProductInfo']) && $_POST['ProductInfo'] == "ok") {
     ProductsAjax::ajaxProductInfo($_POST['idproduct']);
 }
+
+/* ===================================================
+   * AJAX ORDERS
+===================================================*/
+class OrdersAjax
+{
+    /* ===================================================
+       SINGLE ORDER INFORMATION
+    ===================================================*/
+    static public function ajaxOrderInfo($value)
+    {
+        $response = OrdersController::ctrOrderInfo($value);
+        echo json_encode($response);
+    }
+
+    /* ===================================================
+       UPDATE DE UN SOLO CAMPO EN LA ORDEN
+    ===================================================*/
+    static public function ajaxModificarCampo($datos)
+    {
+        $response = OrdersController::ctrModificarCampo($datos);
+        echo $response;
+    }
+
+    /* ===================================================
+        VERIFICAR SI EL DOCUMENTO ESTA CORRECTAMENTE SUBIDO
+    ===================================================*/
+    static public function ajaxVerificarDocumento($datos)
+    {
+        $response = OrdersController::ctrVerificarDocumento($datos);
+        echo json_encode($response);
+        //echo $response;
+    }
+}
+
+if (isset($_POST['OrderInfo']) && $_POST['OrderInfo'] == "ok") {
+    OrdersAjax::ajaxOrderInfo($_POST['idorder']);
+}
+
+if (isset($_POST['UpdateCampo']) && $_POST['UpdateCampo'] == "ok") {
+    $datos = array(
+                    'id_orders' => $_POST['idorder'],
+                    'item' => $_POST['item'],
+                    'value' => $_POST['value']
+                    );
+    OrdersAjax::ajaxModificarCampo($datos);
+}
+
+if (isset($_POST['ExisteDoc']) && $_POST['ExisteDoc'] == "ok") {
+    $datos = array(
+                    'id_orders' => $_POST['idorder'],
+                    'tipodoc' => $_POST['tipodoc']
+                    );
+    OrdersAjax::ajaxVerificarDocumento($datos);
+}

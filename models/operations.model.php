@@ -264,7 +264,6 @@ class OrdersModel
         $stmt = null;
 
         return $retorno;
-    
     }
 
     /* ===================================================
@@ -274,7 +273,7 @@ class OrdersModel
     {
         $conexion = Conexion::conectar();
         $stmt = $conexion->prepare("INSERT INTO Orders (id_companies, id_products, Weight_Each_Bag, Total_Bags, Total_Skids, Customer_PO, Arrange_Pickup, From_Release, Pickup_Date, PO_Reference, Delivery_From_Name, Delivery_Address, Delivery_Phone, Delivery_Contact, Delivery_Date, Delivery_Real_Date, Delivery_Destination_Name, Delivery_Destination_Address, Delivery_Destination_Phone, Delivery_Destination_Contact, Delivery_Destination_Confirmed_Trucking_Charge, Delivery_Destination_Comments, audit_user) VALUES
-(:id_companies, :id_products, :Weight_Each_Bag, :Total_Bags, :Total_Skids, :Customer_PO, :Arrange_Pickup, :From_Release, :Pickup_Date, :PO_Reference, :Delivery_From_Name, :Delivery_Address, :Delivery_Phone, :Delivery_Contact, :Delivery_Date, :Delivery_Real_Date, :Delivery_Destination_Name, :Delivery_Destination_Address, :Delivery_Destination_Phone, :Delivery_Destination_Contact, :Delivery_Destination_Confirmed_Trucking_Charge, :Delivery_Destination_Comments, :audit_user)");
+                                        (:id_companies, :id_products, :Weight_Each_Bag, :Total_Bags, :Total_Skids, :Customer_PO, :Arrange_Pickup, :From_Release, :Pickup_Date, :PO_Reference, :Delivery_From_Name, :Delivery_Address, :Delivery_Phone, :Delivery_Contact, :Delivery_Date, :Delivery_Real_Date, :Delivery_Destination_Name, :Delivery_Destination_Address, :Delivery_Destination_Phone, :Delivery_Destination_Contact, :Delivery_Destination_Confirmed_Trucking_Charge, :Delivery_Destination_Comments, :audit_user)");
 
         $stmt->bindParam(":id_companies", $datos['id_companies'], PDO::PARAM_INT);
         $stmt->bindParam(":id_products", $datos['id_products'], PDO::PARAM_INT);
@@ -308,5 +307,133 @@ class OrdersModel
         $stmt->closeCursor();
         $conexion = null;
         return $id;
+    }
+
+    /* ===================================================
+       SINGLE ORDER INFORMATION
+    ===================================================*/
+    static public function mdlOrderInfo($value)
+    {
+        $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, o.*
+                                                FROM Orders o
+                                                INNER JOIN Companies c ON c.id_companies = o.id_companies
+                                                INNER JOIN Products p ON p.id_products = o.id_products
+                                                WHERE o.id_orders = :id_orders");
+        $stmt->bindParam(":id_orders", $value, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        $retorno = $stmt->fetch();
+
+        $stmt->closeCursor();
+        $stmt = null;
+
+        return $retorno;
+    }
+
+    /* ===================================================
+       EDIT ORDER
+    ===================================================*/
+    static public function mdlEditOrder($datos)
+    {
+        $conexion = Conexion::conectar();
+        $stmt = $conexion->prepare("UPDATE Orders SET id_companies = :id_companies, id_products = :id_products
+                                    , Weight_Each_Bag = :Weight_Each_Bag
+                                    , Total_Bags = :Total_Bags
+                                    , Total_Skids = :Total_Skids
+                                    , Customer_PO = :Customer_PO
+                                    , Arrange_Pickup = :Arrange_Pickup
+                                    , From_Release = :From_Release
+                                    , Pickup_Date = :Pickup_Date
+                                    , PO_Reference = :PO_Reference
+                                    , Delivery_From_Name = :Delivery_From_Name
+                                    , Delivery_Address = :Delivery_Address
+                                    , Delivery_Phone = :Delivery_Phone
+                                    , Delivery_Contact = :Delivery_Contact
+                                    , Delivery_Date = :Delivery_Date
+                                    , Delivery_Real_Date = :Delivery_Real_Date
+                                    , Delivery_Destination_Name = :Delivery_Destination_Name
+                                    , Delivery_Destination_Address = :Delivery_Destination_Address
+                                    , Delivery_Destination_Phone = :Delivery_Destination_Phone
+                                    , Delivery_Destination_Contact = :Delivery_Destination_Contact
+                                    , Delivery_Destination_Confirmed_Trucking_Charge = :Delivery_Destination_Confirmed_Trucking_Charge
+                                    , Delivery_Destination_Comments = :Delivery_Destination_Comments
+                                    WHERE id_orders = :id_orders");
+
+        $stmt->bindParam(":id_orders", $datos['id_orders'], PDO::PARAM_INT);
+        $stmt->bindParam(":id_companies", $datos['id_companies'], PDO::PARAM_INT);
+        $stmt->bindParam(":id_products", $datos['id_products'], PDO::PARAM_INT);
+        $stmt->bindParam(":Weight_Each_Bag", $datos['Weight_Each_Bag'], PDO::PARAM_STR);
+        $stmt->bindParam(":Total_Bags", $datos['Total_Bags'], PDO::PARAM_STR);
+        $stmt->bindParam(":Total_Skids", $datos['Total_Skids'], PDO::PARAM_STR);
+        $stmt->bindParam(":Customer_PO", $datos['Customer_PO'], PDO::PARAM_STR);
+        $stmt->bindParam(":Arrange_Pickup", $datos['Arrange_Pickup'], PDO::PARAM_STR);
+        $stmt->bindParam(":From_Release", $datos['From_Release'], PDO::PARAM_STR);
+        $stmt->bindParam(":Pickup_Date", $datos['Pickup_Date'], PDO::PARAM_STR);
+        $stmt->bindParam(":PO_Reference", $datos['PO_Reference'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_From_Name", $datos['Delivery_From_Name'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Address", $datos['Delivery_Address'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Phone", $datos['Delivery_Phone'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Contact", $datos['Delivery_Contact'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Date", $datos['Delivery_Date'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Real_Date", $datos['Delivery_Real_Date'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Destination_Name", $datos['Delivery_Destination_Name'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Destination_Address", $datos['Delivery_Destination_Address'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Destination_Phone", $datos['Delivery_Destination_Phone'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Destination_Contact", $datos['Delivery_Destination_Contact'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Destination_Confirmed_Trucking_Charge", $datos['Delivery_Destination_Confirmed_Trucking_Charge'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Destination_Comments", $datos['Delivery_Destination_Comments'], PDO::PARAM_STR);
+
+        if ($stmt->execute()) {
+            $retorno = "ok";
+        } else {
+            $retorno = "error";
+        }
+           
+        $stmt->closeCursor();
+        $conexion = null;
+        return $retorno;
+    }
+
+    /* ===================================================
+       MODIFICAR SOLO UN CAMPO DE LA ORDEN
+    ===================================================*/
+    static public function mdlModificarCampo($datos)
+    {
+        $conexion = Conexion::conectar();
+        $stmt = $conexion->prepare("UPDATE Orders SET
+                                    {$datos['item']} = :{$datos['item']}
+                                    WHERE id_orders = :id_orders");
+        $stmt->bindParam(":id_orders", $datos['id_orders'], PDO::PARAM_INT);
+        $stmt->bindParam(":" . $datos['item'], $datos['value'], PDO::PARAM_STR);
+
+        if ($stmt->execute()) {
+            $retorno = "ok";
+        } else {
+            $retorno = "error";
+        }
+        $stmt->closeCursor();
+        $conexion = null;
+        return $retorno;
+    }
+
+    /* ===================================================
+       DATOS DE UN DOCUMENTO DE UNA ORDEN
+    ===================================================*/
+    static public function mdlDocumentoOrder($idorder)
+    {
+        $conexion = Conexion::conectar();
+        $stmt = $conexion->prepare("SELECT * from Orders
+                                    WHERE id_orders = :id_orders");
+        $stmt->bindParam(":id_orders", $idorder, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        $retorno = $stmt->fetch();
+
+        $stmt->closeCursor();
+        $stmt = null;
+
+        return $retorno;
     }
 }

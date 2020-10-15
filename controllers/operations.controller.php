@@ -228,67 +228,34 @@ class ProductsController
                 $newProduct = ProductsModel::mdlNewProduct($datos);
 
                 if ($newProduct != "error") {
+
+
                     /* ===================== 
-                        ? VALIDAR LA IMAGEN 
+                        CREAMOS DIRECTORIO DONDE VAMOS A GUARDAR LA FOTO DEL PRODUCTO 
                     ========================= */
-                    $imagenProducto = $_FILES['Image'];
-                    $ruta = "";
+                    $anioActual = date("Y");
 
-                    if (is_array($imagenProducto) && $imagenProducto['tmp_name'] != "") {
-                        /* list nos permite crear un nuevo array con los indices que se le asignen */
-                        list($ancho, $alto) = getimagesize($imagenProducto['tmp_name']);
-
-                        $nuevoAncho = 500;
-                        $nuevoAlto = 500;
-
-                        /* ===================== 
-                            CREAMOS DIRECTORIO DONDE VAMOS A GUARDAR LA FOTO DEL USUARIO 
-                        ========================= */
-                        $anioActual = date("Y");
-
-                        # Verificar Directorio Año
-                        $directorioAnio = "./views/img/Products/{$anioActual}";
-                        if (!is_dir($directorioAnio)) {
-                            mkdir($directorioAnio, 0755);
-                        }
-
-                        /* ===================== 
-                            DE ACUERDO AL TIPO DE IMAGEN SE APLICA UNA FUNCION POR DEFECTO DE PHP 
-                        ========================= */
-                        $fecha = date('Y-m-d');
-                        $hora = date('His');
-                        if ($imagenProducto['type'] == "image/jpeg") {
-                            /* ===================== 
-                                GUARDAMOS LA IMAGEN EN EL DIRECTORIO 
-                            ========================= */
-                            $ruta = "./views/img/Products/{$anioActual}/{$_POST['Reference']}_{$fecha}_{$hora}.jpg";
-
-                            $origen = imagecreatefromjpeg($imagenProducto['tmp_name']);
-                            $destino = imagecreatetruecolor($nuevoAncho, $nuevoAlto);
-
-                            imagecopyresized($destino, $origen, 0, 0, 0, 0, $nuevoAncho, $nuevoAlto, $ancho, $alto);
-
-                            imagejpeg($destino, $ruta);
-                        }
-
-                        if ($imagenProducto['type'] == "image/png") {
-                            /* ===================== 
-                                GUARDAMOS LA IMAGEN EN EL DIRECTORIO 
-                            ========================= */
-                            $ruta = "./views/img/Products/{$anioActual}/{$_POST['Reference']}_{$fecha}_{$hora}.png";
-
-                            $origen = imagecreatefrompng($imagenProducto['tmp_name']);
-                            $destino = imagecreatetruecolor($nuevoAncho, $nuevoAlto);
-
-                            imagecopyresized($destino, $origen, 0, 0, 0, 0, $nuevoAncho, $nuevoAlto, $ancho, $alto);
-
-                            imagepng($destino, $ruta);
-                        }
+                    # Verificar Directorio Año
+                    $directorioAnio = "./views/img/Products/{$anioActual}";
+                    if (!is_dir($directorioAnio)) {
+                        mkdir($directorioAnio, 0755);
                     }
+
+                    $fecha = date('Y-m-d');
+                    $hora = date('His');
+
+                    /* ===================================================
+                       GUARDAR LA IMAGEN EN EL SERVIDOR
+                    ===================================================*/
+                    $GuardarImagen = new FilesController();
+                    $GuardarImagen->file = $_FILES['Image'];
+                    $GuardarImagen->ruta = "./views/img/Products/{$anioActual}/{$_POST['Reference']}_{$fecha}_{$hora}";
+                    $ruta = $GuardarImagen->ctrImages(500, 500);
 
                     /* ===================================================
                         ACTUALIZAR RUTA IMAGEN EN LA BD
                     ===================================================*/
+
                     if ($ruta != "") {
                         $rutaImg = str_replace("./views", "/views", $ruta);
                         $actualizarRutaImg = ProductsModel::mdlUpdateProductImage($newProduct, $rutaImg);
@@ -353,96 +320,67 @@ class ProductsController
        EDIT PRODUCT INFO
     ===================================================*/
     static public function ctrUpdateProduct()
-    { {
-            if (isset($_POST['editName'])) {
-                if (
-                    preg_match('/^[a-zA-Z0-9- ]+$/', $_POST["editName"]) &&
-                    preg_match('/^[a-zA-Z0-9- ]+$/', $_POST["Reference"]) &&
-                    preg_match('/^[a-zA-Z0-9,. ]+$/', $_POST["Weight"]) &&
-                    preg_match('/^[0-9,.]+$/', $_POST["Unit"]) &&
-                    preg_match('/^[a-zA-Z0-9,. ]+$/', $_POST["Price"])
-                ) {
-                    /* ===================== 
-                        ? VALIDAR LA IMAGEN 
+    {
+        if (isset($_POST['editName'])) {
+            if (
+                preg_match('/^[a-zA-Z0-9- ]+$/', $_POST["editName"]) &&
+                preg_match('/^[a-zA-Z0-9- ]+$/', $_POST["Reference"]) &&
+                preg_match('/^[a-zA-Z0-9,. ]+$/', $_POST["Weight"]) &&
+                preg_match('/^[0-9,.]+$/', $_POST["Unit"]) &&
+                preg_match('/^[a-zA-Z0-9,. ]+$/', $_POST["Price"])
+            ) {
+                /* ===================== 
+                    ? VALIDAR LA IMAGEN 
+                ========================= */
+
+                /* ===================== 
+                        CREAMOS DIRECTORIO DONDE VAMOS A GUARDAR LA FOTO DEL USUARIO 
                     ========================= */
-                    $imagenProducto = $_FILES['Image'];
-                    $ruta = "";
+                $anioActual = date("Y");
 
-                    if (is_array($imagenProducto) && $imagenProducto['tmp_name'] != "") {
-                        /* list nos permite crear un nuevo array con los indices que se le asignen */
-                        list($ancho, $alto) = getimagesize($imagenProducto['tmp_name']);
+                # Verificar Directorio Año
+                $directorioAnio = "./views/img/Products/{$anioActual}";
+                if (!is_dir($directorioAnio)) {
+                    mkdir($directorioAnio, 0755);
+                }
 
-                        $nuevoAncho = 500;
-                        $nuevoAlto = 500;
+                /* ===================== 
+                        DE ACUERDO AL TIPO DE IMAGEN SE APLICA UNA FUNCION POR DEFECTO DE PHP 
+                    ========================= */
+                $fecha = date('Y-m-d');
+                $hora = date('His');
 
-                        /* ===================== 
-                            CREAMOS DIRECTORIO DONDE VAMOS A GUARDAR LA FOTO DEL USUARIO 
-                        ========================= */
-                        $anioActual = date("Y");
+                /* ===================================================
+                    GUARDAR LA IMAGEN EN EL SERVIDOR
+                ===================================================*/
+                $GuardarImagen = new FilesController();
+                $GuardarImagen->file = $_FILES['Image'];
+                $GuardarImagen->ruta = "./views/img/Products/{$anioActual}/{$_POST['Reference']}_{$fecha}_{$hora}";
+                $ruta = $GuardarImagen->ctrImages(500, 500);
 
-                        # Verificar Directorio Año
-                        $directorioAnio = "./views/img/Products/{$anioActual}";
-                        if (!is_dir($directorioAnio)) {
-                            mkdir($directorioAnio, 0755);
-                        }
+                /* ===================================================
+                    ACTUALIZAR RUTA IMAGEN EN LA BD
+                ===================================================*/
+                if ($ruta != "") {
+                    $rutaImg = str_replace("./views", "/views", $ruta);
+                    $actualizarRutaImg = ProductsModel::mdlUpdateProductImage($_POST['idproduct'], $rutaImg);
+                }
+                $datos = array(
+                    'idproduct' => $_POST['idproduct'],
+                    'Name' => $_POST['editName'],
+                    'Reference' => $_POST['Reference'],
+                    'Weight' => $_POST['Weight'],
+                    'Unit' => $_POST['Unit'],
+                    'Price' => $_POST['Price'],
+                    'Description' => $_POST['Description']
+                );
 
-                        /* ===================== 
-                            DE ACUERDO AL TIPO DE IMAGEN SE APLICA UNA FUNCION POR DEFECTO DE PHP 
-                        ========================= */
-                        $fecha = date('Y-m-d');
-                        $hora = date('His');
-                        if ($imagenProducto['type'] == "image/jpeg") {
-                            /* ===================== 
-                                GUARDAMOS LA IMAGEN EN EL DIRECTORIO 
-                            ========================= */
-                            $ruta = "./views/img/Products/{$anioActual}/{$_POST['Reference']}_{$fecha}_{$hora}.jpg";
+                $updateProduct = ProductsModel::mdlUpdateProduct($datos);
 
-                            $origen = imagecreatefromjpeg($imagenProducto['tmp_name']);
-                            $destino = imagecreatetruecolor($nuevoAncho, $nuevoAlto);
-
-                            imagecopyresized($destino, $origen, 0, 0, 0, 0, $nuevoAncho, $nuevoAlto, $ancho, $alto);
-
-                            imagejpeg($destino, $ruta);
-                        }
-
-                        if ($imagenProducto['type'] == "image/png") {
-                            /* ===================== 
-                                GUARDAMOS LA IMAGEN EN EL DIRECTORIO 
-                            ========================= */
-                            $ruta = "./views/img/Products/{$anioActual}/{$_POST['Reference']}_{$fecha}_{$hora}.png";
-
-                            $origen = imagecreatefrompng($imagenProducto['tmp_name']);
-                            $destino = imagecreatetruecolor($nuevoAncho, $nuevoAlto);
-
-                            imagecopyresized($destino, $origen, 0, 0, 0, 0, $nuevoAncho, $nuevoAlto, $ancho, $alto);
-
-                            imagepng($destino, $ruta);
-                        }
-                    }
-
-                    /* ===================================================
-                        ACTUALIZAR RUTA IMAGEN EN LA BD
-                    ===================================================*/
-                    if ($ruta != "") {
-                        $rutaImg = str_replace("./views", "/views", $ruta);
-                        $actualizarRutaImg = ProductsModel::mdlUpdateProductImage($_POST['idproduct'], $rutaImg);
-                    }
-                    $datos = array(
-                        'idproduct' => $_POST['idproduct'],
-                        'Name' => $_POST['editName'],
-                        'Reference' => $_POST['Reference'],
-                        'Weight' => $_POST['Weight'],
-                        'Unit' => $_POST['Unit'],
-                        'Price' => $_POST['Price'],
-                        'Description' => $_POST['Description']
-                    );
-
-                    $updateProduct = ProductsModel::mdlUpdateProduct($datos);
-
-                    if ($updateProduct != "error") {
+                if ($updateProduct != "error") {
 
 
-                        echo "
+                    echo "
 						<script>
 							Swal.fire({
 								icon: 'success',
@@ -458,8 +396,8 @@ class ProductsController
 							})
 						</script>
 					    ";
-                    } else {
-                        echo "
+                } else {
+                    echo "
 						<script>
 							Swal.fire({
 								icon: 'error',
@@ -470,9 +408,9 @@ class ProductsController
 							})
 						</script>
 					    ";
-                    }
-                } else {
-                    echo "
+                }
+            } else {
+                echo "
 						<script>
 							Swal.fire({
 								icon: 'warning',
@@ -483,7 +421,6 @@ class ProductsController
 							})
 						</script>
 					    ";
-                }
             }
         }
     }
@@ -570,4 +507,220 @@ class OrdersController
             }
         }
     }
+
+    /* ===================================================
+       EDIT ORDER
+    ===================================================*/
+    static public function ctrEditOrder()
+    {
+        if (isset($_POST['idorder'])) {
+            $datos = array(
+                'id_orders' => $_POST['idorder'],
+                'id_companies' => $_POST['company'],
+                'id_products' => $_POST['id_products'],
+                'Weight_Each_Bag' => $_POST['Weight_Each_Bag'],
+                'Total_Bags' => $_POST['Total_Bags'],
+                'Total_Skids' => $_POST['Total_Skids'],
+                'Customer_PO' => $_POST['Customer_PO'],
+                'Arrange_Pickup' => $_POST['Arrange_Pickup'],
+                'From_Release' => $_POST['From_Release'],
+                'Pickup_Date' => $_POST['Pickup_Date'],
+                'PO_Reference' => $_POST['PO_Reference'],
+                'Delivery_From_Name' => $_POST['Delivery_From_Name'],
+                'Delivery_Address' => $_POST['Delivery_Address'],
+                'Delivery_Phone' => $_POST['Delivery_Phone'],
+                'Delivery_Contact' => $_POST['Delivery_Contact'],
+                'Delivery_Date' => $_POST['Delivery_Date'],
+                'Delivery_Real_Date' => $_POST['Delivery_Real_Date'],
+                'Delivery_Destination_Name' => $_POST['Delivery_Destination_Name'],
+                'Delivery_Destination_Address' => $_POST['Delivery_Destination_Address'],
+                'Delivery_Destination_Phone' => $_POST['Delivery_Destination_Phone'],
+                'Delivery_Destination_Contact' => $_POST['Delivery_Destination_Contact'],
+                'Delivery_Destination_Confirmed_Trucking_Charge' => $_POST['Delivery_Destination_Confirmed_Trucking_Charge'],
+                'Delivery_Destination_Comments' => $_POST['Delivery_Destination_Comments']
+            );
+
+            $updateOrder = OrdersModel::mdlEditOrder($datos);
+
+            if ($updateOrder != "error") {
+                echo "
+						<script>
+							Swal.fire({
+								icon: 'success',
+								title: '¡Order successfully updated!',						
+								showConfirmButton: true,
+								confirmButtonText: 'Cerrar',
+								allowOutsideClick: false,
+							}).then((result)=>{
+								if(result.value){
+									window.location = 'orders';
+								}
+
+							})
+						</script>
+					    ";
+            } else {
+                echo "
+						<script>
+							Swal.fire({
+								icon: 'error',
+								title: 'Oops, there was a problem, please try again later',						
+								showConfirmButton: true,
+								confirmButtonText: 'Cerrar',
+								closeOnConfirm: false
+							})
+						</script>
+					    ";
+            }
+        }
+    }
+
+    /* ===================================================
+           SINGLE ORDER INFORMATION
+        ===================================================*/
+    static public function ctrOrderInfo($value)
+    {
+        $response = OrdersModel::mdlOrderInfo($value);
+
+        return $response;
+    }
+
+    /* ===================================================
+       MODIFICAR SOLO UN CAMPO DE LA ORDEN
+    ===================================================*/
+    static public function ctrModificarCampo($datos)
+    {
+        $response = OrdersModel::mdlModificarCampo($datos);
+
+        return $response;
+    }
+
+    /* ===================================================
+       CARGAR DOCUMENTO DE LA ORDEN
+    ===================================================*/
+    static public function ctrLoadDoc()
+    {
+        $response = "";
+
+        # Si viene algo del formulario
+        if (isset($_POST['tipoDoc'])) {
+            $tipoDoc = $_POST['tipoDoc'];
+
+            /* ===================== 
+                CREAMOS DIRECTORIO DONDE VAMOS A GUARDAR EL ARCHIVO
+            ========================= */
+            $anioActual = date("Y");
+
+            # Verificar Directorio Año
+            $directorioAnio = "./views/docs/$tipoDoc/{$anioActual}";
+            if (!is_dir($directorioAnio)) {
+                mkdir($directorioAnio, 0755);
+            }
+
+            $fecha = date('Y-m-d');
+            $hora = date('His');
+
+            /* ===================================================
+               GUARDAMOS EL ARCHIVO
+            ===================================================*/
+            $GuardarArchivo = new FilesController();
+            $GuardarArchivo->file = $_FILES['docFile'];
+            $GuardarArchivo->ruta = $directorioAnio . "/{$_POST['idorderDoc']}_{$fecha}_{$hora}";
+
+            # Si es pdf
+            if ($_FILES['docFile']['type'] == "application/pdf") {
+                $response = $GuardarArchivo->ctrPDFFiles();
+            } else {
+                # Si es una imagen
+                if ($_FILES['docFile']['type'] == "image/jpeg" || $_FILES['docFile']['type'] == "image/png") {
+                    $response = $GuardarArchivo->ctrImages(null, null);
+                }
+            }
+
+            # Actualizar el campo de la base de datos donde queda la ruta del archivo
+            if ($response != "") {
+                $rutaDoc = str_replace("./views", "/views", $response);
+                $datos = array(
+                    'id_orders' => $_POST['idorderDoc'],
+                    'item' => $tipoDoc,
+                    'value' => $rutaDoc
+                );
+                $actualizarRutaDoc = self::ctrModificarCampo($datos);
+
+                if ($actualizarRutaDoc == "ok") {
+                    echo "
+						<script>
+							Swal.fire({
+								icon: 'success',
+								title: '¡Document successfully uploaded!',						
+								showConfirmButton: true,
+								confirmButtonText: 'Cerrar',
+								allowOutsideClick: false,
+							}).then((result)=>{
+								if(result.value){
+									window.location = 'orders';
+								}
+
+							})
+						</script>
+					    ";
+                } else {
+                    echo "
+                        <script>
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops, there was a problem, please try again later',						
+                                showConfirmButton: true,
+                                confirmButtonText: 'Cerrar',
+                                closeOnConfirm: false
+                            })
+                        </script>
+                        ";
+                }
+            } else {
+                echo "
+                        <script>
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops, there was a problem, please check your file',						
+                                showConfirmButton: true,
+                                confirmButtonText: 'Cerrar',
+                                closeOnConfirm: false
+                            })
+                        </script>
+                        ";
+            }
+        }
+    }
+
+    /* ===================================================
+        VERIFICAR SI EL DOCUMENTO ESTA CORRECTAMENTE SUBIDO
+    ===================================================*/
+    static public function ctrVerificarDocumento($datos)
+    {
+        $idorder = $datos['id_orders'];
+        $tipodoc = $datos['tipodoc'];
+        $datosDocumento = OrdersModel::mdlDocumentoOrder($idorder);
+
+        $rutaDoc = $datosDocumento[$tipodoc];
+
+        // Ver que el campo no este vacio
+        if ($rutaDoc != "") {
+            // Verificar que el archivo si se encuentre
+            $rutaVerificar = ".." . $rutaDoc;
+            if (file_exists($rutaVerificar)) {
+                $tipoArchivo = strpos($rutaDoc, '.pdf') !== false ? "PDF" : "Image";
+                $tipoArchivoArray = array('tipoArchivo' => $tipoArchivo,
+                                            'rutaDoc' => $rutaDoc);
+                $response = array_merge($datosDocumento, $tipoArchivoArray);
+                return $response;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    
 }
