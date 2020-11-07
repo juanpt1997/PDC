@@ -1,7 +1,7 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
   	<!-- Brand Logo -->
-  	<a href="operations_index" class="brand-link">
+  	<a href="operations-index" class="brand-link">
   		<img src="views/dist/img/admin_logo.png" alt="PDC Operations Logo" width="128" height="128" border="0" class="brand-image img-circle elevation-3" style="opacity: .8">
   		<span class="brand-text font-weight-light">PDC Operations</span> </a>
 
@@ -24,83 +24,101 @@
 				<!-- ===================================================
 					OPERATIONS
 				=================================================== -->
+				<?php if (array_search('OPERATIONS', $_SESSION['options'])) : ?>
+					<li class="nav-item has-treeview">
+						<a href="#" class="nav-link">
+							<i class="nav-icon fas fas fa-users-cog"></i>
+							<p>
+								Operations Options
+								<i class="fas fa-angle-left right"></i>
 
-  				<li class="nav-item has-treeview">
-  					<a href="#" class="nav-link">
-  						<i class="nav-icon fas fas fa-users-cog"></i>
-  						<p>
-  							Operations Options
-  							<i class="fas fa-angle-left right"></i>
-
-  						</p>
-  					</a>
-  					<ul class="nav nav-treeview">
-  						<li class="nav-item">
-  							<a href="operations-index" class="nav-link">
-  								<i class="far fa-circle nav-icon"></i>
-  								<p>Dashboard</p>
-  							</a>
-  						</li>
-  						<li class="nav-item">
-  							<a href="operations-companies" class="nav-link">
-  								<i class="far fa-circle nav-icon"></i>
-  								<p>Companies</p>
-  							</a>
-  						</li>
-  						<li class="nav-item">
-  							<a href="operations-products" class="nav-link">
-  								<i class="far fa-circle nav-icon"></i>
-  								<p>Products</p>
-  							</a>
-  						</li>
-  						<li class="nav-item">
-  							<a href="orders" class="nav-link">
-  								<i class="far fa-circle nav-icon"></i>
-  								<p>Orders</p>
-  							</a>
-  						</li>
-  						<li class="nav-item d-none">
-  							<a href="bol.html" class="nav-link">
-  								<i class="far fa-circle nav-icon"></i>
-  								<p>Bill of Lading</p>
-  							</a>
-  						</li>
-  					</ul>
-  				</li>
+							</p>
+						</a>
+						<ul class="nav nav-treeview">
+							<li class="nav-item">
+								<a href="operations-index" class="nav-link">
+									<i class="far fa-circle nav-icon"></i>
+									<p>Dashboard</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="operations-companies" class="nav-link">
+									<i class="far fa-circle nav-icon"></i>
+									<p>Companies</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="operations-products" class="nav-link">
+									<i class="far fa-circle nav-icon"></i>
+									<p>Products</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="orders" class="nav-link">
+									<i class="far fa-circle nav-icon"></i>
+									<p>Orders</p>
+								</a>
+							</li>
+							<li class="nav-item d-none">
+								<a href="bol.html" class="nav-link">
+									<i class="far fa-circle nav-icon"></i>
+									<p>Bill of Lading</p>
+								</a>
+							</li>
+						</ul>
+					</li>
+				<?php endif ?>
 
 				<!-- ===================================================
 					COMPANIES
 				=================================================== -->
-  				<li class="nav-item has-treeview">
-  					<a href="#" class="nav-link">
-  						<i class="nav-icon fas fa-user"></i>
-  						<p>
-  							Companies Options
-  							<i class="right fas fa-angle-left"></i>
-  						</p>
-  					</a>
-  					<ul class="nav nav-treeview">
-  						<li class="nav-item">
-  							<a href="#" class="nav-link">
-  								<i class="far fa-circle nav-icon"></i>
-  								<p>New Order</p>
-  							</a>
-  						</li>
-  						<li class="nav-item">
-  							<a href="#" class="nav-link">
-  								<i class="far fa-circle nav-icon"></i>
-  								<p>Order Status</p>
-  							</a>
-  						</li>
-  						<li class="nav-item">
-  							<a href="#" class="nav-link">
-  								<i class="far fa-circle nav-icon"></i>
-  								<p>Delivered</p>
-  							</a>
-  						</li>
+				<?php if (array_search('COMPANIES', $_SESSION['options'])) : ?>
+					<li class="nav-item has-treeview">
+						<a href="#" class="nav-link">
+							<i class="nav-icon fas fa-user"></i>
+							<p>
+								Companies Options
+								<i class="right fas fa-angle-left"></i>
+							</p>
+						</a>
+						<ul class="nav nav-treeview">
+							<li class="nav-item">
+								<a href="#" class="nav-link">
+									<i class="far fa-circle nav-icon"></i>
+									<p>New Order</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="#" class="nav-link">
+									<i class="far fa-circle nav-icon"></i>
+									<p>Order Status</p>
+								</a>
+							</li>
+							<li class="nav-item">
+								<a href="#" class="nav-link">
+									<i class="far fa-circle nav-icon"></i>
+									<p>Delivered</p>
+								</a>
+							</li>
 
-  					</ul>
-  				</li>
+						</ul>
+					</li>
+				<?php endif ?>
+
+				<!-- ===================================================
+					USERS
+				=================================================== -->
+				<?php if (array_search('USERS', $_SESSION['options'])) : ?>
+					<li class="nav-item">
+						<a href="users" class="nav-link">
+							<i class="nav-icon fas fa-users"></i>
+							<p>
+								Users
+							</p>
+						</a>
+					</li>
+				<?php endif ?>
+
 
 
   				<li class="nav-header">EXTERNAL LINKS</li>
@@ -109,7 +127,6 @@
   						<i class="nav-icon fas fa-tachometer-alt"></i>
   						<p>
   							Monitor 1
-
   						</p>
   					</a>
 

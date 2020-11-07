@@ -16,6 +16,7 @@ require_once "./controllers/files.controller.php";
    MODELS REQUIRED FOR THE PROJECT
 ===================================================*/
 require_once "./models/operations.model.php";
+require_once "./models/users.model.php";
 
 
 $plantilla = new ControladorPlantilla();

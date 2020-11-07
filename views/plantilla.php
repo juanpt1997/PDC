@@ -79,6 +79,7 @@ session_start();
     <!-- =================================================== CUSTOM JS =================================================== -->
     <script src="views/js/plantilla.js"></script>
     <script src="views/js/operations.js"></script>
+    <script src="views/js/users.js"></script>
 
 
 </head>
@@ -113,6 +114,10 @@ session_start();
                     $ruta == "orders"
                 ) {
                     include "modulos/operations/" . $ruta . ".php";
+                } else if ( # Users
+                    $ruta == "users"
+                ) {
+                    include "modulos/users/" . $ruta . ".php";
                 } else { # Página no válida
                     include "includes/error404.php";
                 }

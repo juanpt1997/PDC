@@ -1,8 +1,12 @@
-<?php 
+<?php
 
-    # REQUERIMOS EL CONTROLADOR Y EL MODELO PARA QUE REALICE LA PETICION
-    require_once '../controllers/operations.controller.php';
-    require_once '../models/operations.model.php';
+/* if (!isset($_SESSION['logged_in'])) {
+    header("Location: {$_SERVER['SERVER_NAME']}");
+}
+ */
+# REQUERIMOS EL CONTROLADOR Y EL MODELO PARA QUE REALICE LA PETICION
+require_once '../controllers/operations.controller.php';
+require_once '../models/operations.model.php';
 
 /* ===================================================
    * AJAX COMPANIES
@@ -82,17 +86,17 @@ if (isset($_POST['OrderInfo']) && $_POST['OrderInfo'] == "ok") {
 
 if (isset($_POST['UpdateCampo']) && $_POST['UpdateCampo'] == "ok") {
     $datos = array(
-                    'id_orders' => $_POST['idorder'],
-                    'item' => $_POST['item'],
-                    'value' => $_POST['value']
-                    );
+        'id_orders' => $_POST['idorder'],
+        'item' => $_POST['item'],
+        'value' => $_POST['value']
+    );
     OrdersAjax::ajaxModificarCampo($datos);
 }
 
 if (isset($_POST['ExisteDoc']) && $_POST['ExisteDoc'] == "ok") {
     $datos = array(
-                    'id_orders' => $_POST['idorder'],
-                    'tipodoc' => $_POST['tipodoc']
-                    );
+        'id_orders' => $_POST['idorder'],
+        'tipodoc' => $_POST['tipodoc']
+    );
     OrdersAjax::ajaxVerificarDocumento($datos);
 }

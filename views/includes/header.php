@@ -15,7 +15,7 @@
         <!-- Messages Dropdown Menu -->
         <!-- Notifications Dropdown Menu -->
         <li class="nav-item">
-            <a class="nav-link" data-toggle="modal" data-target="#cerrarSesionModal" role="button"><i class="fas fa-sign-out-alt"></i></a>
+            <a class="nav-link" data-toggle="modal" data-target="#cerrarSesionModal" role="button"><i class="fas fa-lg fa-sign-out-alt"></i></a>
         </li>
     </ul>
 </nav>

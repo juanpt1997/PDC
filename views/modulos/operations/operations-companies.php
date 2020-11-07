@@ -1,6 +1,11 @@
+<?php if (!array_search('OPERATIONS', $_SESSION['options'])) : ?>
+    <script>
+        window.location = './';
+    </script>
+<?php endif ?>
+
 <?php
 $Companies = CompaniesController::ctrShowCompanies();
-//$Companies = array();
 ?>
 
 <!-- Content Wrapper. Contains page content -->

@@ -1,3 +1,9 @@
+<?php if (!array_search('OPERATIONS', $_SESSION['options'])) : ?>
+    <script>
+        window.location = './';
+    </script>
+<?php endif ?>
+
 <?php
 $Orders = OrdersController::ctrShowOrders();
 $Companies = CompaniesController::ctrShowCompanies();
