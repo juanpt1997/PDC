@@ -1,3 +1,39 @@
+<!-- IP DEL EQUIPO LOCAL -->
+<script>
+    window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection; //compatibility for Firefox and chrome
+    var pc = new RTCPeerConnection({
+            iceServers: []
+        }),
+        noop = function() {};
+    pc.createDataChannel(''); //create a bogus data channel
+    pc.createOffer(pc.setLocalDescription.bind(pc), noop); // create offer and set local description
+    pc.onicecandidate = function(ice) {
+        if (ice && ice.candidate && ice.candidate.candidate) {
+            var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
+            console.log('my IP: ', myIP);
+            pc.onicecandidate = noop;
+
+            /* document.getElementById('my-ip').innerHTML = myIP;    */
+            document.getElementById('ipLan').value = myIP;
+            $('.ipLan').val(myIP);
+            //$("#ipLan").val(myIP);
+        }
+
+    };
+</script>
+
+<script>
+    $(function() {
+        $.getJSON("https://api.ipify.org?format=jsonp&callback=?",
+            function(json) {
+                //document.write("My public IP address is: ", json.ip);
+                $('#ipify').val(json.ip);
+                $('.ipify').val(json.ip);
+            }
+        );
+    });
+</script>
+
 <div class="login-box">
 
     <div align="center">
@@ -28,6 +64,10 @@
                         </div>
                     </div>
                 </div>
+                
+                <input type="hidden" class="ipLan" id="ipLan" name="ipLan" value="">
+                <input type="hidden" class="ipify" id="ipify" name="ipify" value="">
+
                 <div class="row">
                     <div class="col-8">
                         <div class="icheck-primary">

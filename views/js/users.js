@@ -41,10 +41,11 @@ if (window.location.href.includes("users")) {
         ================================================*/
         $(document).on("click", ".btnEditarUsuario", function () {
 
-            var email = $(this).attr("email");
+            var idUser = $(this).attr("idUser");
 
             var datos = new FormData();
-            datos.append("email", email);
+            datos.append("item", "idUser");
+            datos.append("value", idUser);
             datos.append("editarUsuario", "ok");
 
             $.ajax({

@@ -13,10 +13,10 @@ class UsersController
                 preg_match('/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/', $_POST["email"]) &&
                 preg_match('/^[a-zA-Z0-9]+$/', $_POST["password"])
             ) {
-
+                $item = "email";
                 $valor = $_POST["email"];
 
-                $respuesta = UsersModel::mdlShowUsers($valor);
+                $respuesta = UsersModel::mdlShowUsers($item, $valor);
 
                 $encriptar = crypt($_POST["password"], '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
 
@@ -24,6 +24,24 @@ class UsersController
 
                     #SI EL USUARIO ESTA ACTIVO EN EL SISTEMA
                     if ($respuesta['status'] == 1) {
+                        # Session variables
+                        $_SESSION['logged_in'] = "ok";
+                        $_SESSION['user_id'] = $respuesta['idUser'];
+                        $_SESSION['name'] = $respuesta['name'];
+                        $_SESSION['email'] = $respuesta['email'];
+
+                        /* ===================== 
+								SE REGISTRA LA SESSION DEL INGRESO 
+							========================= */
+                        $datosSesion = array(
+                            'idUser' => $respuesta['idUser'],
+                            'ipify' => $_POST["ipify"],
+                            'ip_wan' => $_SERVER["REMOTE_ADDR"],
+                            'ip_lan' => $_POST['ipLan'],
+                            'browser' => $_SERVER['HTTP_USER_AGENT']
+                        );
+                        $sesion = UsersModel::mdlRegistrarSesion($datosSesion);
+
                         /* ===================== 
 							ACTUALIZAMOS  LA FECHA Y HORA PARA EL ULTIMO LOGIN 
 						========================= */
@@ -44,12 +62,6 @@ class UsersController
                         $ultimoLogin = UsersModel::mdlUpdateSingleField($tabla, $item1, $valor1, $item2, $valor2);
 
                         if ($ultimoLogin == "ok") {
-                            # Session variables
-                            $_SESSION['logged_in'] = "ok";
-                            $_SESSION['user_id'] = $respuesta['idUser'];
-                            $_SESSION['name'] = $respuesta['name'];
-                            $_SESSION['email'] = $respuesta['email'];
-
 
                             /* ===================== 
 								CARGAMOS OPCIONES DISPONBLES PARA EL USUARIO 
@@ -118,10 +130,10 @@ class UsersController
     /* ===================================================
         SHOW SYSTEM USERS
     ===================================================*/
-    static public function ctrShowUsers($valor)
+    static public function ctrShowUsers($item, $valor)
     {
 
-        $respuesta = UsersModel::mdlShowUsers($valor);
+        $respuesta = UsersModel::mdlShowUsers($item, $valor);
 
         return $respuesta;
     }
@@ -168,8 +180,9 @@ class UsersController
                     /* ===================== 
 					  COSNSULTO EL ID DEL USUARIO PARA GENERAR EL INSERT DEL PERFIL 
 					========================= */
-                    $valor = $_POST['nuevoEmail'];
-                    $usuarioID = UsersModel::mdlShowUsers($valor);
+                    $item = "dni";
+                    $valor = $_POST['nuevaIdentificacion'];
+                    $usuarioID = UsersModel::mdlShowUsers($item, $valor);
                     $idUsuario = $usuarioID['idUser'];
                     $nuevoPerfil = $_POST['nuevoPerfil'];
 
@@ -267,8 +280,9 @@ class UsersController
                     /* ===================== 
 					  COSNSULTO EL ID DEL USUARIO PARA GENERAR EL INSERT DEL PERFIL 
 					========================= */
-                    $valor = $_POST['editarEmail'];
-                    $usuarioID = UsersModel::mdlShowUsers($valor);
+                    $item = "dni";
+                    $valor = $_POST['editarIdentificacion'];
+                    $usuarioID = UsersModel::mdlShowUsers($item, $valor);
                     $idUsuario = $usuarioID['idUser'];
                     $editarPerfil = $_POST['editarPerfil'];
 

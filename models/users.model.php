@@ -11,15 +11,15 @@ class UsersModel
     /* ===================================================
        SHOW USERS
     ===================================================*/
-    static public function mdlShowUsers($value)
+    static public function mdlShowUsers($item, $value)
     {
-        if ($value != null) {
+        if ($value != null && $item != null) {
 
             $stmt = Conexion::conectar()->prepare("SELECT *
                                                     FROM L_Users
-                                                    WHERE email = :email");
+                                                    WHERE $item = :$item");
 
-            $stmt->bindParam(":email", $value, PDO::PARAM_STR);
+            $stmt->bindParam(":" . $item, $value, PDO::PARAM_STR);
 
             $stmt->execute();
 
@@ -174,6 +174,32 @@ class UsersModel
         $stmt->bindParam(":email", $datos["email"], PDO::PARAM_STR);
         $stmt->bindParam(":phone", $datos["phone"], PDO::PARAM_INT);
         
+        if ($stmt->execute()) {
+            $retorno = "ok";
+        } else {
+            $retorno = "error";
+        }
+
+        $stmt->closeCursor();
+        $stmt = null;
+        
+        return $retorno;
+    }
+
+    /* ===================== 
+      REGISTRAR INGRESO  DE SESION
+    ========================= */
+    static public function mdlRegistrarSesion($datos)
+    {
+        $stmt = Conexion::conectar()->prepare("INSERT INTO L_Sessions (idUser, date, date_time,ipify,ip_wan,ip_lan,browser)
+        VALUES (:idUser, CURDATE(), LOCALTIME(), :ipify, :ip_wan, :ip_lan, :browser)");
+
+        $stmt->bindParam(":idUser", $datos['idUser'], PDO::PARAM_INT);
+        $stmt->bindParam(":ipify", $datos['ipify'], PDO::PARAM_STR);
+        $stmt->bindParam(":ip_wan", $datos['ip_wan'], PDO::PARAM_STR);
+        $stmt->bindParam(":ip_lan", $datos['ip_lan'], PDO::PARAM_STR);
+        $stmt->bindParam(":browser", $datos['browser'], PDO::PARAM_STR);
+
         if ($stmt->execute()) {
             $retorno = "ok";
         } else {

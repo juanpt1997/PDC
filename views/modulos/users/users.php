@@ -58,7 +58,7 @@
                         </thead>
                         <tbody>
                             <?php
-                            $usuarios = UsersController::ctrShowUsers(null);
+                            $usuarios = UsersController::ctrShowUsers(null, null);
 
                             foreach ($usuarios as $key => $value) {
                                 echo '
@@ -70,9 +70,9 @@
                                         ';
 
                                 if ($value['status'] != 0) {
-                                    echo '<td><button class="btn btn-sm btn-success btnActivar" idUsuario="' . $value["idUser"] . '" estadoUsuario="0">Active</button></td>';
+                                    echo '<td><button class="btn btn-sm btn-success btnActivar" idUser="' . $value["idUser"] . '" estadoUsuario="0">Active</button></td>';
                                 } else {
-                                    echo '<td><button class="btn btn-sm btn-danger btnActivar" idUsuario="' . $value["idUser"] . '" estadoUsuario="1">Inactive</button></td>';
+                                    echo '<td><button class="btn btn-sm btn-danger btnActivar" idUser="' . $value["idUser"] . '" estadoUsuario="1">Inactive</button></td>';
                                 }
 
                                 /*  <button class="btn btn-sm btn-danger btnEliminarUsuario" tokenUsuario="' . $value["token"] . '" fotoUsuario="' . $value["foto"] . '" usuario="' . $value["cedula"] . '"><i class="fas fa-times"></i></button> */
@@ -80,7 +80,7 @@
                                 echo  '<td>' . $value['last_login'] . '</td>
                                         <td>
                                             <div class="btn-group" role="group" aria-label="Button group">
-                                                <button class="btn btn-sm btn-warning btnEditarUsuario" email="' . $value['email'] . '" data-toggle="modal" data-target="#modalEditarUsuario"><i class="fas fa-edit"></i></button>
+                                                <button class="btn btn-sm btn-warning btnEditarUsuario" idUser="' . $value['idUser'] . '" data-toggle="modal" data-target="#modalEditarUsuario"><i class="fas fa-edit"></i></button>
                                             </div>
                                         </td>
                                     </tr>

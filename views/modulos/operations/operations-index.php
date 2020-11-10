@@ -35,7 +35,7 @@
 /* ===================================================
        CONSULTO SI EL USUARIO TIENE QUE REALIZAR CAMBIO DE CONTRASEÑA
     ===================================================*/
-$usuario = UsersController::ctrShowUsers($_SESSION['email']);
+$usuario = UsersController::ctrShowUsers('idUser', $_SESSION['user_id']);
 
 if ($usuario['change_password'] != 0) :
 

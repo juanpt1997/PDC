@@ -9,10 +9,10 @@ class UsersAjax
     /* =====================
       EDITAR USUARIO
     ======================= */
-    static public function ajaxEditarUsuario($value)
+    static public function ajaxEditarUsuario($item, $value)
     {
 
-        $respuesta = UsersController::ctrShowUsers($value);
+        $respuesta = UsersController::ctrShowUsers($item, $value);
 
         echo json_encode($respuesta);
     }
@@ -29,7 +29,7 @@ class UsersAjax
 }
 
 if (isset($_POST['editarUsuario']) && $_POST['editarUsuario'] == "ok") {
-    UsersAjax::ajaxEditarUsuario($_POST['email']);
+    UsersAjax::ajaxEditarUsuario($_POST['item'], $_POST['value']);
 }
 
 /* ===================================================
