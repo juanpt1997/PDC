@@ -37,85 +37,91 @@ $Products = ProductsController::ctrShowProducts();
               AGREGAR FILAS Y COLUMNAS PARA EL DESARROLLO 
             ========================= -->
             <!-- Default box -->
-            <div class="card">
+            <!-- TABLE: LATEST ORDERS -->
+            <div class="card card-primary card-outline">
+                <!-- /.card-header -->
                 <div class="card-body">
-                    <!-- TABLE: LATEST ORDERS -->
-                    <div class="card card-primary card-outline">
-                        <!-- /.card-header -->
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table class="table m-0">
-                                    <thead>
-                                        <tr>
-                                            <th>Order</th>
-                                            <th>Client</th>
-                                            <th>Date</th>
-                                            <th>Delivery</th>
-                                            <th>Real Delivery</th>
-                                            <th>Product</th>
-                                            <th>Quanty</th>
-                                            <th>Status</th>
-                                            <th>COA</th>
-                                            <th>POD</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($Orders as $key => $value) : ?>
-                                            <?php
-                                            $BtnOrder = "<button type='button' idorder='{$value['id_orders']}' class='btn btn-default orderInfo' data-toggle='modal' data-target='#modal-vieworder'>{$value['id_orders']}</button>";
+                    <div class="table-responsive">
+                        <table class="table table-sm tablaOrders">
+                            <thead>
+                                <tr>
+                                    <th>PO Order</th>
+                                    <th>Client</th>
+                                    <th>Customer PO</th>
+                                    <th>PO Reference</th>
+                                    <th>Date</th>
+                                    <th>Delivery</th>
+                                    <th>Real Delivery</th>
+                                    <th>Product</th>
+                                    <th>Quanty</th>
+                                    <th>Status</th>
+                                    <th>COA</th>
+                                    <th>POD</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($Orders as $key => $value) : ?>
+                                    <?php
+                                    $BtnOrder = "<button type='button' idorder='{$value['id_orders']}' class='btn btn-default orderInfo' data-toggle='modal' data-target='#modal-vieworder'>{$value['id_orders']}</button>";
 
-                                            $BtnCOA = "<button type='button' class='btn btn-default btn-docs' idorder='{$value['id_orders']}' tipodoc='COA' data-toggle='modal' data-target='#modal-docs'>
-                                                        <i class='far fa-file-pdf'></i>
-                                                    </button>";
+                                    $BtnCOA = "<button type='button' class='btn btn-default btn-docs' idorder='{$value['id_orders']}' tipodoc='COA' data-toggle='modal' data-target='#modal-docs'>
+                                                <i class='far fa-file-pdf'></i>
+                                            </button>";
 
-                                            $BtnPOD = "<button type='button' class='btn btn-default btn-docs' idorder='{$value['id_orders']}' tipodoc='POD' data-toggle='modal' data-target='#modal-docs'>
-                                                        <i class='far fa-file-pdf'></i>
-                                                    </button>";
+                                    $BtnPOD = "<button type='button' class='btn btn-default btn-docs' idorder='{$value['id_orders']}' tipodoc='POD' data-toggle='modal' data-target='#modal-docs'>
+                                                <i class='far fa-file-pdf'></i>
+                                            </button>";
 
-                                            switch ($value['Status']) {
-                                                case 'On Process':
-                                                    $Status = "<span idorder='{$value['id_orders']}' class='badge badge-danger btnCambiarEstado' style='cursor: pointer;'>On Process</span>";
-                                                    break;
+                                    switch ($value['Status']) {
+                                        case 'On Process':
+                                            $Status = "<span idorder='{$value['id_orders']}' class='badge badge-primary btnCambiarEstado' style='cursor: pointer;'>On Process</span>";
+                                            break;
 
-                                                case 'Shipped':
-                                                    $Status = "<span idorder='{$value['id_orders']}' class='badge badge-warning btnCambiarEstado' style='cursor: pointer;'>Shipped</span>";
-                                                    break;
+                                        case 'Shipped':
+                                            $Status = "<span idorder='{$value['id_orders']}' class='badge badge-secondary btnCambiarEstado' style='cursor: pointer;'>Shipped</span>";
+                                            break;
 
-                                                default:
-                                                    $Status = $value['Status'];
-                                                    break;
-                                            }
+                                        case 'Sent':
+                                            $Status = "<span idorder='{$value['id_orders']}' class='badge badge-warning text-white btnCambiarEstado' style='cursor: pointer;'>Sent</span>";
+                                            break;
 
-                                            ?>
-                                            <tr>
-                                                <td><?= $BtnOrder ?></td>
-                                                <td><?= $value['Company'] ?></td>
-                                                <td><?= $value['Pickup_Date'] ?></td>
-                                                <td><?= $value['Delivery_Date'] ?></td>
-                                                <td><?= $value['Delivery_Real_Date'] ?></td>
-                                                <td><?= $value['Product'] ?></td>
-                                                <td><?= $value['Total_Bags'] ?></td>
-                                                <td><?= $Status ?></td>
-                                                <td><?= $BtnCOA ?></td>
-                                                <td><?= $BtnPOD ?></td>
-                                            </tr>
-                                        <?php endforeach ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <!-- /.table-responsive -->
-                        </div>
-                        <!-- /.card-body -->
-                        <div class="card-footer clearfix">
-                            <button type="button" class="btn btn-sm btn-info float-left" data-toggle="modal" data-target="#modal-neworder">Place New Order</button>
-                            <!-- <a href="completed_orders.html" class="btn btn-sm btn-success float-right">Delivered Orders</a> -->
+                                        case 'Canceled':
+                                            $Status = "<span idorder='{$value['id_orders']}' class='badge badge-danger btnCambiarEstado' style='cursor: pointer;'>Canceled</span>";
+                                            break;
 
-                        </div>
-                        <!-- /.card-footer -->
+                                        default:
+                                            $Status = $value['Status'];
+                                            break;
+                                    }
+
+                                    ?>
+                                    <tr>
+                                        <td><?= $BtnOrder ?></td>
+                                        <td><?= $value['Company'] ?></td>
+                                        <td><?= $value['Customer_PO'] ?></td>
+                                        <td><?= $value['PO_Reference'] ?></td>
+                                        <td><?= $value['Pickup_Date'] ?></td>
+                                        <td><?= $value['Delivery_Date'] ?></td>
+                                        <td><?= $value['Delivery_Real_Date'] ?></td>
+                                        <td><?= $value['Product'] ?></td>
+                                        <td><?= $value['Total_Bags'] ?></td>
+                                        <td><?= $Status ?></td>
+                                        <td><?= $BtnCOA ?></td>
+                                        <td><?= $BtnPOD ?></td>
+                                    </tr>
+                                <?php endforeach ?>
+                            </tbody>
+                        </table>
                     </div>
-                    <!-- /.card -->
+                    <!-- /.table-responsive -->
                 </div>
                 <!-- /.card-body -->
+                <div class="card-footer clearfix">
+                    <button type="button" class="btn btn-sm btn-info float-left" data-toggle="modal" data-target="#modal-neworder">Place New Order</button>
+                    <!-- <a href="completed_orders.html" class="btn btn-sm btn-success float-right">Delivered Orders</a> -->
+
+                </div>
+                <!-- /.card-footer -->
             </div>
             <!-- /.card -->
         </div><!-- /.container-fluid -->

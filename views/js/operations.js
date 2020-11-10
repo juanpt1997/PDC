@@ -150,6 +150,13 @@ if (window.location.href.includes("operations-products")) {
 if (window.location.href.includes("orders")) {
     $(document).ready(function () {
         /* ===================================================
+        DATATABLE
+        ===================================================*/
+        $('.tablaOrders').DataTable({
+            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
+        });
+
+        /* ===================================================
               VISUALIZAR DATOS DE UNA ORDER
             ===================================================*/
         $(document).on("click", ".orderInfo", function () {
@@ -217,6 +224,8 @@ if (window.location.href.includes("orders")) {
                     <select id="swal_cambiarEstado" class="form-control" name="swal_cambiarEstado">
                         <option>On Process</option>
                         <option>Shipped</option>
+                        <option>Sent</option>
+                        <option>Canceled</option>
                     </select>
                     `
                 ,

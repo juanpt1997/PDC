@@ -48,6 +48,7 @@ $Products = ProductsController::ctrShowProducts();
                         <table class="table tablaProducts table-sm">
                             <thead class="text-center">
                                 <tr>
+                                    <td>Item #</td>
                                     <td>Name</td>
                                     <td>Reference</td>
                                     <td>Weight</td>
@@ -60,6 +61,7 @@ $Products = ProductsController::ctrShowProducts();
                             <tbody class="text-center">
                                 <?php foreach ($Products as $key => $value) : ?>
                                     <tr>
+                                        <td><?= $value['id_products'] ?></td>
                                         <td><?= $value['Name'] ?></td>
                                         <td><?= $value['Reference'] ?></td>
                                         <td><?= $value['Weight'] ?></td>
