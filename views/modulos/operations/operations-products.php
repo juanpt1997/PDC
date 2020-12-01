@@ -55,6 +55,7 @@ $Products = ProductsController::ctrShowProducts();
                                     <td>Unit</td>
                                     <td>Price</td>
                                     <td>Image</td>
+                                    <td>Description</td>
                                     <td>Actions</td>
                                 </tr>
                             </thead>
@@ -68,6 +69,7 @@ $Products = ProductsController::ctrShowProducts();
                                         <td><?= $value['Unit'] ?></td>
                                         <td><?= $value['Price'] ?></td>
                                         <td><img class="img-thumbnail img-fluid btn-imgproduct" idproduct="<?= $value['id_products'] ?>" src="<?= "." . $value['Image'] ?>" width="100" alt="" style="cursor: pointer;" data-target="#modal-imgproduct" data-toggle="modal"></td>
+                                        <td class="text-sm" style="max-width: 150px"><?= $value['Description'] ?></td>
                                         <td><button class="btn btn-info btn-sm productInfo" data-target="#modal-editproduct" data-toggle="modal" idproduct="<?= $value['id_products'] ?>"><i class="fas fa-pencil-alt"></i></button></td>
                                     </tr>
                                 <?php endforeach ?>

@@ -21,10 +21,23 @@ class CompaniesAjax
         $response = CompaniesController::ctrCompanyInfo($value);
         echo json_encode($response);
     }
+
+    /* ===================================================
+       ALLOWED PRODUCTS
+    ===================================================*/
+    static public function ajaxAllowedProducts($value)
+    {
+        $response = CompaniesController::ctrAllowedProducts($value);
+        echo json_encode($response);
+    }
 }
 
 if (isset($_POST['CompanyInfo']) && $_POST['CompanyInfo'] == "ok") {
     CompaniesAjax::ajaxCompanyInfo($_POST['idcompany']);
+}
+
+if (isset($_POST['AllowedProducts']) && $_POST['AllowedProducts'] == "ok") {
+    CompaniesAjax::ajaxAllowedProducts($_POST['idcompany']);
 }
 
 /* ===================================================
@@ -40,10 +53,22 @@ class ProductsAjax
         $response = ProductsController::ctrProductInfo($value);
         echo json_encode($response);
     }
+
+    /* ===================================================
+       SHOW PRODUCTS
+    ===================================================*/
+    static public function ajaxShowProducts()
+    {
+        $response = ProductsController::ctrShowProducts();
+        echo json_encode($response);
+    }
 }
 
 if (isset($_POST['ProductInfo']) && $_POST['ProductInfo'] == "ok") {
     ProductsAjax::ajaxProductInfo($_POST['idproduct']);
+}
+if (isset($_POST['ShowProducts']) && $_POST['ShowProducts'] == "ok") {
+    ProductsAjax::ajaxShowProducts();
 }
 
 /* ===================================================

@@ -1,0 +1,5 @@
+/* Drop down selection not available with readonly attribute */
+select[readonly] {
+	pointer-events: none;
+	/* color: #828282; */ /* If you also want the disabled input color. */
+}

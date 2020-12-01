@@ -186,6 +186,75 @@ class CompaniesController
             }
         }
     }
+
+    /* ===================================================
+        ALLOWED PRODUCTS
+    ===================================================*/
+    static public function ctrAllowedProducts($value)
+    {
+        $response = CompaniesModel::mdlAllowedProducts($value);
+
+        return $response;
+    }
+
+    /* ===================================================
+       SAVE ALLOWED PRODUCTS
+    ===================================================*/
+    static public function ctrSaveAllowedProducts()
+    {
+        if (isset($_POST['allowedProducts'])) {
+            /* Primero eliminamos los registros existentes de productos permitidos */
+            $eliminarAllowedProducts = CompaniesModel::mdlEliminarRegistros("re_Companies_Products", $_POST['idCompany']);
+
+            if ($eliminarAllowedProducts == "ok") {
+                /* Seguido de esto agregamos los nuevos */
+                $allowedProducts = $_POST['allowedProducts'];
+
+                # Tamaño del arreglo
+                $totalArreglo = $allowedProducts != '' ? sizeof($allowedProducts) : 0;
+
+                # Por cada input del arreglo
+                if ($totalArreglo > 0) {
+                    for ($i = 0; $i < $totalArreglo; $i++) {
+                        if ($allowedProducts[$i] != "") {
+                            $datos = array(
+                                'id_companies' => $_POST['idCompany'],
+                                'id_products' => $allowedProducts[$i]
+                            );
+                            $agregarAllowedProduct = CompaniesModel::mdlUpdateAllowedProducts($datos);
+                        }
+                    }
+                }
+
+                echo "
+                    <script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Allowed products updated successfully!',						
+                            showConfirmButton: true,
+                            allowOutsideClick: false,
+                        }).then((result)=>{
+                            if(result.value){
+                                window.location = 'operations-companies';
+                            }
+                        })
+                    </script>
+                ";
+            } else {
+                echo "
+						<script>
+							Swal.fire({
+								icon: 'error',
+								title: 'Oops, there was a problem, please try again later',						
+								showConfirmButton: true,
+								confirmButtonText: 'Cerrar',
+								closeOnConfirm: false
+							})
+						</script>
+					    ";
+            }
+        }
+    }
 }
 
 /* ===================================================
@@ -710,8 +779,10 @@ class OrdersController
             $rutaVerificar = ".." . $rutaDoc;
             if (file_exists($rutaVerificar)) {
                 $tipoArchivo = strpos($rutaDoc, '.pdf') !== false ? "PDF" : "Image";
-                $tipoArchivoArray = array('tipoArchivo' => $tipoArchivo,
-                                            'rutaDoc' => $rutaDoc);
+                $tipoArchivoArray = array(
+                    'tipoArchivo' => $tipoArchivo,
+                    'rutaDoc' => $rutaDoc
+                );
                 $response = array_merge($datosDocumento, $tipoArchivoArray);
                 return $response;
             } else {
@@ -721,6 +792,4 @@ class OrdersController
             return null;
         }
     }
-
-    
 }

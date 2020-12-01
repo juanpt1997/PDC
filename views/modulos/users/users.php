@@ -51,6 +51,7 @@
                                 <th>Name</th>
                                 <th>email</th>
                                 <th>Profile</th>
+                                <th>Company</th>
                                 <th>Status</th>
                                 <th>Last Login</th>
                                 <th>Actions</th>
@@ -67,6 +68,7 @@
                                         <td>' . $value['name'] . '</td>
                                         <td>' . $value['email'] . '</td>
                                         <td>' . $value['profile'] . '</td>
+                                        <td>' . $value['Company'] . '</td>
                                         ';
 
                                 if ($value['status'] != 0) {
@@ -180,8 +182,8 @@
                                     <i class="fas fa-user-secret"></i>
                                 </span>
                             </div>
-                            <select class="form-control input-lg" name="nuevoPerfil" required>
-                                <option disabled selected>Select a profile</option>
+                            <select class="form-control input-lg selectProfile" name="nuevoPerfil" required>
+                                <option disabled selected value="">Select a profile</option>
                                 <?php
                                 $perfiles = UsersController::ctrProfilesList();
 
@@ -194,6 +196,31 @@
                             </select>
                         </div>
                     </div>
+                    
+                    <!-- COMPANY -->
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="fas fa-users"></i>
+                                </span>
+                            </div>
+                            <select class="form-control input-lg selectCompany" name="nuevoCompany" readonly>
+                                <option disabled selected value="">Select a company</option>
+                                <?php
+                                $companies = CompaniesController::ctrShowCompanies();
+
+                                foreach ($companies as $key => $value) {
+
+                                    echo '<option value="' . $value['id_companies'] . '">' . $value['Name'] . '</option>';
+                                }
+                                ?>
+
+                            </select>
+                        </div>
+                    </div>
+
+
 
                 </div>
 
@@ -290,14 +317,37 @@
                                     <i class="fas fa-user-secret"></i>
                                 </span>
                             </div>
-                            <select class="form-control input-lg" name="editarPerfil" required>
-                                <option disabled selected>Select a profile</option>
+                            <select class="form-control input-lg selectProfile" id="editarPerfil" name="editarPerfil" required>
+                                <option disabled selected value="">Select a profile</option>
                                 <?php
                                 $perfiles = UsersController::ctrProfilesList();
 
                                 foreach ($perfiles as $key => $value) {
 
                                     echo '<option value="' . $value['idProfile'] . '">' . $value['profile'] . '</option>';
+                                }
+                                ?>
+
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- COMPANY -->
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <span class="input-group-text">
+                                    <i class="fas fa-users"></i>
+                                </span>
+                            </div>
+                            <select class="form-control input-lg selectCompany" id="editCompany" name="editCompany" readonly>
+                                <option disabled selected value="">Select a company</option>
+                                <?php
+                                $companies = CompaniesController::ctrShowCompanies();
+
+                                foreach ($companies as $key => $value) {
+
+                                    echo '<option value="' . $value['id_companies'] . '">' . $value['Name'] . '</option>';
                                 }
                                 ?>
 

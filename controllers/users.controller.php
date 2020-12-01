@@ -164,13 +164,15 @@ class UsersController
 
                 $encriptar = crypt($_POST['nuevaIdentificacion'], '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
 
+                $id_companies = !isset($_POST['nuevoCompany']) ? 0 : $_POST['nuevoCompany'];
                 $datos = array(
                     "dni" => $_POST['nuevaIdentificacion'],
                     "name" => $_POST['nuevoNombre'],
                     "email" => $_POST['nuevoEmail'],
                     "status" => 1,
                     "phone" => $_POST['nuevoCelular'],
-                    "password" => $encriptar
+                    "password" => $encriptar,
+                    "id_companies" => $id_companies
                 );
 
                 $respuesta = UsersModel::mdlRegisterUser($datos);
@@ -262,13 +264,14 @@ class UsersController
             ) {
 
 
+                $id_companies = !isset($_POST['editCompany']) ? 0 : $_POST['editCompany'];
                 $tabla = "L_Users";
-
                 $datos = array(
                     "dni" => $_POST['editarIdentificacion'],
                     "name" => $_POST['editarNombre'],
                     "email" => $_POST['editarEmail'],
-                    "phone" => $_POST['editarCelular']
+                    "phone" => $_POST['editarCelular'],
+                    "id_companies" => $id_companies
                 );
 
                 # Actualizar tabla de usuarios

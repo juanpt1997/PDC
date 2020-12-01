@@ -62,6 +62,21 @@ if (window.location.href.includes("users")) {
                     $("#editarEmail").val(response.email);
                     $("#editarCelular").val(response.phone);
 
+                    if (response.id_companies != 0){
+                        $('#editarPerfil').val(4);
+                        $('#editCompany').val(response.id_companies);
+
+                        $(".selectCompany").removeAttr("readonly");
+                        $(".selectCompany").attr("required", "required");
+                    }
+                    else{
+                        $('#editarPerfil').val("");
+                        $('#editCompany').val("");
+
+                        $(".selectCompany").attr("readonly", "readonly");
+                        $(".selectCompany").removeAttr("required");
+                    }
+
                 }
             });
         });
@@ -101,6 +116,32 @@ if (window.location.href.includes("users")) {
             });
         });
 
+        /* ===================================================
+          CUANDO SELECCIONE UN PERFIL DE CLIENTE
+        ===================================================*/
+        $(document).on("change", ".selectProfile", function () {
+            var perfil = $(this).val();
+
+            if (perfil == 4){
+                $(".selectCompany").removeAttr("readonly");
+                $(".selectCompany").attr("required", "required");
+            }
+            else{
+                $(".selectCompany").attr("readonly", "readonly");
+                $(".selectCompany").removeAttr("required");
+                $(".selectCompany").val("");
+            }
+        });
+
+        /* ===================================================
+          ABRA LA MODAL DE AGREGAR UN NUEVO USUARIO
+        ===================================================*/
+        $('#agregarUsuarioModal').on('shown.bs.modal', function () {
+            $(".selectProfile").val("");
+            $(".selectCompany").attr("readonly", "readonly");
+            $(".selectCompany").removeAttr("required");
+            $(".selectCompany").val("");
+        })
         
     });
 }

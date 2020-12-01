@@ -39,6 +39,11 @@ session_start();
     <!-- Datatables -->
     <link rel="stylesheet" href="views/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="views/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <!-- Bootstrap4 Duallistbox -->
+    <link rel="stylesheet" href="views/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+
+    <!-- ESTILOS PERSONALIZADOS -->
+    <link rel="stylesheet" href="views/css/plantilla.css">
 
     <!-- =================================================== 
         PLUGINS JS
@@ -61,6 +66,8 @@ session_start();
     <script src="views/plugins/sweetalert2/sweetalert2.all.min.js"></script>
     <!-- PDF JS -->
     <script src="views/plugins/pdf-js/pdf.js"></script>
+    <!-- Bootstrap4 Duallistbox -->
+    <script src="views/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
 
     <!-- OPTIONAL SCRIPTS -->
     <script src="views/dist/js/demo.js"></script>
@@ -77,9 +84,9 @@ session_start();
     <!-- PAGE SCRIPTS -->
     <!-- <script src="views/dist/js/pages/dashboard2.js"></script> -->
     <!-- =================================================== CUSTOM JS =================================================== -->
-    <script src="views/js/plantilla.js"></script>
-    <script src="views/js/operations.js"></script>
-    <script src="views/js/users.js"></script>
+    <script src="views/js/plantilla.js?v=<?= time() ?>"></script>
+    <script src="views/js/operations.js?v=<?= time() ?>"></script>
+    <script src="views/js/users.js?v=<?= time() ?>"></script>
 
 
 </head>
@@ -133,25 +140,25 @@ session_start();
         <!-- ./wrapper -->
     <?php else : ?>
         <div class="hold-transition login-page">
-            <?php 
-                if (isset($_GET['page'])) {
-                    $rutaUrl = explode("/", $_GET['page']);
+            <?php
+            if (isset($_GET['page'])) {
+                $rutaUrl = explode("/", $_GET['page']);
 
-                    //$ruta = $_GET['ruta'];
-                    $ruta = $rutaUrl[0];
+                //$ruta = $_GET['ruta'];
+                $ruta = $rutaUrl[0];
 
-                    if (
-                        $ruta == "operations-login" ||
-                        $ruta == "clients-login"
-                    ){
-                        include "modulos/login/" . $ruta . ".php";
-                    } else{
-                        include('modulos/login/login.php');
-                    }
+                if (
+                    $ruta == "operations-login" ||
+                    $ruta == "clients-login"
+                ) {
+                    include "modulos/login/" . $ruta . ".php";
                 } else {
                     include('modulos/login/login.php');
                 }
-                
+            } else {
+                include('modulos/login/login.php');
+            }
+
             ?>
         </div>
     <?php endif ?>

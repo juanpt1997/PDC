@@ -6,6 +6,8 @@
 
 <?php
 $Companies = CompaniesController::ctrShowCompanies();
+
+$Products = ProductsController::ctrShowProducts();
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -66,6 +68,11 @@ $Companies = CompaniesController::ctrShowCompanies();
                             </thead>
                             <tbody>
                                 <?php foreach ($Companies as $key => $value) : ?>
+                                    <?php
+                                    $btnEditCompany = "<button class='btn btn-secondary btn-sm companyInfo m-1' data-target='#modal-editcompany' data-toggle='modal' idcompany='{$value['id_companies']}'><i class='fas fa-pencil-alt'></i></button>";
+                                    $botonProductsAllowed = "<button class='btn btn-primary btn-sm btn-productsAllowed m-1' data-target='#modal-productsAllowed' data-toggle='modal' idcompany='{$value['id_companies']}' namecompany='{$value['Name']}'><i class='fas fa-cubes'></i></button>";
+                                    $btnActions = "<div class='row d-flex flex-nowrap justify-content-center'>" . $btnEditCompany . $botonProductsAllowed . "</div>";
+                                    ?>
                                     <tr>
                                         <td><?= $value['Country'] ?></td>
                                         <td><?= $value['Name'] ?></td>
@@ -78,7 +85,7 @@ $Companies = CompaniesController::ctrShowCompanies();
                                         <td><?= $value['Contact_Name'] ?></td>
                                         <td><?= $value['Phone_Number'] ?></td>
                                         <td><?= $value['Email'] ?></td>
-                                        <td><button class="btn btn-info btn-sm companyInfo" data-target="#modal-editcompany" data-toggle="modal" idcompany="<?= $value['id_companies'] ?>"><i class="fas fa-pencil-alt"></i></button></td>
+                                        <td><?= $btnActions ?></td>
                                     </tr>
                                 <?php endforeach ?>
 
@@ -308,8 +315,8 @@ $Companies = CompaniesController::ctrShowCompanies();
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
 
-                <?php 
-                    $newCompany = CompaniesController::ctrNewCompany();
+                <?php
+                $newCompany = CompaniesController::ctrNewCompany();
                 ?>
             </div>
             <!-- /.modal-content -->
@@ -521,8 +528,8 @@ $Companies = CompaniesController::ctrShowCompanies();
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 </div>
 
-                <?php 
-                    $modifyCompany = CompaniesController::ctrUpdateCompany();
+                <?php
+                $modifyCompany = CompaniesController::ctrUpdateCompany();
                 ?>
             </div>
             <!-- /.modal-content -->
@@ -531,3 +538,44 @@ $Companies = CompaniesController::ctrShowCompanies();
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+
+<!-- ===================================================
+    MODAL ASIGNAR PRODUCTS A UN COMPANY - PRODUCTS ALLOWED
+=================================================== -->
+<div id="modal-productsAllowed" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="title_ProductsAllowed">Title</h5>
+                <button class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="spinner-grow spinnerDuallistbox" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <form id="frmAllowedProducts" method="post" enctype="multipart/form-data">
+                    <input id="allowedProductsIdCompany" type="hidden" name="idCompany" value="">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group divAllowedProducts">
+
+                            </div>
+                            <!-- /.form-group -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" type="submit" form="frmAllowedProducts"><i class="fas fa-save"></i> Save</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+            <?php
+                $updateAllowedProducts = CompaniesController::ctrSaveAllowedProducts();
+            ?>
+        </div>
+    </div>
+</div>

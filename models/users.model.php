@@ -25,10 +25,11 @@ class UsersModel
 
             $retorno = $stmt->fetch();
         } else {
-            $stmt = Conexion::conectar()->prepare("SELECT u.*, p.profile
-                                                    FROM L_Users u 
+            $stmt = Conexion::conectar()->prepare("SELECT u.*, p.profile, c.Name as Company
+                                                    FROM L_Users u
                                                     INNER JOIN L_User_Profile up ON u.idUser = up.idUser
                                                     INNER JOIN L_Profiles p ON up.idProfile = p.idProfile
+                                                    LEFT JOIN Companies c ON c.id_companies = u.id_companies
                                                     ORDER BY p.profile DESC");
 
             $stmt->execute();
@@ -115,8 +116,8 @@ class UsersModel
     ===================================================*/
     static public function mdlRegisterUser($datos)
     {        
-        $stmt = Conexion::conectar()->prepare("INSERT INTO L_Users(dni,name,email, `status`,phone, password, creation_date) 
-                                                VALUES(:dni, :name, :email, :status, :phone, :password, CURDATE())");
+        $stmt = Conexion::conectar()->prepare("INSERT INTO L_Users(dni, name, email, `status`,phone, password, id_companies, creation_date) 
+                                                VALUES(:dni, :name, :email, :status, :phone, :password, :id_companies, CURDATE())");
 
         $stmt->bindParam(":dni", $datos["dni"], PDO::PARAM_INT);
         $stmt->bindParam(":name", $datos["name"], PDO::PARAM_STR);
@@ -124,6 +125,7 @@ class UsersModel
         $stmt->bindParam(":status", $datos["status"], PDO::PARAM_INT);
         $stmt->bindParam(":phone", $datos["phone"], PDO::PARAM_INT);
         $stmt->bindParam(":password", $datos["password"], PDO::PARAM_STR);
+        $stmt->bindParam(":id_companies", $datos["id_companies"], PDO::PARAM_INT);
 
 
         if ($stmt->execute()) {
@@ -167,12 +169,13 @@ class UsersModel
     ===================================================*/
     static public function mdlEditUser($tabla, $datos)
     {
-        $stmt = Conexion::conectar()->prepare("UPDATE L_Users SET dni = :dni, name = :name, email = :email, phone = :phone WHERE dni = :dni");
+        $stmt = Conexion::conectar()->prepare("UPDATE L_Users SET dni = :dni, name = :name, email = :email, phone = :phone, id_companies = :id_companies WHERE dni = :dni");
 
         $stmt->bindParam(":dni", $datos["dni"], PDO::PARAM_INT);
         $stmt->bindParam(":name", $datos["name"], PDO::PARAM_STR);
         $stmt->bindParam(":email", $datos["email"], PDO::PARAM_STR);
         $stmt->bindParam(":phone", $datos["phone"], PDO::PARAM_INT);
+        $stmt->bindParam(":id_companies", $datos["id_companies"], PDO::PARAM_STR);
         
         if ($stmt->execute()) {
             $retorno = "ok";

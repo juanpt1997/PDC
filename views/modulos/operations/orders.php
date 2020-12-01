@@ -57,6 +57,7 @@ $Products = ProductsController::ctrShowProducts();
                                     <th>Status</th>
                                     <th>COA</th>
                                     <th>POD</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -93,6 +94,9 @@ $Products = ProductsController::ctrShowProducts();
                                             $Status = $value['Status'];
                                             break;
                                     }
+                                    //$onclickEventDescargar = `onclick="javascript:window.open('pdf/po.php?order=${value['id_orders']}','','width=1280,height=720,left=50,top=50,toolbar=yes');`;
+                                    $botonDescargarOrder = "<button class='btn btn-secondary ml-2 btn-descargarorder' type='button' idorder='{$value['id_orders']}'><i class='fas fa-save'></i></button>";
+                                    $botonAcciones = "<div class='row d-flex flex-nowrap justify-content-center'>" . $botonDescargarOrder . "</div>";
 
                                     ?>
                                     <tr>
@@ -108,6 +112,7 @@ $Products = ProductsController::ctrShowProducts();
                                         <td><?= $Status ?></td>
                                         <td><?= $BtnCOA ?></td>
                                         <td><?= $BtnPOD ?></td>
+                                        <td><?= $botonAcciones ?></td>
                                     </tr>
                                 <?php endforeach ?>
                             </tbody>
@@ -117,7 +122,7 @@ $Products = ProductsController::ctrShowProducts();
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer clearfix">
-                    <button type="button" class="btn btn-sm btn-info float-left" data-toggle="modal" data-target="#modal-neworder">Place New Order</button>
+                    <button id="btnPlaceNewOrder" type="button" class="btn btn-sm btn-info float-left" data-toggle="modal" data-target="#modal-neworder">Place New Order</button>
                     <!-- <a href="completed_orders.html" class="btn btn-sm btn-success float-right">Delivered Orders</a> -->
 
                 </div>
@@ -158,7 +163,7 @@ $Products = ProductsController::ctrShowProducts();
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
                                 <label>Client</label>
-                                <select class="form-control select2" name="client" style="width: 100%" required>
+                                <select class="form-control select2 clientInput" name="client" style="width: 100%" required>
                                     <option value="" selected disabled>Choose an option</option>
                                     <?php foreach ($Companies as $key => $value) : ?>
                                         <option value="<?= $value['id_companies'] ?>"><?= $value['Name'] ?></option>
@@ -174,11 +179,8 @@ $Products = ProductsController::ctrShowProducts();
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
                                 <label>Product</label>
-                                <select class="form-control select2" name="id_products" style="width: 100%" required>
+                                <select class="form-control select2 productsInput" name="id_products" style="width: 100%" required>
                                     <option value="" selected disabled>Choose an option</option>
-                                    <?php foreach ($Products as $key => $value) : ?>
-                                        <option value="<?= $value['id_products'] ?>"><?= $value['Name'] ?></option>
-                                    <?php endforeach ?>
                                 </select>
                             </div>
                             <!-- /.form-group -->
@@ -519,7 +521,7 @@ $Products = ProductsController::ctrShowProducts();
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
                                 <label>Client</label>
-                                <select class="form-control select2 editOrder" id="company" name="company" style="width: 100%" required>
+                                <select class="form-control select2 editOrder clientInput" id="company" name="company" style="width: 100%" required>
                                     <option value="" selected disabled>Choose an option</option>
                                     <?php foreach ($Companies as $key => $value) : ?>
                                         <option value="<?= $value['id_companies'] ?>"><?= $value['Name'] ?></option>
@@ -535,11 +537,8 @@ $Products = ProductsController::ctrShowProducts();
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
                                 <label>Product</label>
-                                <select class="form-control select2 editOrder" id="id_products" name="id_products" style="width: 100%" required>
+                                <select class="form-control select2 editOrder productsInput" id="id_products" name="id_products" style="width: 100%" required>
                                     <option value="" selected disabled>Choose an option</option>
-                                    <?php foreach ($Products as $key => $value) : ?>
-                                        <option value="<?= $value['id_products'] ?>"><?= $value['Name'] ?></option>
-                                    <?php endforeach ?>
                                 </select>
                             </div>
                             <!-- /.form-group -->

@@ -115,6 +115,73 @@ class CompaniesModel
         $conexion = null;
         return $id;
     }
+
+    /* ===================================================
+       ALLOWED PRODUCTS
+    ===================================================*/
+    static public function mdlAllowedProducts($value)
+    {
+        $stmt = Conexion::conectar()->prepare("SELECT p.*
+                                                FROM Companies c
+                                                INNER JOIN re_Companies_Products cp ON c.id_companies = cp.id_companies
+                                                INNER JOIN Products p ON p.id_products = cp.id_products
+                                                WHERE c.id_companies = :id_companies");
+        $stmt->bindParam(":id_companies", $value, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        $retorno = $stmt->fetchAll();
+
+        $stmt->closeCursor();
+        $stmt = null;
+
+        return $retorno;
+    }
+
+    /* ===================================================
+       ELIMINAR REGISTROS DE LA TABLA ALLOWED PRODUCTS
+    ===================================================*/
+    static public function mdlEliminarRegistros($tabla, $value)
+    {
+        $stmt = Conexion::conectar()->prepare("DELETE
+                                                FROM $tabla
+                                                WHERE id_companies = :id_companies");
+        $stmt->bindParam(":id_companies", $value, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            $retorno = "ok";
+        } else {
+            $retorno = "error";
+        }
+
+        $stmt->closeCursor();
+        $stmt = null;
+
+        return $retorno;
+    }
+
+    /* ===================================================
+           UPDATE ALLOWED PRODUCTS OF A COMPANY
+        ===================================================*/
+    static public function mdlUpdateAllowedProducts($datos)
+    {
+        $stmt = Conexion::conectar()->prepare("INSERT INTO re_Companies_Products (id_companies, id_products)
+                                                        VALUES (:id_companies, :id_products)");
+
+        $stmt->bindParam(":id_companies", $datos['id_companies'], PDO::PARAM_INT);
+        $stmt->bindParam(":id_products", $datos['id_products'], PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            $retorno = "ok";
+        } else {
+            $retorno = "error";
+        }
+
+        $stmt->closeCursor();
+        $stmt = null;
+
+        return $retorno;
+    }
 }
 
 /* ===================================================
@@ -314,10 +381,11 @@ class OrdersModel
     ===================================================*/
     static public function mdlOrderInfo($value)
     {
-        $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, o.*
+        $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, c.Address_Line1 AS Company_Address1, c.Address_Line2 AS Company_Address2, c.Phone_Number AS Company_Phone, c.Contact_Name AS Company_Contact, o.*, u.name AS audituser
                                                 FROM Orders o
                                                 INNER JOIN Companies c ON c.id_companies = o.id_companies
                                                 INNER JOIN Products p ON p.id_products = o.id_products
+                                                INNER JOIN L_Users u ON u.idUser = o.audit_user
                                                 WHERE o.id_orders = :id_orders");
         $stmt->bindParam(":id_orders", $value, PDO::PARAM_INT);
 
@@ -389,7 +457,7 @@ class OrdersModel
         } else {
             $retorno = "error";
         }
-           
+
         $stmt->closeCursor();
         $conexion = null;
         return $retorno;

@@ -54,6 +54,77 @@ if (window.location.href.includes("operations-companies")) {
             });
         });
 
+        /* ===================================================
+          MOSTRAR Y SELECCIONAR PRODUCTS PERMITIDOS
+        ===================================================*/
+        $(document).on("click", ".btn-productsAllowed", function () {
+            var idcompany = $(this).attr("idcompany");
+            var namecompany = $(this).attr("namecompany");
+
+            // Titulo de la modal
+            $("#title_ProductsAllowed").html(namecompany);
+
+            // Id company del formulario
+            $("#allowedProductsIdCompany").val(idcompany);
+
+            // Eliminar el select existente
+            $(".divAllowedProducts").html("");
+            // Mostrar el spinner cargando
+            $('.spinnerDuallistbox').removeClass("d-none");
+
+            var datos = new FormData();
+            datos.append('ShowProducts', "ok");
+            $.ajax({
+                type: 'post',
+                url: 'ajax/operations.ajax.php',
+                data: datos,
+                dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    var template = `<label>Select the allowed products for this company</label>
+                                    <select class="duallistbox d-none" multiple="multiple" name="allowedProducts[]" required>`;
+                    if (response != "") {
+                        response.forEach(element => {
+                            template += `<option value="${element.id_products}">${element.Name}</option>`;
+                        });
+                    }
+                    template += `</select>`;
+                    // Agregar el select al formulario
+                    $(".divAllowedProducts").html(template);
+
+                    // Traer la informacion de los productos que estan permitidos para dicho company
+                    var datosAllowedProducts = new FormData();
+                    datosAllowedProducts.append('AllowedProducts', "ok");
+                    datosAllowedProducts.append('idcompany', idcompany);
+                    $.ajax({
+                        type: 'post',
+                        url: 'ajax/operations.ajax.php',
+                        data: datosAllowedProducts,
+                        dataType: 'json',
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            if (response != "") {
+                                response.forEach(element => {
+                                    $(`.duallistbox option[value="${element.id_products}"]`).attr("selected", "selected");
+                                });
+                            }
+                            // INICIALIZAR DUALLISTBOX PARA ALLOWED PRODUCTS DE UN COMPANY
+                            $('.duallistbox').bootstrapDualListbox();
+
+                            // Mostrar duallistbox
+                            $('.duallistbox').removeClass("d-none");
+                            // Esconder spinner de cargando
+                            $('.spinnerDuallistbox').addClass("d-none");
+                        }
+                    });
+                }
+            });
+
+        });
     });
 }
 
@@ -183,7 +254,7 @@ if (window.location.href.includes("orders")) {
                         // Inputs de la modal
                         $("#idorder").val(response.id_orders);
                         $("#company").val(response.id_companies);
-                        $("#id_products").val(response.id_products);
+                        ShowAllowedProducts(response.id_companies, response.id_products);
                         $("#Weight_Each_Bag").val(response.Weight_Each_Bag);
                         $("#Total_Bags").val(response.Total_Bags);
                         $("#Total_Skids").val(response.Total_Skids);
@@ -335,6 +406,67 @@ if (window.location.href.includes("orders")) {
                     }
                 }
             });
+        });
+
+        /* ===================================================
+          CLICK DESCARGAR PDF ORDER
+        ===================================================*/
+        $(document).on("click", ".btn-descargarorder", function () {
+            var idorder = $(this).attr("idorder");
+            window.open(`./pdf/pdforder.php?order=${idorder}`, '', 'width=1280,height=720,left=50,top=50,toolbar=yes')
+        });
+
+        /* ===================================================
+            DETECTS CHANGE ON INPUT CLIENT TO SHOW ALLOWED PRODUCTS
+        ===================================================*/
+        $(document).on("change", ".clientInput", function () {
+            var idcompany = $(this).val();
+
+            ShowAllowedProducts(idcompany, null);
+
+        });
+
+        /* ===================================================
+          SHOW ALLOWED PRODUCTS FOR AN SPECIFIC COMPANY
+        ===================================================*/
+        function ShowAllowedProducts(idcompany, idproduct) {
+            $(".productsInput").html("");
+
+            var datos = new FormData();
+            datos.append('AllowedProducts', "ok");
+            datos.append('idcompany', idcompany);
+            $.ajax({
+                type: 'post',
+                url: 'ajax/operations.ajax.php',
+                data: datos,
+                dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    var template = `<option value="" selected disabled>Choose an option</option>`;
+                    if (response != "") {
+                        response.forEach(element => {
+                            template += `<option value="${element.id_products}">${element.Name}</option>`;
+                        });
+                    }
+
+                    // Agregar el select
+                    $(".productsInput").html(template);
+
+                    if (idproduct != null){
+                        $("#id_products").val(idproduct);
+                    }
+                }
+            });
+        }
+
+        /* ===================================================
+            RESET SELECT CLIENT AND PRODUCT WHEN NEW ORDER MODAL IS OPENED
+        ===================================================*/
+        $(document).on("click", "#btnPlaceNewOrder", function () {
+            $(".clientInput").val("");
+            $(".productsInput").val("");
         });
     });
 
