@@ -254,7 +254,7 @@
                 <!-- INICIO DEL FORMULARIO -->
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Editar usuario</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit user</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -358,11 +358,11 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-warning" type="button" id="restablecerPswd" data-dismiss="modal"><i class="fas fa-lock-open"></i> Restablecer Contraseña</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button class="btn btn-warning" type="button" id="restablecerPswd" data-dismiss="modal"><i class="fas fa-lock-open"></i> Restore Password</button>
                     <button type="submit" class="btn btn-success">
                         <i class="fas fa-save"></i>
-                        Modificar usuario
+                        Modify User
                     </button>
                 </div>
 

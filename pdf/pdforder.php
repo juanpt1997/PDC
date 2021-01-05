@@ -154,7 +154,7 @@ class PdfOrder
         # POSICION DEL EJE X & Y de la fecha
         $pdf->SetXY(150, 30);
         $pdf->SetFont('helvetica', '', '10');
-        $pdf->MultiCell(40, 10, "DATE:   " . date('Y-m-d'), 0, 'C');
+        $pdf->MultiCell(40, 10, "DATE:   " . date('m-d-Y'), 0, 'C');
 
         # Cliente
         $pdf->SetFont('helvetica', 'B', '12');
@@ -289,7 +289,7 @@ class PdfOrder
         $pdf->SetFont('helvetica', '', '10');
         $pdf->Cell(35, 5, 'DELIVERY DATE:');
         $pdf->SetFont('helvetica', 'B', '10');
-        $pdf->Cell(30, 5, $info['Delivery_Date'], $complex_cell_border);
+        $pdf->Cell(30, 5, $info['Delivery_DateF'], $complex_cell_border);
         $pdf->Ln();
         $pdf->Ln();
         $pdf->Ln();

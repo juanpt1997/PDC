@@ -103,6 +103,16 @@ class OrdersAjax
         echo json_encode($response);
         //echo $response;
     }
+
+    /* ===================================================
+       DOWNLOAD FILE (POD OR COA)
+    ===================================================*/
+    static public function ajaxDownloadFile($datos)
+    {
+        $response = OrdersController::ctrDownloadFile($datos);
+        //echo $response;
+        echo json_encode($response);
+    }
 }
 
 if (isset($_POST['OrderInfo']) && $_POST['OrderInfo'] == "ok") {
@@ -124,4 +134,12 @@ if (isset($_POST['ExisteDoc']) && $_POST['ExisteDoc'] == "ok") {
         'tipodoc' => $_POST['tipodoc']
     );
     OrdersAjax::ajaxVerificarDocumento($datos);
+}
+
+if (isset($_POST['DownloadFile']) && $_POST['DownloadFile'] == "ok") {
+    $datos = array(
+        'id_orders' => $_POST['idorder'],
+        'tipodoc' => $_POST['tipodoc']
+    );
+    OrdersAjax::ajaxDownloadFile($datos);
 }

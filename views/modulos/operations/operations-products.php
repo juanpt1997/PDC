@@ -19,7 +19,7 @@ $Products = ProductsController::ctrShowProducts();
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="./">Home</a></li>
                         <li class="breadcrumb-item active">Products</li>
                     </ol>
                 </div><!-- /.col -->
@@ -139,6 +139,21 @@ $Products = ProductsController::ctrShowProducts();
                                         <span class="input-group-text"><i class="fas fa-barcode"></i></span>
                                     </div>
                                     <input name="Reference" type="text" class="form-control" id="" placeholder="Reference" maxlength="30" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ===================================================
+                            UPC Code
+                        =================================================== -->
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="">UPC Code</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-terminal"></i></span>
+                                    </div>
+                                    <input name="UpcCode" type="text" class="form-control" id="" placeholder="UPC Code" maxlength="30" required>
                                 </div>
                             </div>
                         </div>
@@ -276,6 +291,21 @@ $Products = ProductsController::ctrShowProducts();
                                         <span class="input-group-text"><i class="fas fa-barcode"></i></span>
                                     </div>
                                     <input name="Reference" type="text" class="form-control editProduct" id="Reference" placeholder="Reference" maxlength="30" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ===================================================
+                            UPC Code
+                        =================================================== -->
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="">UPC Code</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-barcode"></i></span>
+                                    </div>
+                                    <input name="UpcCode" type="text" class="form-control editProduct" id="UpcCode" placeholder="UPC Code" maxlength="30" required>
                                 </div>
                             </div>
                         </div>

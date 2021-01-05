@@ -11,6 +11,7 @@ require_once "./controllers/plantilla_controlador.php";
 require_once "./controllers/users.controller.php";
 require_once "./controllers/operations.controller.php";
 require_once "./controllers/files.controller.php";
+require_once "./controllers/mail.controller.php";
 
 /* ===================================================
    MODELS REQUIRED FOR THE PROJECT

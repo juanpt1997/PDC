@@ -86,6 +86,7 @@ session_start();
     <!-- =================================================== CUSTOM JS =================================================== -->
     <script src="views/js/plantilla.js?v=<?= time() ?>"></script>
     <script src="views/js/operations.js?v=<?= time() ?>"></script>
+    <script src="views/js/companies.js?v=<?= time() ?>"></script>
     <script src="views/js/users.js?v=<?= time() ?>"></script>
 
 
@@ -121,6 +122,12 @@ session_start();
                     $ruta == "orders"
                 ) {
                     include "modulos/operations/" . $ruta . ".php";
+                } else if ( # Companies
+                    $ruta == "c-neworder" ||
+                    $ruta == "c-orders" ||
+                    $ruta == "c-shippedorders"
+                ) {
+                    include "modulos/companies/" . $ruta . ".php";
                 } else if ( # Users
                     $ruta == "users"
                 ) {
@@ -134,6 +141,7 @@ session_start();
             ?>
 
             <!-- =================================================== MAIN FOOTER =================================================== -->
+            <?php include('includes/modals.php'); ?>
             <?php include('includes/footer.php'); ?>
 
         </div>
@@ -162,31 +170,6 @@ session_start();
             ?>
         </div>
     <?php endif ?>
-
-    <!-- =================================================== MODAL PARA CERRAR SESIÓN =================================================== -->
-    <div class="modal fade" id="cerrarSesionModal" tabindex="-1" role="dialog" aria-labelledby="cerrarSesionModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="cerrarSesionModalLabel">Log Out</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="text-center">
-                        <div class="text-center">
-                            Are you sure you want to log out?
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
-                    <a href="./logout" class="btn btn-danger">Log Out</a>
-                </div>
-            </div>
-        </div>
-    </div>
 
 </body>
 

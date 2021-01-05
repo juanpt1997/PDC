@@ -30,6 +30,8 @@ class UsersController
                         $_SESSION['name'] = $respuesta['name'];
                         $_SESSION['email'] = $respuesta['email'];
 
+                        $_SESSION['idCompany'] = $respuesta['id_companies'];
+
                         /* ===================== 
 								SE REGISTRA LA SESSION DEL INGRESO 
 							========================= */
@@ -161,10 +163,26 @@ class UsersController
                 preg_match('/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/', $_POST["nuevoEmail"])
 
             ) {
-
-                $encriptar = crypt($_POST['nuevaIdentificacion'], '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
-
                 $id_companies = !isset($_POST['nuevoCompany']) ? 0 : $_POST['nuevoCompany'];
+
+                # Si es un usuario de operations la contraseña es el mismo DNI
+                if ($id_companies == 0) {
+                    $encriptar = crypt($_POST['nuevaIdentificacion'], '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
+                }
+                # Si es un cliente la contraseña se general al azar
+                else {
+                    $caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"; //posibles caracteres a usar
+                    $numerodeletras = 6; //numero de letras para generar el texto
+                    $cadena = ""; //variable para almacenar la cadena generada
+                    for ($i = 0; $i < $numerodeletras; $i++) {
+                        $cadena .= substr($caracteres, rand(0, strlen($caracteres)), 1); /*Extraemos 1 caracter de los caracteres entre el rango 0 a Numero de letras que tiene la cadena */
+                    }
+                    $encriptar = crypt($cadena, '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
+                }
+
+
+
+
                 $datos = array(
                     "dni" => $_POST['nuevaIdentificacion'],
                     "name" => $_POST['nuevoNombre'],
@@ -195,6 +213,28 @@ class UsersController
 
                     $perfilUsuario = UsersModel::mdlRegisterUserProfile($datosUsuarioPerfil);
 
+                    /* ===================================================
+                       EMAIL DE BIENVENIDA AL NUEVO USUARIO CLIENTE
+                    ===================================================*/
+                    if ($id_companies != 0) {
+                        $to = $_POST['nuevoEmail'];
+                        $subject = "PDC INTERNATIONAL INC - Invitation";
+                        $message = "<html>
+                                    <body>
+                                    <p>PDC INTERNATIONAL INC has invited you to join WEB PLATFORM as a new customer of PDC INTERNATIONAL INC. <a href='http://www.lnrdigital.com/lnrdigital.com/jpablo/'>Click here to accept this invitation.</a><br><br>
+                                    Our WEB PLATFORM can easily place and check status of your orders as well download your order's documents like BOL's and POD's.<br><br>
+                                    Once you accept this invitation, you'll be able to access and start your business with us.<br>
+                                    USERNAME: your email, PASSWORD: $cadena<br><br>
+                                    Thank you,<br>
+                                    The PDC INTERNATIONAL INC Team</p><br>
+                                    </body>
+                                    </html>";
+                        ControladorCorreo::ctrEnviarCorreo($to, $subject, $message);
+                    }
+
+                    /* ===================================================
+                       MENSAJE DE EXITO
+                    ===================================================*/
                     echo "
 						<script>
 							Swal.fire({
@@ -356,8 +396,24 @@ class UsersController
 	===================================================*/
     static public function ctrRestablecerPswd($item, $value)
     {
-        # Se encrita la cadena para luego actualizar el campo del usuario
-        $encriptar = crypt($value, '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
+        $user = self::ctrShowUsers($item, $value);
+
+        # Si es un usuario de operations la contraseña es el mismo DNI
+        if ($user['id_companies'] == 0) {
+            # Se encrita la cadena para luego actualizar el campo del usuario
+            $encriptar = crypt($value, '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
+        }
+        # Si es un cliente la contraseña se general al azar
+        else {
+            $caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"; //posibles caracteres a usar
+            $numerodeletras = 6; //numero de letras para generar el texto
+            $cadena = ""; //variable para almacenar la cadena generada
+            for ($i = 0; $i < $numerodeletras; $i++) {
+                $cadena .= substr($caracteres, rand(0, strlen($caracteres)), 1); /*Extraemos 1 caracter de los caracteres entre el rango 0 a Numero de letras que tiene la cadena */
+            }
+            $encriptar = crypt($cadena, '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
+        }
+
 
         $tabla = "L_Users";
         $item1 = "password";
@@ -369,6 +425,23 @@ class UsersController
 
         # Actualizo el campo de cambiar contraseña a 1 para que pida cambiar la contraseña cuando inicie sesion
         $pedirCambiarPassword = UsersModel::mdlUpdateSingleField($tabla, "change_password", 1, $item2, $valor2);
+
+        # En caso de ser un cliente, enviar email con la nueva contraseña
+        if ($user['id_companies'] != 0 && $actualizarPassword == "ok") {
+            $to = $user['email'];
+            $subject = "PDC INTERNATIONAL INC - Reset Password";
+            $message = "<html>
+                                    <body>
+                                    <p>
+                                    Your password has been restored by the web platform administrator.<br><br>
+                                    USERNAME: your email, PASSWORD: $cadena<br>
+                                    <a href='http://www.lnrdigital.com/lnrdigital.com/jpablo/'>Click here to go to the website.</a><br>
+                                    Thank you,<br>
+                                    The PDC INTERNATIONAL INC Team</p><br>
+                                    </body>
+                                    </html>";
+            ControladorCorreo::ctrEnviarCorreo($to, $subject, $message);
+        }
 
         return $actualizarPassword;
     }

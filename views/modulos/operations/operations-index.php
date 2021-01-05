@@ -1,3 +1,9 @@
+<?php if (!array_search('OPERATIONS', $_SESSION['options'])) : ?>
+    <script>
+        window.location = 'c-neworder';
+    </script>
+<?php endif ?>
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -76,9 +82,9 @@ if ($usuario['change_password'] != 0) :
 
                     </div>
                     <div class="modal-footer">
-                        <a href="salir" class="btn btn-danger"><i class="fas fa-times"></i> Cancelar </a>
+                        <a href="logout" class="btn btn-danger"><i class="fas fa-times"></i> Cancel </a>
                         <!-- <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button> -->
-                        <button type="submit" class="btn btn-success " disabled id="btnCambioPassword"><i class="fas fa-lock"></i> Cambiar</button>
+                        <button type="submit" class="btn btn-success " disabled id="btnCambioPassword"><i class="fas fa-lock"></i> Change</button>
                     </div>
                 </div><!-- modal-content -->
 

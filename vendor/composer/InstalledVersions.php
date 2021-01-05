@@ -19,7 +19,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '475d13bf8a58d3117c768d07cfea1029d5c39b23',
+    'reference' => 'fbdd68fcb9c182113480a110e6e1ae2a3a01741a',
     'name' => '__root__',
   ),
   'versions' => 
@@ -31,7 +31,16 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '475d13bf8a58d3117c768d07cfea1029d5c39b23',
+      'reference' => 'fbdd68fcb9c182113480a110e6e1ae2a3a01741a',
+    ),
+    'phpmailer/phpmailer' => 
+    array (
+      'pretty_version' => 'v6.2.0',
+      'version' => '6.2.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => 'e38888a75c070304ca5514197d4847a59a5c853f',
     ),
     'tecnickcom/tcpdf' => 
     array (

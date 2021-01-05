@@ -121,7 +121,7 @@ class CompaniesModel
     ===================================================*/
     static public function mdlAllowedProducts($value)
     {
-        $stmt = Conexion::conectar()->prepare("SELECT p.*
+        $stmt = Conexion::conectar()->prepare("SELECT p.*, c.Name as Company
                                                 FROM Companies c
                                                 INNER JOIN re_Companies_Products cp ON c.id_companies = cp.id_companies
                                                 INNER JOIN Products p ON p.id_products = cp.id_products
@@ -214,11 +214,12 @@ class ProductsModel
     {
         $conexion = Conexion::conectar();
         $stmt = $conexion->prepare("INSERT INTO Products 
-                                    (Name, Reference, Description, Weight, Unit, Price) VALUES 
-                                    (:Name, :Reference, :Description, :Weight, :Unit, :Price)");
+                                    (Name, Reference, UpcCode, Description, Weight, Unit, Price) VALUES 
+                                    (:Name, :Reference, :UpcCode, :Description, :Weight, :Unit, :Price)");
 
         $stmt->bindParam(":Name", $datos['Name'], PDO::PARAM_STR);
         $stmt->bindParam(":Reference", $datos['Reference'], PDO::PARAM_STR);
+        $stmt->bindParam(":UpcCode", $datos['UpcCode'], PDO::PARAM_STR);
         $stmt->bindParam(":Description", $datos['Description'], PDO::PARAM_STR);
         $stmt->bindParam(":Weight", $datos['Weight'], PDO::PARAM_STR);
         $stmt->bindParam(":Unit", $datos['Unit'], PDO::PARAM_STR);
@@ -286,12 +287,13 @@ class ProductsModel
     {
         $conexion = Conexion::conectar();
         $stmt = $conexion->prepare("UPDATE Products SET
-                                    Name = :Name, Reference = :Reference, Description = :Description, Weight = :Weight, Unit = :Unit, Price = :Price
+                                    Name = :Name, Reference = :Reference, UpcCode = :UpcCode, Description = :Description, Weight = :Weight, Unit = :Unit, Price = :Price
                                     WHERE id_products = :idproduct");
 
         $stmt->bindParam(":idproduct", $datos['idproduct'], PDO::PARAM_INT);
         $stmt->bindParam(":Name", $datos['Name'], PDO::PARAM_STR);
         $stmt->bindParam(":Reference", $datos['Reference'], PDO::PARAM_STR);
+        $stmt->bindParam(":UpcCode", $datos['UpcCode'], PDO::PARAM_STR);
         $stmt->bindParam(":Description", $datos['Description'], PDO::PARAM_STR);
         $stmt->bindParam(":Weight", $datos['Weight'], PDO::PARAM_STR);
         $stmt->bindParam(":Unit", $datos['Unit'], PDO::PARAM_STR);
@@ -316,12 +318,38 @@ class OrdersModel
     /* ===================================================
        SHOW ALL ORDERS
     ===================================================*/
-    static public function mdlShowOrders()
+    static public function mdlShowOrders($value, $status)
     {
-        $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, o.*
-                                                FROM Orders o
-                                                INNER JOIN Companies c ON c.id_companies = o.id_companies
-                                                INNER JOIN Products p ON p.id_products = o.id_products");
+        switch ($status) {
+                # Mostrar solo las ordenes con el estado Shipped
+            case 'Shipped':
+                # Ordenes de companies
+                $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, o.*, DATE_FORMAT(o.Pickup_Date, '%m-%d-%Y') as Pickup_DateF, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF, DATE_FORMAT(o.Delivery_Real_Date, '%m-%d-%Y') as Delivery_Real_DateF
+                                                        FROM Orders o
+                                                        INNER JOIN Companies c ON c.id_companies = o.id_companies
+                                                        INNER JOIN Products p ON p.id_products = o.id_products
+                                                        WHERE o.id_companies = $value AND o.Status = '$status'");
+                break;
+
+                # Mostrar todas las ordenes con cualquier estado
+            default:
+                # Ordenes de operations
+                if ($value == null) {
+                    $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, o.*, DATE_FORMAT(o.Pickup_Date, '%m-%d-%Y') as Pickup_DateF, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF, DATE_FORMAT(o.Delivery_Real_Date, '%m-%d-%Y') as Delivery_Real_DateF
+                                                        FROM Orders o
+                                                        INNER JOIN Companies c ON c.id_companies = o.id_companies
+                                                        INNER JOIN Products p ON p.id_products = o.id_products");
+                }
+                # Ordenes de companies
+                else {
+                    $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, o.*, DATE_FORMAT(o.Pickup_Date, '%m-%d-%Y') as Pickup_DateF, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF, DATE_FORMAT(o.Delivery_Real_Date, '%m-%d-%Y') as Delivery_Real_DateF
+                                                        FROM Orders o
+                                                        INNER JOIN Companies c ON c.id_companies = o.id_companies
+                                                        INNER JOIN Products p ON p.id_products = o.id_products
+                                                        WHERE o.id_companies = $value");
+                }
+                break;
+        }
 
         $stmt->execute();
 
@@ -339,8 +367,8 @@ class OrdersModel
     static public function mdlNewOrder($datos)
     {
         $conexion = Conexion::conectar();
-        $stmt = $conexion->prepare("INSERT INTO Orders (id_companies, id_products, Weight_Each_Bag, Total_Bags, Total_Skids, Customer_PO, Arrange_Pickup, From_Release, Pickup_Date, PO_Reference, Delivery_From_Name, Delivery_Address, Delivery_Phone, Delivery_Contact, Delivery_Date, Delivery_Real_Date, Delivery_Destination_Name, Delivery_Destination_Address, Delivery_Destination_Phone, Delivery_Destination_Contact, Delivery_Destination_Confirmed_Trucking_Charge, Delivery_Destination_Comments, audit_user) VALUES
-                                        (:id_companies, :id_products, :Weight_Each_Bag, :Total_Bags, :Total_Skids, :Customer_PO, :Arrange_Pickup, :From_Release, :Pickup_Date, :PO_Reference, :Delivery_From_Name, :Delivery_Address, :Delivery_Phone, :Delivery_Contact, :Delivery_Date, :Delivery_Real_Date, :Delivery_Destination_Name, :Delivery_Destination_Address, :Delivery_Destination_Phone, :Delivery_Destination_Contact, :Delivery_Destination_Confirmed_Trucking_Charge, :Delivery_Destination_Comments, :audit_user)");
+        $stmt = $conexion->prepare("INSERT INTO Orders (id_companies, id_products, Weight_Each_Bag, Total_Bags, Total_Skids, Customer_PO, Arrange_Pickup, From_Release, Pickup_Date, PO_Reference, Delivery_Terms, Delivery_From_Name, Delivery_Address, Delivery_Phone, Delivery_Contact, Delivery_Date, Delivery_Real_Date, Delivery_Destination_Name, Delivery_Destination_Address, Delivery_Destination_Phone, Delivery_Destination_Contact, Delivery_Destination_Confirmed_Trucking_Charge, Delivery_Destination_Comments, audit_user) VALUES
+                                        (:id_companies, :id_products, :Weight_Each_Bag, :Total_Bags, :Total_Skids, :Customer_PO, :Arrange_Pickup, :From_Release, :Pickup_Date, :PO_Reference, :Delivery_Terms, :Delivery_From_Name, :Delivery_Address, :Delivery_Phone, :Delivery_Contact, :Delivery_Date, :Delivery_Real_Date, :Delivery_Destination_Name, :Delivery_Destination_Address, :Delivery_Destination_Phone, :Delivery_Destination_Contact, :Delivery_Destination_Confirmed_Trucking_Charge, :Delivery_Destination_Comments, :audit_user)");
 
         $stmt->bindParam(":id_companies", $datos['id_companies'], PDO::PARAM_INT);
         $stmt->bindParam(":id_products", $datos['id_products'], PDO::PARAM_INT);
@@ -352,6 +380,7 @@ class OrdersModel
         $stmt->bindParam(":From_Release", $datos['From_Release'], PDO::PARAM_STR);
         $stmt->bindParam(":Pickup_Date", $datos['Pickup_Date'], PDO::PARAM_STR);
         $stmt->bindParam(":PO_Reference", $datos['PO_Reference'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Terms", $datos['Delivery_Terms'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_From_Name", $datos['Delivery_From_Name'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Address", $datos['Delivery_Address'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Phone", $datos['Delivery_Phone'], PDO::PARAM_STR);
@@ -381,7 +410,7 @@ class OrdersModel
     ===================================================*/
     static public function mdlOrderInfo($value)
     {
-        $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, c.Address_Line1 AS Company_Address1, c.Address_Line2 AS Company_Address2, c.Phone_Number AS Company_Phone, c.Contact_Name AS Company_Contact, o.*, u.name AS audituser
+        $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, c.Address_Line1 AS Company_Address1, c.Address_Line2 AS Company_Address2, c.Phone_Number AS Company_Phone, c.Contact_Name AS Company_Contact, o.*, u.name AS audituser, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF
                                                 FROM Orders o
                                                 INNER JOIN Companies c ON c.id_companies = o.id_companies
                                                 INNER JOIN Products p ON p.id_products = o.id_products
@@ -414,6 +443,7 @@ class OrdersModel
                                     , From_Release = :From_Release
                                     , Pickup_Date = :Pickup_Date
                                     , PO_Reference = :PO_Reference
+                                    , Delivery_Terms = :Delivery_Terms
                                     , Delivery_From_Name = :Delivery_From_Name
                                     , Delivery_Address = :Delivery_Address
                                     , Delivery_Phone = :Delivery_Phone
@@ -439,6 +469,7 @@ class OrdersModel
         $stmt->bindParam(":From_Release", $datos['From_Release'], PDO::PARAM_STR);
         $stmt->bindParam(":Pickup_Date", $datos['Pickup_Date'], PDO::PARAM_STR);
         $stmt->bindParam(":PO_Reference", $datos['PO_Reference'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Terms", $datos['Delivery_Terms'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_From_Name", $datos['Delivery_From_Name'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Address", $datos['Delivery_Address'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Phone", $datos['Delivery_Phone'], PDO::PARAM_STR);
@@ -503,5 +534,27 @@ class OrdersModel
         $stmt = null;
 
         return $retorno;
+    }
+
+    /* ===================================================
+       INSERT STATUS HISTORY
+    ===================================================*/
+    static public function mdlInsertStatusHistory($datos)
+    {
+        $conexion = Conexion::conectar();
+        $stmt = $conexion->prepare("INSERT INTO Orders_Status_History (id_orders, Status, Date) VALUES
+                                    (:id_orders, :Status, NOW())");
+
+        $stmt->bindParam(":id_orders", $datos['id_orders'], PDO::PARAM_INT);
+        $stmt->bindParam(":Status", $datos['Status'], PDO::PARAM_STR);
+
+        if ($stmt->execute()) {
+            $id = $conexion->lastInsertId();
+        } else {
+            $id = "error";
+        }
+        $stmt->closeCursor();
+        $conexion = null;
+        return $id;
     }
 }

@@ -144,3 +144,94 @@ function VisualizarPDF(ruta) {
     });
 
 }
+
+/* ===================================================
+            CLICK EN EL BOTON PARA VISUALIZAR/SUBIR ARCHIVOS COA O POD
+        ===================================================*/
+$(document).on("click", ".btn-docs", function () {
+    var idorder = $(this).attr("idorder");
+    var tipodoc = $(this).attr("tipodoc");
+
+    //Titulo del tipo de documento
+    if (tipodoc == "COA") {
+        $(".docTitle").html("Certicate Of Analysis");
+    }
+    else {
+        $(".docTitle").html("Proof of Delivery");
+    }
+
+    $("#canvasPDF").addClass("d-none");
+    $("#containerImgDoc").addClass("d-none");
+    $("#frmSubirDocumento").addClass("d-none");
+    $("#btnGuardarArchivo").addClass("d-none");
+    $("#btnDescargarArchivo").addClass("d-none");
+
+
+    // Cambiar valor de hidden input
+    $(".idorder").val(idorder);
+    $(".tipodoc").val(tipodoc);
+
+    // Despues de conocer el tipo de documento, consultamos si tiene correctamente subido el documento
+    var datos = new FormData();
+    datos.append('ExisteDoc', "ok");
+    datos.append('idorder', idorder);
+    datos.append('tipodoc', tipodoc);
+    $.ajax({
+        type: 'post',
+        url: 'ajax/operations.ajax.php',
+        data: datos,
+        cache: false,
+        dataType: "json",
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            if (response != null) {
+                // EL DOC ES UN PDF
+                if (response.tipoArchivo == "PDF") {
+                    $("#canvasPDF").removeClass("d-none");
+                    VisualizarPDF(response.rutaDoc);
+                }
+                // EL DOC ES UNA IMAGEN
+                else {
+                    $("#containerImgDoc").removeClass("d-none");
+                    $("#imgDoc").attr("src", "." + response.rutaDoc);
+                }
+                // Mostrar boton para descargar el archivo
+                $("#btnDescargarArchivo").removeClass("d-none");
+            }
+            // NO HAY DOCUMENTO, POR TANTO SE MUESTRA EL FORMULARIO PARA SUBIR UNO
+            else {
+                $("#frmSubirDocumento").removeClass("d-none");
+                $("#btnGuardarArchivo").removeClass("d-none");
+            }
+        }
+    });
+});
+
+/* ===================================================
+  CLICK EN DESCARGAR ARCHIVO
+===================================================*/
+$(document).on("click", "#btnDescargarArchivo", function () {
+    var idorder = $(".idorder").first().val();
+    var tipodoc = $(".tipodoc").first().val();
+    
+    var datos = new FormData();
+    datos.append('DownloadFile', "ok");
+    datos.append('idorder', idorder);
+    datos.append('tipodoc', tipodoc);
+    $.ajax({
+        type: 'post',
+        url: 'ajax/operations.ajax.php',
+        data: datos,
+        cache: false,
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            var url = response.url;
+            url = url.substring(1);
+            window.open(url, '_blank');
+        }
+    });
+    
+});

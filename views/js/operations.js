@@ -169,6 +169,7 @@ if (window.location.href.includes("operations-products")) {
                         $("#idproduct").val(response.id_products);
                         $("#Name").val(response.Name);
                         $("#Reference").val(response.Reference);
+                        $("#UpcCode").val(response.UpcCode);
                         $("#Weight").val(response.Weight);
                         $("#Unit").val(response.Unit);
                         $("#Price").val(response.Price);
@@ -218,7 +219,7 @@ if (window.location.href.includes("operations-products")) {
 /* ===================================================
   * ORDERS
 ===================================================*/
-if (window.location.href.includes("orders")) {
+if (window.location.href.includes("orders") && !window.location.href.includes("c-orders") && !window.location.href.includes("c-shippedorders")) {
     $(document).ready(function () {
         /* ===================================================
         DATATABLE
@@ -263,6 +264,7 @@ if (window.location.href.includes("orders")) {
                         $("#From_Release").val(response.From_Release);
                         $("#Pickup_Date").val(response.Pickup_Date);
                         $("#PO_Reference").val(response.PO_Reference);
+                        $("#Delivery_Terms").val(response.Delivery_Terms);
                         $("#Delivery_From_Name").val(response.Delivery_From_Name);
                         $("#Delivery_Address").val(response.Delivery_Address);
                         $("#Delivery_Phone").val(response.Delivery_Phone);
@@ -348,66 +350,7 @@ if (window.location.href.includes("orders")) {
             })
         });
 
-        /* ===================================================
-            CLICK EN EL BOTON PARA VISUALIZAR/SUBIR ARCHIVOS COA O POD
-        ===================================================*/
-        $(document).on("click", ".btn-docs", function () {
-            var idorder = $(this).attr("idorder");
-            var tipodoc = $(this).attr("tipodoc");
-
-            //Titulo del tipo de documento
-            if (tipodoc == "COA") {
-                $(".docTitle").html("Certicate Of Analysis");
-            }
-            else {
-                $(".docTitle").html("Probe of Delivery");
-            }
-
-            $("#canvasPDF").addClass("d-none");
-            $("#containerImgDoc").addClass("d-none");
-            $("#frmSubirDocumento").addClass("d-none");
-            $("#btnGuardarArchivo").addClass("d-none");
-
-
-            // Cambiar valor de hidden input
-            $(".idorder").val(idorder);
-            $(".tipodoc").val(tipodoc);
-
-            // Despues de conocer el tipo de documento, consultamos si tiene correctamente subido el documento
-            var datos = new FormData();
-            datos.append('ExisteDoc', "ok");
-            datos.append('idorder', idorder);
-            datos.append('tipodoc', tipodoc);
-            $.ajax({
-                type: 'post',
-                url: 'ajax/operations.ajax.php',
-                data: datos,
-                cache: false,
-                dataType: "json",
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    if (response != null) {
-                        // EL DOC ES UN PDF
-                        if (response.tipoArchivo == "PDF") {
-                            $("#canvasPDF").removeClass("d-none");
-                            VisualizarPDF(response.rutaDoc);
-                        }
-                        // EL DOC ES UNA IMAGEN
-                        else {
-                            $("#containerImgDoc").removeClass("d-none");
-                            $("#imgDoc").attr("src", "." + response.rutaDoc);
-                        }
-                    }
-                    // NO HAY DOCUMENTO, POR TANTO SE MUESTRA EL FORMULARIO PARA SUBIR UNO
-                    else {
-                        $("#frmSubirDocumento").removeClass("d-none");
-                        $("#btnGuardarArchivo").removeClass("d-none");
-                    }
-                }
-            });
-        });
-
+        
         /* ===================================================
           CLICK DESCARGAR PDF ORDER
         ===================================================*/
@@ -427,7 +370,7 @@ if (window.location.href.includes("orders")) {
         });
 
         /* ===================================================
-          SHOW ALLOWED PRODUCTS FOR AN SPECIFIC COMPANY
+            SHOW ALLOWED PRODUCTS FOR AN SPECIFIC COMPANY
         ===================================================*/
         function ShowAllowedProducts(idcompany, idproduct) {
             $(".productsInput").html("");
@@ -468,6 +411,7 @@ if (window.location.href.includes("orders")) {
             $(".clientInput").val("");
             $(".productsInput").val("");
         });
+    
     });
 
 }

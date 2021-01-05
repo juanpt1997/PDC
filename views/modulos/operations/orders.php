@@ -5,7 +5,7 @@
 <?php endif ?>
 
 <?php
-$Orders = OrdersController::ctrShowOrders();
+$Orders = OrdersController::ctrShowOrders(null, null);
 $Companies = CompaniesController::ctrShowCompanies();
 $Products = ProductsController::ctrShowProducts();
 ?>
@@ -17,11 +17,11 @@ $Products = ProductsController::ctrShowProducts();
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0 text-dark">Clientes Orders</h1>
+                    <h1 class="m-0 text-dark">Clients Orders</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="inicio">Home</a></li>
+                        <li class="breadcrumb-item"><a href="./">Home</a></li>
                         <li class="breadcrumb-item active">Clients Orders</li>
                     </ol>
                 </div><!-- /.col -->
@@ -104,9 +104,9 @@ $Products = ProductsController::ctrShowProducts();
                                         <td><?= $value['Company'] ?></td>
                                         <td><?= $value['Customer_PO'] ?></td>
                                         <td><?= $value['PO_Reference'] ?></td>
-                                        <td><?= $value['Pickup_Date'] ?></td>
-                                        <td><?= $value['Delivery_Date'] ?></td>
-                                        <td><?= $value['Delivery_Real_Date'] ?></td>
+                                        <td><?= $value['Pickup_DateF'] ?></td>
+                                        <td><?= $value['Delivery_DateF'] ?></td>
+                                        <td><?= $value['Delivery_Real_DateF'] ?></td>
                                         <td><?= $value['Product'] ?></td>
                                         <td><?= $value['Total_Bags'] ?></td>
                                         <td><?= $Status ?></td>
@@ -302,6 +302,23 @@ $Products = ProductsController::ctrShowProducts();
                     <h4 class="text-muted">Delivery</h4>
 
                     <div class="row mt-3">
+                        <!-- ===================================================
+                        Delivery Terms
+                    =================================================== -->
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Delivery Terms</label>
+                                <select class="form-control" name="Delivery_Terms" required>
+                                    <option value="" selected disabled>Select an option</option>
+                                    <option>Customer Pick Up</option>
+                                    <option>Delivery</option>
+                                    <option>Third Party Inland</option>
+                                </select>
+                            </div>
+                            <!-- /.form-group -->
+                        </div>
+                        <!-- /.col -->
+
                         <!-- ===================================================
                         From Name
                     =================================================== -->
@@ -661,6 +678,23 @@ $Products = ProductsController::ctrShowProducts();
 
                     <div class="row mt-3">
                         <!-- ===================================================
+                        Delivery Terms
+                    =================================================== -->
+                        <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>Delivery Terms</label>
+                                <select class="form-control editOrder" id="Delivery_Terms" name="Delivery_Terms" required>
+                                    <option value="" selected disabled>Select an option</option>
+                                    <option>Customer Pick Up</option>
+                                    <option>Delivery</option>
+                                    <option>Third Party Inland</option>
+                                </select>
+                            </div>
+                            <!-- /.form-group -->
+                        </div>
+                        <!-- /.col -->
+
+                        <!-- ===================================================
                         From Name
                     =================================================== -->
                         <div class="col-12 col-sm-6">
@@ -845,62 +879,6 @@ $Products = ProductsController::ctrShowProducts();
             <?php
             $updateOrder = OrdersController::ctrEditOrder();
             ?>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-<!-- /.modal -->
-
-<!-- ===================================================
-    MODAL DOCS COA-POD
-=================================================== -->
-<div class="modal fade" id="modal-docs">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title docTitle">Certicate Of Analysis</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-
-                <!-- ===================================================
-                    ACA PUEDE IR CUALQUIERA DE LA SIGUIENTES OPCIONES SEGUN EL DOCUMENTO QUE HAYA SIDO CARGADO O NO: 
-                =================================================== -->
-                <!-- VISUALIZAR PDF COMO DOCUMENTO -->
-                <div class="d-none" id="canvasPDF">
-                </div>
-
-                <!-- VISUALIZAR IMAGEN COMO DOCUMENTO -->
-                <div class="row" id="containerImgDoc">
-                    <div class="col-12">
-                        <img class="img-fluid" id="imgDoc" src="">
-                    </div>
-                </div>
-
-                <!-- FORMULARIO PARA CARGAR UN ARCHIVO -->
-                <form method="post" enctype="multipart/form-data" id="frmSubirDocumento" class="d-none">
-                    <input type="hidden" name="idorderDoc" class="idorder" value="">
-                    <input type="hidden" name="tipoDoc" class="tipodoc" value="">
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-file-alt"></i></span>
-                        </div>
-                        <input name="docFile" type="file" class="form-control" required accept="image/png, image/jpeg, application/pdf">
-                    </div>
-                </form>
-                <?php
-                OrdersController::ctrLoadDoc();
-                ?>
-            </div>
-            <div class="modal-footer justify-content-end">
-                <button class="btn btn-success" type="submit" form="frmSubirDocumento" id="btnGuardarArchivo"><i class="fas fa-save"></i> Save</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">
-                    Close
-                </button>
-            </div>
         </div>
         <!-- /.modal-content -->
     </div>

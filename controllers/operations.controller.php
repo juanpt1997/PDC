@@ -281,13 +281,15 @@ class ProductsController
             if (
                 preg_match('/^[a-zA-Z0-9- ]+$/', $_POST["Name"]) &&
                 preg_match('/^[a-zA-Z0-9- ]+$/', $_POST["Reference"]) &&
+                preg_match('/^[a-zA-Z0-9- ]+$/', $_POST["UpcCode"]) &&
                 preg_match('/^[a-zA-Z0-9,. ]+$/', $_POST["Weight"]) &&
-                preg_match('/^[0-9,.]+$/', $_POST["Unit"]) &&
+                preg_match('/^[a-zA-Z0-9,. ]+$/', $_POST["Unit"]) &&
                 preg_match('/^[a-zA-Z0-9,. ]+$/', $_POST["Price"])
             ) {
                 $datos = array(
                     'Name' => $_POST['Name'],
                     'Reference' => $_POST['Reference'],
+                    'UpcCode' => $_POST['UpcCode'],
                     'Weight' => $_POST['Weight'],
                     'Unit' => $_POST['Unit'],
                     'Price' => $_POST['Price'],
@@ -394,6 +396,7 @@ class ProductsController
             if (
                 preg_match('/^[a-zA-Z0-9- ]+$/', $_POST["editName"]) &&
                 preg_match('/^[a-zA-Z0-9- ]+$/', $_POST["Reference"]) &&
+                preg_match('/^[a-zA-Z0-9- ]+$/', $_POST["UpcCode"]) &&
                 preg_match('/^[a-zA-Z0-9,. ]+$/', $_POST["Weight"]) &&
                 preg_match('/^[0-9,.]+$/', $_POST["Unit"]) &&
                 preg_match('/^[a-zA-Z0-9,. ]+$/', $_POST["Price"])
@@ -438,6 +441,7 @@ class ProductsController
                     'idproduct' => $_POST['idproduct'],
                     'Name' => $_POST['editName'],
                     'Reference' => $_POST['Reference'],
+                    'UpcCode' => $_POST['UpcCode'],
                     'Weight' => $_POST['Weight'],
                     'Unit' => $_POST['Unit'],
                     'Price' => $_POST['Price'],
@@ -503,9 +507,9 @@ class OrdersController
     /* ===================================================
        SHOW ALL ORDERS
     ===================================================*/
-    static public function ctrShowOrders()
+    static public function ctrShowOrders($value, $status)
     {
-        $response = OrdersModel::mdlShowOrders();
+        $response = OrdersModel::mdlShowOrders($value, $status);
 
         return $response;
     }
@@ -527,6 +531,7 @@ class OrdersController
                 'From_Release' => $_POST['From_Release'],
                 'Pickup_Date' => $_POST['Pickup_Date'],
                 'PO_Reference' => $_POST['PO_Reference'],
+                'Delivery_Terms' => $_POST['Delivery_Terms'],
                 'Delivery_From_Name' => $_POST['Delivery_From_Name'],
                 'Delivery_Address' => $_POST['Delivery_Address'],
                 'Delivery_Phone' => $_POST['Delivery_Phone'],
@@ -545,6 +550,11 @@ class OrdersController
             $newOrder = OrdersModel::mdlNewOrder($datos);
 
             if ($newOrder != "error") {
+                $datos = array(
+                    'id_orders' => $newOrder,
+                    'Status' => 'Sent'
+                );
+                OrdersModel::mdlInsertStatusHistory($datos);
                 echo "
 						<script>
 							Swal.fire({
@@ -595,6 +605,7 @@ class OrdersController
                 'From_Release' => $_POST['From_Release'],
                 'Pickup_Date' => $_POST['Pickup_Date'],
                 'PO_Reference' => $_POST['PO_Reference'],
+                'Delivery_Terms' => $_POST['Delivery_Terms'],
                 'Delivery_From_Name' => $_POST['Delivery_From_Name'],
                 'Delivery_Address' => $_POST['Delivery_Address'],
                 'Delivery_Phone' => $_POST['Delivery_Phone'],
@@ -622,7 +633,8 @@ class OrdersController
 								allowOutsideClick: false,
 							}).then((result)=>{
 								if(result.value){
-									window.location = 'orders';
+									//window.location = 'orders';
+									window.location.href = window.location.href;
 								}
 
 							})
@@ -660,6 +672,14 @@ class OrdersController
     static public function ctrModificarCampo($datos)
     {
         $response = OrdersModel::mdlModificarCampo($datos);
+
+        if ($datos['item'] == "Status") {
+            $datosArray = array(
+                'id_orders' => $datos['id_orders'],
+                'Status' => $datos['value']
+            );
+            OrdersModel::mdlInsertStatusHistory($datosArray);
+        }
 
         return $response;
     }
@@ -727,7 +747,8 @@ class OrdersController
 								allowOutsideClick: false,
 							}).then((result)=>{
 								if(result.value){
-									window.location = 'orders';
+									//window.location = 'orders';
+                                    window.location.href = window.location.href;
 								}
 
 							})
@@ -791,5 +812,30 @@ class OrdersController
         } else {
             return null;
         }
+    }
+
+    /* ===================================================
+       DOWNLOAD FILE (POD OR COA)
+    ===================================================*/
+    static public function ctrDownloadFile($datos)
+    {
+        $tipodoc = $datos['tipodoc'];
+        $datosOrder = OrdersModel::mdlOrderInfo($datos['id_orders']);
+
+        $datosResponse = array('url' => $datosOrder["{$tipodoc}"]);
+
+        return $datosResponse;
+
+        // //$url = $datosOrder["{$tipodoc}"];
+        // $url = "C:/wamp64/www/PDC" . $datosOrder["{$tipodoc}"];
+        // $file_name = basename($url);
+        // /* return $_SERVER['SCRIPT_FILENAME'];
+        // return $_SERVER['DOCUMENT_ROOT']; */
+
+        // if (file_put_contents($file_name, file_get_contents($url))) {
+        //     return "File downloaded successfully";
+        // } else {
+        //     return "File downloading failed.";
+        // }
     }
 }

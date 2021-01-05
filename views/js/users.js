@@ -4,36 +4,7 @@ if (window.location.href.includes("users")) {
           DATATABLE
         ===================================================*/
         $('.tablaUsuarios').DataTable({
-
-            "language": {
-
-                "sProcessing": "Procesando...",
-                "sLengthMenu": "Mostrar _MENU_ registros",
-                "sZeroRecords": "No se encontraron resultados",
-                "sEmptyTable": "Ningún dato disponible en esta tabla",
-                "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_",
-                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0",
-                "sInfoFiltered": "<div class='small'>(filtrado de un total de _MAX_ registros)</div>",
-                "sInfoPostFix": "",
-                "sSearch": "Buscar:",
-                "sUrl": "",
-                "sInfoThousands": ",",
-                "sLoadingRecords": "Cargando...",
-                "oPaginate": {
-                    "sFirst": "Primero",
-                    "sLast": "Último",
-                    "sNext": "Siguiente",
-                    "sPrevious": "Anterior"
-                },
-                "oAria": {
-                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
-                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-                }
-
-            },
             "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todo"]]
-
-
         });
 
         /*================================================ 
@@ -62,14 +33,14 @@ if (window.location.href.includes("users")) {
                     $("#editarEmail").val(response.email);
                     $("#editarCelular").val(response.phone);
 
-                    if (response.id_companies != 0){
+                    if (response.id_companies != 0) {
                         $('#editarPerfil').val(4);
                         $('#editCompany').val(response.id_companies);
 
                         $(".selectCompany").removeAttr("readonly");
                         $(".selectCompany").attr("required", "required");
                     }
-                    else{
+                    else {
                         $('#editarPerfil').val("");
                         $('#editCompany').val("");
 
@@ -122,11 +93,11 @@ if (window.location.href.includes("users")) {
         $(document).on("change", ".selectProfile", function () {
             var perfil = $(this).val();
 
-            if (perfil == 4){
+            if (perfil == 4) {
                 $(".selectCompany").removeAttr("readonly");
                 $(".selectCompany").attr("required", "required");
             }
-            else{
+            else {
                 $(".selectCompany").attr("readonly", "readonly");
                 $(".selectCompany").removeAttr("required");
                 $(".selectCompany").val("");
@@ -142,6 +113,46 @@ if (window.location.href.includes("users")) {
             $(".selectCompany").removeAttr("required");
             $(".selectCompany").val("");
         })
-        
+
+
+        /* ===================== 
+        ACTIVAR USUARIO 
+    ========================= */
+        $(document).on("click", ".btnActivar", function () {
+            var iduser = $(this).attr("iduser");
+            var estadoUsuario = $(this).attr("estadoUsuario");
+
+            console.log("iduser => " + iduser);
+            console.log("estadoUsuario => " + estadoUsuario);
+
+            var datos = new FormData();
+            datos.append("iduser", iduser);
+            datos.append("activarUsuario", estadoUsuario);
+
+            $.ajax({
+                url: "ajax/users.ajax.php",
+                method: "POST",
+                data: datos,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response == "ok") {
+                        Swal.fire({
+                            icon: 'success',
+                            showConfirmButton: true,
+                            title: "User status updated",
+                            confirmButtonText: "Close!",
+                            allowOutsideClick: false
+                        }).then((result) => {
+                            if (result.value) {
+                                window.location = 'users';
+                            }
+
+                        });
+                    }
+                }
+            });
+        });
     });
 }

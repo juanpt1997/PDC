@@ -10,10 +10,10 @@
   		<!-- Sidebar user panel (optional) -->
   		<div class="user-panel mt-3 pb-3 mb-3 d-flex">
   			<div class="image">
-  				<img src="views/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+  				<img src="views/img/plantilla/personal-id-card.png" class="img-circle elevation-2" alt="User Image">
   			</div>
   			<div class="info">
-  				<a href="#" class="d-block">Alexander Tobon</a>
+  				<a href="#" class="d-block"><?= $_SESSION['name'] ?></a>
   			</div>
   		</div>
 
@@ -83,21 +83,21 @@
 						</a>
 						<ul class="nav nav-treeview">
 							<li class="nav-item">
-								<a href="#" class="nav-link">
+								<a href="c-neworder" class="nav-link">
 									<i class="far fa-circle nav-icon"></i>
 									<p>New Order</p>
 								</a>
 							</li>
 							<li class="nav-item">
-								<a href="#" class="nav-link">
+								<a href="c-orders" class="nav-link">
 									<i class="far fa-circle nav-icon"></i>
 									<p>Order Status</p>
 								</a>
 							</li>
 							<li class="nav-item">
-								<a href="#" class="nav-link">
+								<a href="c-shippedorders" class="nav-link">
 									<i class="far fa-circle nav-icon"></i>
-									<p>Delivered</p>
+									<p>Shipped</p>
 								</a>
 							</li>
 
