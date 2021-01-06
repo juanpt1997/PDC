@@ -318,7 +318,7 @@ class OrdersModel
     /* ===================================================
        SHOW ALL ORDERS
     ===================================================*/
-    static public function mdlShowOrders($value, $status)
+    static public function mdlShowOrders($value, $status, $fechas)
     {
         switch ($status) {
                 # Mostrar solo las ordenes con el estado Shipped
@@ -334,11 +334,18 @@ class OrdersModel
                 # Mostrar todas las ordenes con cualquier estado
             default:
                 # Ordenes de operations
-                if ($value == null) {
+                if ($value == null && $fechas != null) {
+
                     $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, o.*, DATE_FORMAT(o.Pickup_Date, '%m-%d-%Y') as Pickup_DateF, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF, DATE_FORMAT(o.Delivery_Real_Date, '%m-%d-%Y') as Delivery_Real_DateF
                                                         FROM Orders o
                                                         INNER JOIN Companies c ON c.id_companies = o.id_companies
-                                                        INNER JOIN Products p ON p.id_products = o.id_products");
+                                                        INNER JOIN Products p ON p.id_products = o.id_products
+                                                        WHERE DATE(o.Pickup_Date) BETWEEN '{$fechas['fecha1']}' AND '{$fechas['fecha2']}'");
+                                                        //WHERE DATE(o.Pickup_Date) BETWEEN '2020-12-01' AND '2020-12-31'");
+                    // $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, o.*, DATE_FORMAT(o.Pickup_Date, '%m-%d-%Y') as Pickup_DateF, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF, DATE_FORMAT(o.Delivery_Real_Date, '%m-%d-%Y') as Delivery_Real_DateF
+                    //                                     FROM Orders o
+                    //                                     INNER JOIN Companies c ON c.id_companies = o.id_companies
+                    //                                     INNER JOIN Products p ON p.id_products = o.id_products");
                 }
                 # Ordenes de companies
                 else {

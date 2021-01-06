@@ -1,5 +1,6 @@
 if (window.location.href.includes("c-orders") || window.location.href.includes("c-shippedorders")) {
     $(document).ready(function () {
+        
         /* ===================================================
         DATATABLE
         ===================================================*/

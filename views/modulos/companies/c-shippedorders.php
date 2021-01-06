@@ -5,7 +5,7 @@
 <?php endif ?>
 
 <?php
-$Orders = OrdersController::ctrShowOrders($_SESSION['idCompany'], 'Shipped');
+$Orders = OrdersController::ctrShowOrders($_SESSION['idCompany'], 'Shipped', null);
 ?>
 
 <!-- Content Wrapper. Contains page content -->

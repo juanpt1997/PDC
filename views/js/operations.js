@@ -222,11 +222,134 @@ if (window.location.href.includes("operations-products")) {
 if (window.location.href.includes("orders") && !window.location.href.includes("c-orders") && !window.location.href.includes("c-shippedorders")) {
     $(document).ready(function () {
         /* ===================================================
-        DATATABLE
+          ? PRUEBA AJAX
         ===================================================*/
-        $('.tablaOrders').DataTable({
-            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
-        });
+        // var datos = new FormData();
+        // datos.append('TablaOrders', "ok");
+        // datos.append('fecha1', "2020-12-01");
+        // datos.append('fecha2', "2020-12-31");
+        // $.ajax({
+        //     type: 'post',
+        //     url: 'ajax/operations.ajax.php',
+        //     data: datos,
+        //     dataType: 'json',
+        //     cache: false,
+        //     contentType: false,
+        //     processData: false,
+        //     success: function (response) {
+        //         console.log(response);
+        //     }
+        // });
+        /* ===================================================
+          DATE RANGE PICKER MONITOR COMPRAS
+        ===================================================*/
+        $("#rango-fechas").daterangepicker({
+            showWeekNumbers: true,
+            showDropdowns: true,
+            autoApply: true,
+            ranges: {
+                Today: [moment(), moment()],
+                Yesterday: [moment().subtract(1, "days"), moment().subtract(1, "days")],
+                "Last 7 Days": [moment().subtract(6, "days"), moment()],
+                "Last 30 Days": [moment().subtract(29, "days"), moment()],
+                "This Month": [moment().startOf("month"), moment().endOf("month")],
+                "Last Month": [
+                    moment()
+                        .subtract(1, "month")
+                        .startOf("month"),
+                    moment()
+                        .subtract(1, "month")
+                        .endOf("month")
+                ],
+                Everything: [moment().subtract(20, "years"), moment()]
+            },
+            alwaysShowCalendars: true,
+            startDate: moment().startOf("month"),
+            endDate: moment().endOf("month"),
+            opens: "center",
+            cancelClass: "btn-danger"
+        },
+            function (start, end, label) {
+                console.log(
+                    "Rango desde: " +
+                    start.format("YYYY-MM-DD") +
+                    " hasta " +
+                    end.format("YYYY-MM-DD") +
+                    " (predefined range: " +
+                    label +
+                    ")"
+                );
+
+                fecha1 = start.format("YYYY-MM-DD");
+                fecha2 = end.format("YYYY-MM-DD");
+
+                mostrarDatatableOrders(fecha1, fecha2);
+            }
+        );
+
+        /* ===================================================
+          FUNCION DATATABLE
+        ===================================================*/
+        const mostrarDatatableOrders = (fecha1, fecha2) => {
+            var $tabla = $(".tablaOrders").find("table");
+
+            //Eliminamos la tabla actual
+            $tabla.remove();
+
+            let template = `  
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>PO Order</th>
+                            <th>Client</th>
+                            <th>Customer PO</th>
+                            <th>PO Reference</th>
+                            <th>Date</th>
+                            <th>Delivery</th>
+                            <th>Real Delivery</th>
+                            <th>Product</th>
+                            <th>Quanty</th>
+                            <th>Status</th>
+                            <th>COA</th>
+                            <th>POD</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>      
+                    </tbody>
+                </table>`;
+            //<th>Compromiso</th>
+            //<th>Línea</th>
+
+            //Creamos nuevamente la tabla
+            $(".tablaOrders").html(template);
+
+            $tabla = $(".tablaOrders").find("table");
+
+            /* Inicializar datatable */
+            var table = $tabla.DataTable({
+                ajax: `ajax/operations.ajax.php?TablaOrders=ok&fecha1=${fecha1}&fecha2=${fecha2}`,
+                processing: true,
+                "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+                order: []
+            })
+                /* Cuando detecta la tabla vacia */
+                .on('error.dt', function (e, settings, techNote, message) {
+                    $('.spinner-border').removeClass("spinner-border float-left").html("No results found");
+                    //console.log('An error has been reported by DataTables: ', message);
+                });
+        }
+        //Ejecutar Funcion cuando cargue la pagina
+        let fechaInicio = moment().startOf("month").format("YYYY-MM-DD");
+        let fechaFin = moment().endOf("month").format("YYYY-MM-DD")
+        mostrarDatatableOrders(fechaInicio, fechaFin);
+
+        // /* ===================================================
+        // DATATABLE
+        // ===================================================*/
+        // $('.tablaOrders').DataTable({
+        //     "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
+        // });
 
         /* ===================================================
               VISUALIZAR DATOS DE UNA ORDER
@@ -350,7 +473,7 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
             })
         });
 
-        
+
         /* ===================================================
           CLICK DESCARGAR PDF ORDER
         ===================================================*/
@@ -397,7 +520,7 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
                     // Agregar el select
                     $(".productsInput").html(template);
 
-                    if (idproduct != null){
+                    if (idproduct != null) {
                         $("#id_products").val(idproduct);
                     }
                 }
@@ -411,7 +534,7 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
             $(".clientInput").val("");
             $(".productsInput").val("");
         });
-    
+
     });
 
 }

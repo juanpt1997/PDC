@@ -507,9 +507,9 @@ class OrdersController
     /* ===================================================
        SHOW ALL ORDERS
     ===================================================*/
-    static public function ctrShowOrders($value, $status)
+    static public function ctrShowOrders($value, $status, $fechas)
     {
-        $response = OrdersModel::mdlShowOrders($value, $status);
+        $response = OrdersModel::mdlShowOrders($value, $status, $fechas);
 
         return $response;
     }
