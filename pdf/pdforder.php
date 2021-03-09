@@ -53,11 +53,11 @@ class MYPDF extends TCPDF
         $this->Ln();
         $this->Cell(0, 0, "", 0, 0, 'C', 0, '', 0);
         $this->Ln();
-        $this->Cell(0, 0, "PDC INTERNATIONAL INC", 0, 0, 'C', 0, '', 0);
+        $this->Cell(0, 0, "PURCHASE ORDER", 0, 0, 'C', 0, '', 0);
         $this->Ln();
 
         $this->SetFont('helvetica', 'B', '9');
-        $this->Cell(0, 0, "PURCHASE ORDER", 0, 0, 'C', 0, '', 0);
+        $this->Cell(0, 0, "", 0, 0, 'C', 0, '', 0);
         $this->Ln();
         $this->Ln();
        

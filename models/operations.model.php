@@ -349,11 +349,18 @@ class OrdersModel
                 }
                 # Ordenes de companies
                 else {
-                    $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, o.*, DATE_FORMAT(o.Pickup_Date, '%m-%d-%Y') as Pickup_DateF, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF, DATE_FORMAT(o.Delivery_Real_Date, '%m-%d-%Y') as Delivery_Real_DateF
-                                                        FROM Orders o
-                                                        INNER JOIN Companies c ON c.id_companies = o.id_companies
-                                                        INNER JOIN Products p ON p.id_products = o.id_products
-                                                        WHERE o.id_companies = $value");
+                    if ($fechas != null){
+                        $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, o.*, DATE_FORMAT(o.Pickup_Date, '%m-%d-%Y') as Pickup_DateF, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF, DATE_FORMAT(o.Delivery_Real_Date, '%m-%d-%Y') as Delivery_Real_DateF
+                                                            FROM Orders o
+                                                            INNER JOIN Companies c ON c.id_companies = o.id_companies
+                                                            INNER JOIN Products p ON p.id_products = o.id_products
+                                                            WHERE o.id_companies = $value AND DATE(o.Pickup_Date) BETWEEN '{$fechas['fecha1']}' AND '{$fechas['fecha2']}'");
+                        // $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, o.*, DATE_FORMAT(o.Pickup_Date, '%m-%d-%Y') as Pickup_DateF, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF, DATE_FORMAT(o.Delivery_Real_Date, '%m-%d-%Y') as Delivery_Real_DateF
+                        //                                     FROM Orders o
+                        //                                     INNER JOIN Companies c ON c.id_companies = o.id_companies
+                        //                                     INNER JOIN Products p ON p.id_products = o.id_products
+                        //                                     WHERE o.id_companies = $value");
+                    }
                 }
                 break;
         }

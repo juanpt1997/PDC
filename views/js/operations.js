@@ -241,7 +241,7 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
         //     }
         // });
         /* ===================================================
-          DATE RANGE PICKER MONITOR COMPRAS
+          DATE RANGE PICKER ORDERS
         ===================================================*/
         $("#rango-fechas").daterangepicker({
             showWeekNumbers: true,

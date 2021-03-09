@@ -20,7 +20,7 @@ class UsersController
 
                 $encriptar = crypt($_POST["password"], '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
 
-                if ($respuesta["email"] == $_POST["email"] && $respuesta["password"] == $encriptar) {
+                if ($respuesta != null && $respuesta["email"] == $_POST["email"] && $respuesta["password"] == $encriptar) {
 
                     #SI EL USUARIO ESTA ACTIVO EN EL SISTEMA
                     if ($respuesta['status'] == 1) {
@@ -159,7 +159,7 @@ class UsersController
 
             if (
                 preg_match('/^[0-9]+$/', $_POST["nuevaIdentificacion"]) &&
-                preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["nuevoNombre"]) &&
+                /* preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["nuevoNombre"]) && */
                 preg_match('/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/', $_POST["nuevoEmail"])
 
             ) {

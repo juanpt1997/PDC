@@ -77,7 +77,7 @@ if (isset($_POST['ShowProducts']) && $_POST['ShowProducts'] == "ok") {
 class OrdersAjax
 {
     /* ===================================================
-       TABLA MONITOR COMPRAS
+       TABLA ORDERS
     ===================================================*/
     static public function mostrarTablaOrders($fecha1, $fecha2)
     {

@@ -22,15 +22,15 @@ class CompaniesController
         if (isset($_POST['company'])) {
             if (
                 preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["country"]) &&
-                preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["company"]) &&
+                /* preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["company"]) && */
                 preg_match('/^[a-zA-Z0-9]+$/', $_POST["ID"]) &&
                 preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ, ]+$/', $_POST["addrLine1"]) &&
                 preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ, ]+$/', $_POST["addrLine2"]) &&
                 preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["city"]) &&
                 preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["state"]) &&
                 preg_match('/^[0-9]+$/', $_POST["zipcode"]) &&
-                preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["contact"]) &&
-                preg_match('/^[0-9()+ ]+$/', $_POST["phone"])
+                preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["contact"]) /* &&
+                preg_match('/^[0-9()+ ]+$/', $_POST["phone"]) */
             ) {
                 $datos = array(
                     'country' => $_POST['country'],
