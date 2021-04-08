@@ -50,7 +50,7 @@ $Orders = OrdersController::ctrShowOrders($_SESSION['idCompany'], 'Shipped', nul
                                     <th>Quanty</th>
                                     <th>COA</th>
                                     <th>POD</th>
-                                    <th>Actions</th>
+                                    <th>PDF</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -68,7 +68,7 @@ $Orders = OrdersController::ctrShowOrders($_SESSION['idCompany'], 'Shipped', nul
                                           
                                     //$onclickEventDescargar = `onclick="javascript:window.open('pdf/po.php?order=${value['id_orders']}','','width=1280,height=720,left=50,top=50,toolbar=yes');`;
                                     $botonDescargarOrder = "<button class='btn btn-secondary ml-2 btn-descargarorder' type='button' idorder='{$value['id_orders']}'><i class='fas fa-save'></i></button>";
-                                    $botonAcciones = "<div class='row d-flex flex-nowrap justify-content-center'>" . $botonDescargarOrder . "</div>";
+                                    $BtnPDF = "<div class='row d-flex flex-nowrap justify-content-center'>" . $botonDescargarOrder . "</div>";
 
                                     ?>
                                     <tr>
@@ -83,7 +83,7 @@ $Orders = OrdersController::ctrShowOrders($_SESSION['idCompany'], 'Shipped', nul
                                         <td><?= $value['Total_Bags'] ?></td>
                                         <td><?= $BtnCOA ?></td>
                                         <td><?= $BtnPOD ?></td>
-                                        <td><?= $botonAcciones ?></td>
+                                        <td><?= $BtnPDF ?></td>
                                     </tr>
                                 <?php endforeach ?>
                             </tbody>

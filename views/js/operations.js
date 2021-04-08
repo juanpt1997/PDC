@@ -125,6 +125,70 @@ if (window.location.href.includes("operations-companies")) {
             });
 
         });
+
+        /* ===================================================
+          DESHABILITAR UN COMPANY('BORRARLO')
+        ===================================================*/
+        $(document).on("click", ".btnBorrarCompany", function () {
+            var nameCompany = $(this).attr("nameCompany");
+            var id_companies = $(this).attr("id_companies");
+            Swal.fire({
+                title: `${nameCompany}`,
+                html:
+                    `
+                    <p>Do you really want to <b>delete</b> this company's data?</p>
+                    `
+                ,
+                /* text: 'Do you really want to delete this company?', */
+                footer: 'You will not be able to reverse this action',
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#0275d8',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Sure!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.value) {
+                    var datos = new FormData();
+                    datos.append('UpdateCampoCompany', "ok");
+                    datos.append('id_companies', id_companies);
+                    datos.append('item', "Active");
+                    datos.append('value', '0');
+                    $.ajax({
+                        type: 'post',
+                        url: 'ajax/operations.ajax.php',
+                        data: datos,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            if (response == "ok") {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: '¡Company deleted successfully!',
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'Close',
+                                    allowOutsideClick: false,
+                                }).then((result) => {
+                                    if (result.value) {
+                                        window.location = 'operations-companies';
+                                    }
+                                })
+                            }
+                            else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops, there was a problem, please try again later',
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'Close',
+                                    closeOnConfirm: false
+                                })
+                            }
+                        }
+                    });
+                }
+            })
+        });
     });
 }
 
@@ -213,6 +277,71 @@ if (window.location.href.includes("operations-products")) {
             });
 
         });
+
+        /* ===================================================
+          DESHABILITAR UN PRODUCT('BORRARLO')
+        ===================================================*/
+        $(document).on("click", ".btnBorrarProduct", function () {
+            var nameProduct = $(this).attr("nameProduct");
+            var id_products = $(this).attr("id_products");
+            Swal.fire({
+                title: `${nameProduct}`,
+                html:
+                    `
+                    <p>Do you really want to <b>delete</b> this product's data?</p>
+                    `
+                ,
+                /* text: 'Do you really want to delete this Product?', */
+                footer: 'You will not be able to reverse this action',
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#0275d8',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Sure!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.value) {
+                    var datos = new FormData();
+                    datos.append('UpdateCampoProduct', "ok");
+                    datos.append('id_products', id_products);
+                    datos.append('item', "Active");
+                    datos.append('value', '0');
+                    $.ajax({
+                        type: 'post',
+                        url: 'ajax/operations.ajax.php',
+                        data: datos,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            if (response == "ok") {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: '¡Product deleted successfully!',
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'Close',
+                                    allowOutsideClick: false,
+                                }).then((result) => {
+                                    if (result.value) {
+                                        window.location = 'operations-products';
+                                    }
+                                })
+                            }
+                            else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops, there was a problem, please try again later',
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'Close',
+                                    closeOnConfirm: false
+                                })
+                            }
+                        }
+                    });
+                }
+            })
+        });
+
     });
 }
 
@@ -264,7 +393,8 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
                 Everything: [moment().subtract(20, "years"), moment()]
             },
             alwaysShowCalendars: true,
-            startDate: moment().startOf("month"),
+            //startDate: moment().startOf("month"),
+            startDate: moment().startOf("year"),
             endDate: moment().endOf("month"),
             opens: "center",
             cancelClass: "btn-danger"
@@ -298,20 +428,21 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
 
             let template = `  
                 <table class="table table-sm">
-                    <thead>
+                    <thead class="text-uppercase">
                         <tr>
-                            <th>PO Order</th>
-                            <th>Client</th>
+                            <th>Order</th>
+                            <th>Company</th>
                             <th>Customer PO</th>
-                            <th>PO Reference</th>
-                            <th>Date</th>
-                            <th>Delivery</th>
-                            <th>Real Delivery</th>
+                            <th>BOL REFERENCE</th>
+                            <th>DATE ENTERED</th>
+                            <th>DELIVER BY</th>
+                            <th>DELIVERED DATE</th>
                             <th>Product</th>
                             <th>Quanty</th>
                             <th>Status</th>
                             <th>COA</th>
                             <th>POD</th>
+                            <th>PDF</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -340,8 +471,9 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
                 });
         }
         //Ejecutar Funcion cuando cargue la pagina
-        let fechaInicio = moment().startOf("month").format("YYYY-MM-DD");
-        let fechaFin = moment().endOf("month").format("YYYY-MM-DD")
+        //let fechaInicio = moment().startOf("month").format("YYYY-MM-DD");
+        let fechaInicio = moment().startOf("year").format("YYYY-MM-DD");
+        let fechaFin = moment().endOf("month").format("YYYY-MM-DD");
         mostrarDatatableOrders(fechaInicio, fechaFin);
 
         // /* ===================================================
@@ -418,9 +550,9 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
                     <br>
                     <label for="">New Status</label>
                     <select id="swal_cambiarEstado" class="form-control" name="swal_cambiarEstado">
-                        <option>On Process</option>
+                        <option>In Process</option>
                         <option>Shipped</option>
-                        <option>Sent</option>
+                        <option>Delivered</option>
                         <option>Canceled</option>
                     </select>
                     `
@@ -428,8 +560,8 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
                 showCancelButton: true,
                 confirmButtonColor: '#5cb85c',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Confirmar!',
-                cancelButtonText: 'Cancelar'
+                confirmButtonText: 'Confirm!',
+                cancelButtonText: 'Cancel'
             }).then((result) => {
                 if (result.value) {
                     var datos = new FormData();
@@ -450,7 +582,7 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
                                     icon: 'success',
                                     title: '¡Status updated successfully!',
                                     showConfirmButton: true,
-                                    confirmButtonText: 'Cerrar',
+                                    confirmButtonText: 'Ok',
                                     allowOutsideClick: false,
                                 }).then((result) => {
                                     if (result.value) {
@@ -463,7 +595,70 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
                                     icon: 'error',
                                     title: 'Oops, there was a problem, please try again later',
                                     showConfirmButton: true,
-                                    confirmButtonText: 'Cerrar',
+                                    confirmButtonText: 'Ok',
+                                    closeOnConfirm: false
+                                })
+                            }
+                        }
+                    });
+                }
+            })
+        });
+
+        /* ===================================================
+          DESHABILITAR UNA ORDER('BORRARLA')
+        ===================================================*/
+        $(document).on("click", ".btnBorrarOrder", function () {
+            var id_orders = $(this).attr("id_orders");
+            Swal.fire({
+                title: `Order: ${id_orders}`,
+                html:
+                    `
+                    <p>Do you really want to <b>delete</b> this order's data?</p>
+                    `
+                ,
+                /* text: 'Do you really want to delete this company?', */
+                footer: 'You will not be able to reverse this action',
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#0275d8',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Sure!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.value) {
+                    var datos = new FormData();
+                    datos.append('UpdateCampo', "ok");
+                    datos.append('idorder', id_orders);
+                    datos.append('item', "active");
+                    datos.append('value', '0');
+                    $.ajax({
+                        type: 'post',
+                        url: 'ajax/operations.ajax.php',
+                        data: datos,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            if (response == "ok") {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Order deleted successfully!',
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'Close',
+                                    allowOutsideClick: false,
+                                }).then((result) => {
+                                    if (result.value) {
+                                        window.location = 'orders';
+                                    }
+                                })
+                            }
+                            else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops, there was a problem, please try again later',
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'Close',
                                     closeOnConfirm: false
                                 })
                             }

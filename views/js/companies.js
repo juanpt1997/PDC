@@ -29,7 +29,8 @@ if (window.location.href.includes("c-orders") || window.location.href.includes("
                     Everything: [moment().subtract(20, "years"), moment()]
                 },
                 alwaysShowCalendars: true,
-                startDate: moment().startOf("month"),
+                //startDate: moment().startOf("month"),
+                startDate: moment().startOf("year"),
                 endDate: moment().endOf("month"),
                 opens: "center",
                 cancelClass: "btn-danger"
@@ -62,21 +63,21 @@ if (window.location.href.includes("c-orders") || window.location.href.includes("
 
                 let template = `  
                 <table class="table table-sm">
-                    <thead>
+                    <thead class="text-uppercase">
                         <tr>
-                            <th>PO Order</th>
-                            <th>Client</th>
+                            <th>Order</th>
+                            <th>Company</th>
                             <th>Customer PO</th>
-                            <th>PO Reference</th>
-                            <th>Date</th>
-                            <th>Delivery</th>
-                            <th>Real Delivery</th>
+                            <th>BOL REFERENCE</th>
+                            <th>DATE ENTERED</th>
+                            <th>DELIVER BY</th>
+                            <th>DELIVERED DATE</th>
                             <th>Product</th>
                             <th>Quanty</th>
                             <th>Status</th>
                             <th>COA</th>
                             <th>POD</th>
-                            <th>Actions</th>
+                            <th>PDF</th>
                         </tr>
                     </thead>
                     <tbody>      
@@ -104,8 +105,9 @@ if (window.location.href.includes("c-orders") || window.location.href.includes("
                     });
             }
             //Ejecutar Funcion cuando cargue la pagina
-            let fechaInicio = moment().startOf("month").format("YYYY-MM-DD");
-            let fechaFin = moment().endOf("month").format("YYYY-MM-DD")
+            //let fechaInicio = moment().startOf("month").format("YYYY-MM-DD");
+            let fechaInicio = moment().startOf("year").format("YYYY-MM-DD");
+            let fechaFin = moment().endOf("month").format("YYYY-MM-DD");
             mostrarDatatableOrders(fechaInicio, fechaFin);
         }
 
@@ -176,9 +178,9 @@ if (window.location.href.includes("c-orders") || window.location.href.includes("
                     <br>
                     <label for="">New Status</label>
                     <select id="swal_cambiarEstado" class="form-control" name="swal_cambiarEstado">
-                        <option>On Process</option>
+                        <option>In Process</option>
                         <option>Shipped</option>
-                        <option>Sent</option>
+                        <option>Delivered</option>
                         <option>Canceled</option>
                     </select>
                     `

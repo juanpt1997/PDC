@@ -23,7 +23,7 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-    <title>PDC INTERNATIONAL INC</title>
+    <title>PDC INTERNATIONAL</title>
 
     <!-- =================================================== 
         PLUGINS CSS
@@ -87,6 +87,7 @@ session_start();
     <script src="views/plugins/jquery-mapael/maps/usa_states.min.js"></script>
     <!-- ChartJS -->
     <script src="views/plugins/chart.js/Chart.min.js"></script>
+    <script src="views/plugins/chart.js/Charjs-plugin-datalabels.min.js"></script>
 
     <!-- PAGE SCRIPTS -->
     <!-- <script src="views/dist/js/pages/dashboard2.js"></script> -->
@@ -95,6 +96,7 @@ session_start();
     <script src="views/js/operations.js?v=<?= time() ?>"></script>
     <script src="views/js/companies.js?v=<?= time() ?>"></script>
     <script src="views/js/users.js?v=<?= time() ?>"></script>
+    <script src="views/js/dashboard.js?v=<?= time() ?>"></script>
 
 
 </head>

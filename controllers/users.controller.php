@@ -218,15 +218,15 @@ class UsersController
                     ===================================================*/
                     if ($id_companies != 0) {
                         $to = $_POST['nuevoEmail'];
-                        $subject = "PDC INTERNATIONAL INC - Invitation";
+                        $subject = "PDC INTERNATIONAL - Invitation";
                         $message = "<html>
                                     <body>
-                                    <p>PDC INTERNATIONAL INC has invited you to join WEB PLATFORM as a new customer of PDC INTERNATIONAL INC. <a href='http://www.lnrdigital.com/lnrdigital.com/jpablo/'>Click here to accept this invitation.</a><br><br>
+                                    <p>PDC INTERNATIONAL has invited you to join WEB PLATFORM as a new customer of PDC INTERNATIONAL. <a href='http://www.lnrdigital.com/lnrdigital.com/jpablo/'>Click here to accept this invitation.</a><br><br>
                                     Our WEB PLATFORM can easily place and check status of your orders as well download your order's documents like BOL's and POD's.<br><br>
                                     Once you accept this invitation, you'll be able to access and start your business with us.<br>
                                     USERNAME: your email, PASSWORD: $cadena<br><br>
                                     Thank you,<br>
-                                    The PDC INTERNATIONAL INC Team</p><br>
+                                    The PDC INTERNATIONAL Team</p><br>
                                     </body>
                                     </html>";
                         ControladorCorreo::ctrEnviarCorreo($to, $subject, $message);
@@ -429,7 +429,7 @@ class UsersController
         # En caso de ser un cliente, enviar email con la nueva contraseña
         if ($user['id_companies'] != 0 && $actualizarPassword == "ok") {
             $to = $user['email'];
-            $subject = "PDC INTERNATIONAL INC - Reset Password";
+            $subject = "PDC INTERNATIONAL - Reset Password";
             $message = "<html>
                                     <body>
                                     <p>
@@ -437,7 +437,7 @@ class UsersController
                                     USERNAME: your email, PASSWORD: $cadena<br>
                                     <a href='http://www.lnrdigital.com/lnrdigital.com/jpablo/'>Click here to go to the website.</a><br>
                                     Thank you,<br>
-                                    The PDC INTERNATIONAL INC Team</p><br>
+                                    The PDC INTERNATIONAL Team</p><br>
                                     </body>
                                     </html>";
             ControladorCorreo::ctrEnviarCorreo($to, $subject, $message);

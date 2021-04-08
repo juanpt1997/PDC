@@ -4,6 +4,15 @@
     </script>
 <?php endif ?>
 
+<?php
+# INFORMACIÓN DE LA BASE DE DATOS
+$NewOrdersToday = DashboardController::ctrOrdersToday();
+$OrdersInProcess = DashboardController::ctrOrdersInProcess();
+$OrdersDeliveredThisWeek = DashboardController::ctrOrdersDeliveredThisWeek();
+$DataOrdersDeliveredMonth = DashboardController::ctrChartOrdersDeliveredThisMonth();
+$OrdersShipped = DashboardController::ctrOrderShipped();
+?>
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -27,7 +36,163 @@
     <!-- Main content -->
     <section class="content">
 
-        content here...
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <!-- ===================================================
+                            OTROS INDICADORES
+                        =================================================== -->
+                        <div class="row">
+                            <!-- ===================================================
+                                NEW ORDERS
+                            =================================================== -->
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-clipboard-list"></i></span>
+
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-uppercase">There are</span>
+                                        <span class="info-box-number">
+                                            <h1><?= $NewOrdersToday ?></h1>
+                                        </span>
+                                        <span class="info-box-text text-uppercase">New orders today</span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
+
+                            <!-- ===================================================
+                                ORDERS IN PROCESS
+                            =================================================== -->
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <div class="info-box mb-3">
+                                    <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-tasks"></i></span>
+
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-uppercase">There are</span>
+                                        <span class="info-box-number">
+                                            <h1><?= $OrdersInProcess ?></h1>
+                                        </span>
+                                        <span class="info-box-text text-uppercase">Orders in process</span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
+
+                            <!-- ===================================================
+                                ORDERS DELIVERED THIS WEEK
+                            =================================================== -->
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <div class="info-box mb-3">
+                                    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-clipboard-check"></i></span>
+
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-uppercase">There are</span>
+                                        <span class="info-box-number">
+                                            <h1><?= $OrdersDeliveredThisWeek ?></h1>
+                                        </span>
+                                        <span class="info-box-text text-uppercase">Orders delivered this week</span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
+
+                            <!-- ===================================================
+                                TOTAL PALLETS DELIVERED MONTH
+                            =================================================== -->
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <div class="info-box mb-3">
+                                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-pallet"></i></span>
+
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-uppercase">Total pallets delivered this month</span>
+                                        <span class="info-box-number">
+                                            <h1>750</h1>
+                                        </span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
+                            <!-- /.col -->
+
+                            <!-- ===================================================
+                                ORDERS DELIVERED MONTH
+                            =================================================== -->
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <div class="info-box mb-3">
+                                    <span class="info-box-icon bg-secondary elevation-1"><i class="fas fa-paste"></i></span>
+                                    <?php
+                                    $calculoPorcentaje = $DataOrdersDeliveredMonth['ordenesEntregadasMes'] / $DataOrdersDeliveredMonth['totalOrdenesMes'] * 100;
+                                    ?>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text text-uppercase">Orders delivered this month</span>
+                                        <div class="progress-group">
+                                            <span class="progress-text"><b><?= $DataOrdersDeliveredMonth['ordenesEntregadasMes'] ?></b></span>
+                                            <span class="float-right"><b><?= $DataOrdersDeliveredMonth['totalOrdenesMes'] ?></b></span>
+                                            <div class="progress" style="height: 20px">
+                                                <div class="progress-bar bg-secondary" style="width: <?= $calculoPorcentaje ?>%;"></div>
+                                            </div>
+                                        </div>
+                                        <!-- /.progress-group -->
+                                        <!-- <span class="info-box-number">
+                                            <h1><?= $temp['ordenesEntregadasMes'] ?></h1>
+                                        </span> -->
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
+                            <!-- /.col -->
+
+                            <!-- ===================================================
+                                ORDERS SHIPPED
+                            =================================================== -->
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-truck-loading"></i></span>
+
+                                    <div class="info-box-content">
+                                        <span class="info-box-number">
+                                            <h1><?= $OrdersShipped ?></h1>
+                                        </span>
+                                        <span class="info-box-text text-uppercase">Orders shipped</span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
+                        </div>
+
+                        <!-- ===================================================
+                            TOTAL ORDERS DELIVERED BY MONTH
+                        =================================================== -->
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-12 col-lg-8">
+                                <div class="card">
+                                    <div class="card-header">
+                                            <h4 class="text-center font-weight-bold">
+                                                TOTAL ORDERS DELIVERED BY MONTH
+                                            </h4>
+                                        </div>
+                                    <div class="card-body">
+                                        <div class="chart">
+                                            <!-- Sales Chart Canvas -->
+                                            <canvas id="ChartOrdersxMonth" style="height: 15rem;"></canvas>
+                                        </div>
+                                        <!-- /.chart-responsive -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </section>
     <!-- /.content -->

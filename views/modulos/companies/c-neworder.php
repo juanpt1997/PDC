@@ -130,7 +130,7 @@ if ($ProductsAllowed == null) {
                             <div class="col-12 col-sm-6 col-lg-4">
                                 <div class="form-group">
                                     <label>Customer PO#</label>
-                                    <input type="text" class="form-control" name="Customer_PO" data-placeholder="" style="width: 100%" maxlength="10" required>
+                                    <input type="text" class="form-control" name="Customer_PO" data-placeholder="" style="width: 100%" maxlength="20" required>
                                 </div>
                                 <!-- /.form-group -->
                             </div>
@@ -186,7 +186,7 @@ if ($ProductsAllowed == null) {
                                 <div class="form-group">
                                     <label>P.O. Reference #</label>
                                     <div class="select2-purple">
-                                        <input type="text" class="form-control" name="PO_Reference" data-placeholder="" style="width: 100%" maxlength="10" required>
+                                        <input type="text" class="form-control" name="PO_Reference" data-placeholder="" style="width: 100%" maxlength="20" required>
                                     </div>
                                 </div>
                                 <!-- /.form-group -->
@@ -261,7 +261,7 @@ if ($ProductsAllowed == null) {
                                 <div class="form-group">
                                     <label>Contact</label>
                                     <div class="select2-purple">
-                                        <input type="text" name="Delivery_Contact" class="form-control" data-placeholder="" style="width: 100%" maxlength="50" required>
+                                        <input type="text" name="Delivery_Contact" class="form-control" data-placeholder="" style="width: 100%" maxlength="50">
                                     </div>
                                 </div>
                                 <!-- /.form-group -->
@@ -292,7 +292,7 @@ if ($ProductsAllowed == null) {
                     =================================================== -->
                             <div class="col-12 col-sm-6 col-lg-4">
                                 <div class="form-group">
-                                    <label>Real Delivery Date</label>
+                                    <label>Delivered Date</label>
                                     <div class="input-group date" id="reservationdate" data-target-input="nearest">
                                         <input type="date" name="Delivery_Real_Date" class="form-control datetimepicker-input" data-target="#reservationdate" required>
                                         <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
@@ -357,7 +357,7 @@ if ($ProductsAllowed == null) {
                                 <div class="form-group">
                                     <label>Contact</label>
                                     <div class="select2-purple">
-                                        <input type="text" name="Delivery_Destination_Contact" class="form-control" data-placeholder="" maxlength="100" style="width: 100%" required>
+                                        <input type="text" name="Delivery_Destination_Contact" class="form-control" data-placeholder="" maxlength="100" style="width: 100%">
                                     </div>
                                 </div>
                                 <!-- /.form-group -->

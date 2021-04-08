@@ -52,7 +52,7 @@ $Products = ProductsController::ctrShowProducts();
                                 <tr>
                                     <th>Country</th>
                                     <th>Company</th>
-                                    <th>ID</th>
+                                    <!-- <th>ID</th> -->
                                     <th>Address Line1</th>
                                     <th>Address Line2</th>
                                     <th>City</th>
@@ -71,12 +71,13 @@ $Products = ProductsController::ctrShowProducts();
                                     <?php
                                     $btnEditCompany = "<button class='btn btn-secondary btn-sm companyInfo m-1' data-target='#modal-editcompany' data-toggle='modal' idcompany='{$value['id_companies']}'><i class='fas fa-pencil-alt'></i></button>";
                                     $botonProductsAllowed = "<button class='btn btn-primary btn-sm btn-productsAllowed m-1' data-target='#modal-productsAllowed' data-toggle='modal' idcompany='{$value['id_companies']}' namecompany='{$value['Name']}'><i class='fas fa-cubes'></i></button>";
-                                    $btnActions = "<div class='row d-flex flex-nowrap justify-content-center'>" . $btnEditCompany . $botonProductsAllowed . "</div>";
+                                    $btnDeleteCompany = "<button class='btn btn-danger btn-sm btnBorrarCompany m-1' id_companies='{$value['id_companies']}' nameCompany='{$value['Name']}'><i class='fas fa-trash-alt'></i></button>";
+                                    $btnActions = "<div class='row d-flex flex-nowrap justify-content-center'>" . $btnEditCompany . $botonProductsAllowed . $btnDeleteCompany . "</div>";
                                     ?>
                                     <tr>
                                         <td><?= $value['Country'] ?></td>
                                         <td><?= $value['Name'] ?></td>
-                                        <td><?= $value['ID'] ?></td>
+                                        <!-- <td><?= $value['ID'] ?></td> -->
                                         <td><?= $value['Address_Line1'] ?></td>
                                         <td><?= $value['Address_Line2'] ?></td>
                                         <td><?= $value['City'] ?></td>
@@ -139,7 +140,7 @@ $Products = ProductsController::ctrShowProducts();
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-globe-americas"></i></span>
                                     </div>
-                                    <input name="country" type="text" class="form-control" id="" placeholder="Country" maxlength="50" required>
+                                    <input value="United States" name="country" type="text" class="form-control" id="" placeholder="Country" maxlength="50" required>
                                 </div>
                             </div>
                         </div>
@@ -162,7 +163,7 @@ $Products = ProductsController::ctrShowProducts();
                         <!-- ===================================================
                             ID
                         =================================================== -->
-                        <div class="col-12 col-md-6">
+                        <div class="col-12 col-md-6 d-none">
                             <div class="form-group">
                                 <label for="">ID</label>
                                 <div class="input-group mb-3">
@@ -375,7 +376,7 @@ $Products = ProductsController::ctrShowProducts();
                         <!-- ===================================================
                             ID
                         =================================================== -->
-                        <div class="col-12 col-md-6">
+                        <div class="col-12 col-md-6 d-none">
                             <div class="form-group">
                                 <label for="">ID</label>
                                 <div class="input-group mb-3">

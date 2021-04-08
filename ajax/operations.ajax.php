@@ -30,6 +30,15 @@ class CompaniesAjax
         $response = CompaniesController::ctrAllowedProducts($value);
         echo json_encode($response);
     }
+
+    /* ===================================================
+       UPDATE DE UN SOLO CAMPO DE COMPANY (INICIALMENTE PARA DESHABILITARLO)
+    ===================================================*/
+    static public function ajaxModificarCampo($datos)
+    {
+        $response = CompaniesController::ctrModificarCampo($datos);
+        echo $response;
+    }
 }
 
 if (isset($_POST['CompanyInfo']) && $_POST['CompanyInfo'] == "ok") {
@@ -38,6 +47,15 @@ if (isset($_POST['CompanyInfo']) && $_POST['CompanyInfo'] == "ok") {
 
 if (isset($_POST['AllowedProducts']) && $_POST['AllowedProducts'] == "ok") {
     CompaniesAjax::ajaxAllowedProducts($_POST['idcompany']);
+}
+
+if (isset($_POST['UpdateCampoCompany']) && $_POST['UpdateCampoCompany'] == "ok") {
+    $datos = array(
+        'id_companies' => $_POST['id_companies'],
+        'item' => $_POST['item'],
+        'value' => $_POST['value']
+    );
+    CompaniesAjax::ajaxModificarCampo($datos);
 }
 
 /* ===================================================
@@ -62,6 +80,15 @@ class ProductsAjax
         $response = ProductsController::ctrShowProducts();
         echo json_encode($response);
     }
+
+    /* ===================================================
+       UPDATE DE UN SOLO CAMPO DE PRODUCT (INICIALMENTE PARA DESHABILITARLO)
+    ===================================================*/
+    static public function ajaxModificarCampo($datos)
+    {
+        $response = ProductsController::ctrModificarCampo($datos);
+        echo $response;
+    }
 }
 
 if (isset($_POST['ProductInfo']) && $_POST['ProductInfo'] == "ok") {
@@ -69,6 +96,14 @@ if (isset($_POST['ProductInfo']) && $_POST['ProductInfo'] == "ok") {
 }
 if (isset($_POST['ShowProducts']) && $_POST['ShowProducts'] == "ok") {
     ProductsAjax::ajaxShowProducts();
+}
+if (isset($_POST['UpdateCampoProduct']) && $_POST['UpdateCampoProduct'] == "ok") {
+    $datos = array(
+        'id_products' => $_POST['id_products'],
+        'item' => $_POST['item'],
+        'value' => $_POST['value']
+    );
+    ProductsAjax::ajaxModificarCampo($datos);
 }
 
 /* ===================================================
@@ -122,16 +157,16 @@ class OrdersAjax
                 $BtnPOD = "<button type='button' class='btn btn-default btn-docs' idorder='{$value['id_orders']}' tipodoc='POD' data-toggle='modal' data-target='#modal-docs'><i class='far fa-file-pdf'></i></button>";
 
                 switch ($value['Status']) {
-                    case 'On Process':
-                        $Status = "<span idorder='{$value['id_orders']}' class='badge badge-primary btnCambiarEstado' style='cursor: pointer;'>On Process</span>";
+                    case 'In Process':
+                        $Status = "<span idorder='{$value['id_orders']}' class='badge badge-primary btnCambiarEstado' style='cursor: pointer;'>In Process</span>";
                         break;
 
                     case 'Shipped':
-                        $Status = "<span idorder='{$value['id_orders']}' class='badge badge-secondary btnCambiarEstado' style='cursor: pointer;'>Shipped</span>";
+                        $Status = "<span idorder='{$value['id_orders']}' class='badge badge-warning btnCambiarEstado' style='cursor: pointer;'>Shipped</span>";
                         break;
 
-                    case 'Sent':
-                        $Status = "<span idorder='{$value['id_orders']}' class='badge badge-warning text-white btnCambiarEstado' style='cursor: pointer;'>Sent</span>";
+                    case 'Delivered':
+                        $Status = "<span idorder='{$value['id_orders']}' class='badge badge-secondary text-white btnCambiarEstado' style='cursor: pointer;'>Delivered</span>";
                         break;
 
                     case 'Canceled':
@@ -144,7 +179,10 @@ class OrdersAjax
                 }
                 //$onclickEventDescargar = `onclick="javascript:window.open('pdf/po.php?order=${value['id_orders']}','','width=1280,height=720,left=50,top=50,toolbar=yes');`;
                 $botonDescargarOrder = "<button class='btn btn-secondary ml-2 btn-descargarorder' type='button' idorder='{$value['id_orders']}'><i class='fas fa-save'></i></button>";
-                $botonAcciones = "<div class='row d-flex flex-nowrap justify-content-center'>" . $botonDescargarOrder . "</div>";
+                $BtnPDF = "<div class='row d-flex flex-nowrap justify-content-center'>" . $botonDescargarOrder . "</div>";
+
+                $btnDeleteOrder = "<button class='btn btn-danger btn-sm btnBorrarOrder m-1' id_orders='{$value['id_orders']}'><i class='fas fa-trash-alt'></i></button>";
+                $btnActions = "<div class='row d-flex flex-nowrap justify-content-center'>" . $btnDeleteOrder . "</div>";
 
                 $datosJson .= '
                     [
@@ -160,7 +198,8 @@ class OrdersAjax
                         "' . $Status . '",
                         "' . $BtnCOA . '",
                         "' . $BtnPOD . '",
-                        "' . $botonAcciones . '"
+                        "' . $BtnPDF . '",
+                        "' . $btnActions . '"
                     ],';
             }
             #Eliminamos la ultima coma para no tener problema en el json    

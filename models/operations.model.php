@@ -17,7 +17,8 @@ class CompaniesModel
     static public function mdlShowCompanies()
     {
         $stmt = Conexion::conectar()->prepare("SELECT *
-                                                FROM Companies");
+                                                FROM Companies
+                                                where Active = 1");
 
         $stmt->execute();
 
@@ -121,11 +122,11 @@ class CompaniesModel
     ===================================================*/
     static public function mdlAllowedProducts($value)
     {
-        $stmt = Conexion::conectar()->prepare("SELECT p.*, c.Name as Company
+        $stmt = Conexion::conectar()->prepare("SELECT p.*, c.Name AS Company
                                                 FROM Companies c
                                                 INNER JOIN re_Companies_Products cp ON c.id_companies = cp.id_companies
                                                 INNER JOIN Products p ON p.id_products = cp.id_products
-                                                WHERE c.id_companies = :id_companies");
+                                                WHERE c.id_companies = :id_companies AND p.Active = 1");
         $stmt->bindParam(":id_companies", $value, PDO::PARAM_INT);
 
         $stmt->execute();
@@ -182,6 +183,28 @@ class CompaniesModel
 
         return $retorno;
     }
+
+    /* ===================================================
+       MODIFICAR SOLO UN CAMPO DE COMPANY (INICIALMENTE PARA DESHABILITARLO)
+    ===================================================*/
+    static public function mdlModificarCampo($datos)
+    {
+        $conexion = Conexion::conectar();
+        $stmt = $conexion->prepare("UPDATE Companies SET
+                                    {$datos['item']} = :{$datos['item']}
+                                    WHERE id_companies = :id_companies");
+        $stmt->bindParam(":id_companies", $datos['id_companies'], PDO::PARAM_INT);
+        $stmt->bindParam(":" . $datos['item'], $datos['value'], PDO::PARAM_STR);
+
+        if ($stmt->execute()) {
+            $retorno = "ok";
+        } else {
+            $retorno = "error";
+        }
+        $stmt->closeCursor();
+        $conexion = null;
+        return $retorno;
+    }
 }
 
 /* ===================================================
@@ -195,7 +218,8 @@ class ProductsModel
     static public function mdlShowProducts()
     {
         $stmt = Conexion::conectar()->prepare("SELECT *
-                                                FROM Products");
+                                                FROM Products
+                                                where Active = 1");
 
         $stmt->execute();
 
@@ -308,6 +332,28 @@ class ProductsModel
         $conexion = null;
         return $id;
     }
+
+    /* ===================================================
+       MODIFICAR SOLO UN CAMPO DE PRODUCT (INICIALMENTE PARA DESHABILITARLO)
+    ===================================================*/
+    static public function mdlModificarCampo($datos)
+    {
+        $conexion = Conexion::conectar();
+        $stmt = $conexion->prepare("UPDATE Products SET
+                                    {$datos['item']} = :{$datos['item']}
+                                    WHERE id_products = :id_products");
+        $stmt->bindParam(":id_products", $datos['id_products'], PDO::PARAM_INT);
+        $stmt->bindParam(":" . $datos['item'], $datos['value'], PDO::PARAM_STR);
+
+        if ($stmt->execute()) {
+            $retorno = "ok";
+        } else {
+            $retorno = "error";
+        }
+        $stmt->closeCursor();
+        $conexion = null;
+        return $retorno;
+    }
 }
 
 /* ===================================================
@@ -328,7 +374,7 @@ class OrdersModel
                                                         FROM Orders o
                                                         INNER JOIN Companies c ON c.id_companies = o.id_companies
                                                         INNER JOIN Products p ON p.id_products = o.id_products
-                                                        WHERE o.id_companies = $value AND o.Status = '$status'");
+                                                        WHERE o.id_companies = $value AND o.Status = '$status' AND o.active = 1");
                 break;
 
                 # Mostrar todas las ordenes con cualquier estado
@@ -340,7 +386,7 @@ class OrdersModel
                                                         FROM Orders o
                                                         INNER JOIN Companies c ON c.id_companies = o.id_companies
                                                         INNER JOIN Products p ON p.id_products = o.id_products
-                                                        WHERE DATE(o.Pickup_Date) BETWEEN '{$fechas['fecha1']}' AND '{$fechas['fecha2']}'");
+                                                        WHERE DATE(o.Pickup_Date) BETWEEN '{$fechas['fecha1']}' AND '{$fechas['fecha2']}' AND o.active = 1");
                                                         //WHERE DATE(o.Pickup_Date) BETWEEN '2020-12-01' AND '2020-12-31'");
                     // $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, o.*, DATE_FORMAT(o.Pickup_Date, '%m-%d-%Y') as Pickup_DateF, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF, DATE_FORMAT(o.Delivery_Real_Date, '%m-%d-%Y') as Delivery_Real_DateF
                     //                                     FROM Orders o
@@ -354,7 +400,7 @@ class OrdersModel
                                                             FROM Orders o
                                                             INNER JOIN Companies c ON c.id_companies = o.id_companies
                                                             INNER JOIN Products p ON p.id_products = o.id_products
-                                                            WHERE o.id_companies = $value AND DATE(o.Pickup_Date) BETWEEN '{$fechas['fecha1']}' AND '{$fechas['fecha2']}'");
+                                                            WHERE o.id_companies = $value AND DATE(o.Pickup_Date) BETWEEN '{$fechas['fecha1']}' AND '{$fechas['fecha2']}' AND o.active = 1");
                         // $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, o.*, DATE_FORMAT(o.Pickup_Date, '%m-%d-%Y') as Pickup_DateF, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF, DATE_FORMAT(o.Delivery_Real_Date, '%m-%d-%Y') as Delivery_Real_DateF
                         //                                     FROM Orders o
                         //                                     INNER JOIN Companies c ON c.id_companies = o.id_companies

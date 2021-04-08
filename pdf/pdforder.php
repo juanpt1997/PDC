@@ -384,7 +384,7 @@ class PdfOrder
         $pdf->Ln();
         $pdf->Ln();
         $pdf->SetFont('helvetica', '', '10');
-        $attentionList = '<ul><li>TRUCKER HAS AGREED TO THE TOTAL WEIGHT ADVISED ABOVE +  PALLET WEIGHT.</li><li>IF THERE ARE ANY CHANGES TO DELIVERY, TRUCKER MUST NOTIFY NEW ENGLAND FLOUR, BILL FORRAY (561) 998-09-04.</li></ul>';
+        $attentionList = '<ul><li>TRUCKER HAS AGREED TO THE TOTAL WEIGHT ADVISED ABOVE +  PALLET WEIGHT.</li><li>IF THERE ARE ANY CHANGES TO DELIVERY, TRUCKER MUST NOTIFY.</li></ul>';
         $pdf->writeHTML($attentionList);
         
 
@@ -404,7 +404,7 @@ class PdfOrder
 
         // Close and output PDF document
         // This method has several options, check the source code documentation for more information.
-        $pdf->Output('example_001.pdf', 'I');
+        $pdf->Output('PO REF ' . $info['PO_Reference'], 'I');
 
         //============================================================+
         // END OF FILE

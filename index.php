@@ -12,12 +12,14 @@ require_once "./controllers/users.controller.php";
 require_once "./controllers/operations.controller.php";
 require_once "./controllers/files.controller.php";
 require_once "./controllers/mail.controller.php";
+require_once "./controllers/dashboard.controller.php";
 
 /* ===================================================
    MODELS REQUIRED FOR THE PROJECT
 ===================================================*/
 require_once "./models/operations.model.php";
 require_once "./models/users.model.php";
+require_once "./models/dashboard.model.php";
 
 
 $plantilla = new ControladorPlantilla();

@@ -54,16 +54,16 @@ class C_OrdersAjax
                 $BtnPOD = "<button type='button' class='btn btn-default btn-docs' idorder='{$value['id_orders']}' tipodoc='POD' data-toggle='modal' data-target='#modal-docs'><i class='far fa-file-pdf'></i></button>";
 
                 switch ($value['Status']) {
-                    case 'On Process':
-                        $Status = "<span idorder='{$value['id_orders']}' class='badge badge-primary'>On Process</span>";
+                    case 'In Process':
+                        $Status = "<span idorder='{$value['id_orders']}' class='badge badge-primary'>In Process</span>";
                         break;
 
                     case 'Shipped':
-                        $Status = "<span idorder='{$value['id_orders']}' class='badge badge-secondary'>Shipped</span>";
+                        $Status = "<span idorder='{$value['id_orders']}' class='badge badge-warning'>Shipped</span>";
                         break;
 
-                    case 'Sent':
-                        $Status = "<span idorder='{$value['id_orders']}' class='badge badge-warning text-white'>Sent</span>";
+                    case 'Delivered':
+                        $Status = "<span idorder='{$value['id_orders']}' class='badge badge-secondary text-white'>Delivered</span>";
                         break;
 
                     case 'Canceled':
@@ -76,7 +76,10 @@ class C_OrdersAjax
                 }
                 //$onclickEventDescargar = `onclick="javascript:window.open('pdf/po.php?order=${value['id_orders']}','','width=1280,height=720,left=50,top=50,toolbar=yes');`;
                 $botonDescargarOrder = "<button class='btn btn-secondary ml-2 btn-descargarorder' type='button' idorder='{$value['id_orders']}'><i class='fas fa-save'></i></button>";
-                $botonAcciones = "<div class='row d-flex flex-nowrap justify-content-center'>" . $botonDescargarOrder . "</div>";
+                $BtnPDF = "<div class='row d-flex flex-nowrap justify-content-center'>" . $botonDescargarOrder . "</div>";
+
+                // $btnDeleteOrder = "<button class='btn btn-danger btn-sm btnBorrarOrder m-1' id_orders='{$value['id_orders']}'><i class='fas fa-trash-alt'></i></button>";
+                // $btnActions = "<div class='row d-flex flex-nowrap justify-content-center'>" . $btnDeleteOrder . "</div>";
 
                 $datosJson .= '
                     [
@@ -92,7 +95,7 @@ class C_OrdersAjax
                         "' . $Status . '",
                         "' . $BtnCOA . '",
                         "' . $BtnPOD . '",
-                        "' . $botonAcciones . '"
+                        "' . $BtnPDF . '"
                     ],';
             }
             #Eliminamos la ultima coma para no tener problema en el json    

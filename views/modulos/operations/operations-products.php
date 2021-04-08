@@ -48,9 +48,9 @@ $Products = ProductsController::ctrShowProducts();
                         <table class="table tablaProducts table-sm">
                             <thead class="text-center">
                                 <tr>
-                                    <td>Item #</td>
+                                    <td>#</td>
                                     <td>Name</td>
-                                    <td>Reference</td>
+                                    <td>Item</td>
                                     <td>Weight</td>
                                     <td>Unit</td>
                                     <td>Price</td>
@@ -61,6 +61,11 @@ $Products = ProductsController::ctrShowProducts();
                             </thead>
                             <tbody class="text-center">
                                 <?php foreach ($Products as $key => $value) : ?>
+                                    <?php
+                                    $btnEditProduct = "<button class='btn btn-secondary btn-sm productInfo m-1' data-target='#modal-editproduct' data-toggle='modal' idproduct='{$value['id_products']}'><i class='fas fa-pencil-alt'></i></button>";
+                                    $btnDeleteProduct = "<button class='btn btn-danger btn-sm btnBorrarProduct m-1' id_products='{$value['id_products']}' nameProduct='{$value['Name']}'><i class='fas fa-trash-alt'></i></button>";
+                                    $btnActions = "<div class='row d-flex flex-nowrap justify-content-center'>" . $btnEditProduct . $btnDeleteProduct . "</div>";
+                                    ?>
                                     <tr>
                                         <td><?= $value['id_products'] ?></td>
                                         <td><?= $value['Name'] ?></td>
@@ -70,7 +75,8 @@ $Products = ProductsController::ctrShowProducts();
                                         <td><?= $value['Price'] ?></td>
                                         <td><img class="img-thumbnail img-fluid btn-imgproduct" idproduct="<?= $value['id_products'] ?>" src="<?= "." . $value['Image'] ?>" width="100" alt="" style="cursor: pointer;" data-target="#modal-imgproduct" data-toggle="modal"></td>
                                         <td class="text-sm" style="max-width: 150px"><?= $value['Description'] ?></td>
-                                        <td><button class="btn btn-info btn-sm productInfo" data-target="#modal-editproduct" data-toggle="modal" idproduct="<?= $value['id_products'] ?>"><i class="fas fa-pencil-alt"></i></button></td>
+                                        <!-- <td><button class="btn btn-info btn-sm productInfo" data-target="#modal-editproduct" data-toggle="modal" idproduct="<?= $value['id_products'] ?>"><i class="fas fa-pencil-alt"></i></button></td> -->
+                                        <td><?= $btnActions ?></td>
                                     </tr>
                                 <?php endforeach ?>
                             </tbody>
@@ -183,7 +189,13 @@ $Products = ProductsController::ctrShowProducts();
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-sort-numeric-up-alt"></i></span>
                                     </div>
-                                    <input name="Unit" type="text" class="form-control" id="" placeholder="Unit" maxlength="20" required>
+                                    <select id="" class="form-control" name="Unit" required>
+                                        <option value="" selected disabled></option>
+                                        <option>LB</option>
+                                        <option>OZ</option>
+                                        <option>KG</option>
+                                    </select>
+                                    <!-- <input name="Unit" type="text" class="form-control" id="" placeholder="Unit" maxlength="20" required> -->
                                 </div>
                             </div>
                         </div>

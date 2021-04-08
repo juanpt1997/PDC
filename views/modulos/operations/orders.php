@@ -67,21 +67,21 @@ $Products = ProductsController::ctrShowProducts();
                         <div class="card-body">
                             <div class="table-responsive tablaOrders">
                                 <table class="table table-sm">
-                                    <thead>
+                                    <thead class="text-uppercase">
                                         <tr>
-                                            <th>PO Order</th>
-                                            <th>Client</th>
+                                            <th>Order</th>
+                                            <th>Company</th>
                                             <th>Customer PO</th>
-                                            <th>PO Reference</th>
-                                            <th>Date</th>
-                                            <th>Delivery</th>
-                                            <th>Real Delivery</th>
+                                            <th>BOL REFERENCE</th>
+                                            <th>DATE ENTERED</th>
+                                            <th>DELIVER BY</th>
+                                            <th>DELIVERED DATE</th>
                                             <th>Product</th>
                                             <th>Quanty</th>
                                             <th>Status</th>
                                             <th>COA</th>
                                             <th>POD</th>
-                                            <th>Actions</th>
+                                            <th>PDF</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -207,7 +207,7 @@ $Products = ProductsController::ctrShowProducts();
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
                                 <label>Customer PO#</label>
-                                <input type="text" class="form-control" name="Customer_PO" data-placeholder="" style="width: 100%" maxlength="10" required>
+                                <input type="text" class="form-control" name="Customer_PO" data-placeholder="" style="width: 100%" maxlength="20" required>
                             </div>
                             <!-- /.form-group -->
                         </div>
@@ -263,7 +263,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>P.O. Reference #</label>
                                 <div class="select2-purple">
-                                    <input type="text" class="form-control" name="PO_Reference" data-placeholder="" style="width: 100%" maxlength="10" required>
+                                    <input type="text" class="form-control" name="PO_Reference" data-placeholder="" style="width: 100%" maxlength="20" required>
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -338,7 +338,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Contact</label>
                                 <div class="select2-purple">
-                                    <input type="text" name="Delivery_Contact" class="form-control" data-placeholder="" style="width: 100%" maxlength="50" required>
+                                    <input type="text" name="Delivery_Contact" class="form-control" data-placeholder="" style="width: 100%" maxlength="50">
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -369,7 +369,7 @@ $Products = ProductsController::ctrShowProducts();
                     =================================================== -->
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
-                                <label>Real Delivery Date</label>
+                                <label>Delivered Date</label>
                                 <div class="input-group date" id="reservationdate" data-target-input="nearest">
                                     <input type="date" name="Delivery_Real_Date" class="form-control datetimepicker-input" data-target="#reservationdate" required>
                                     <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
@@ -434,7 +434,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Contact</label>
                                 <div class="select2-purple">
-                                    <input type="text" name="Delivery_Destination_Contact" class="form-control" data-placeholder="" maxlength="100" style="width: 100%" required>
+                                    <input type="text" name="Delivery_Destination_Contact" class="form-control" data-placeholder="" maxlength="100" style="width: 100%">
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -582,7 +582,7 @@ $Products = ProductsController::ctrShowProducts();
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
                                 <label>Customer PO#</label>
-                                <input type="text" class="form-control editOrder" id="Customer_PO" name="Customer_PO" data-placeholder="" style="width: 100%" maxlength="10" required>
+                                <input type="text" class="form-control editOrder" id="Customer_PO" name="Customer_PO" data-placeholder="" style="width: 100%" maxlength="20" required>
                             </div>
                             <!-- /.form-group -->
                         </div>
@@ -638,7 +638,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>P.O. Reference #</label>
                                 <div class="select2-purple">
-                                    <input type="text" class="form-control editOrder" id="PO_Reference" name="PO_Reference" data-placeholder="" style="width: 100%" maxlength="10" required>
+                                    <input type="text" class="form-control editOrder" id="PO_Reference" name="PO_Reference" data-placeholder="" style="width: 100%" maxlength="20" required>
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -713,7 +713,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Contact</label>
                                 <div class="select2-purple">
-                                    <input type="text" id="Delivery_Contact" name="Delivery_Contact" class="form-control editOrder" data-placeholder="" style="width: 100%" maxlength="50" required>
+                                    <input type="text" id="Delivery_Contact" name="Delivery_Contact" class="form-control editOrder" data-placeholder="" style="width: 100%" maxlength="50">
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -744,7 +744,7 @@ $Products = ProductsController::ctrShowProducts();
                     =================================================== -->
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
-                                <label>Real Delivery Date</label>
+                                <label>Delivered Date</label>
                                 <div class="input-group date" id="reservationdate" data-target-input="nearest">
                                     <input type="date" id="Delivery_Real_Date" name="Delivery_Real_Date" class="form-control editOrder datetimepicker-input" data-target="#reservationdate" required>
                                     <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
@@ -809,7 +809,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Contact</label>
                                 <div class="select2-purple">
-                                    <input type="text" id="Delivery_Destination_Contact" name="Delivery_Destination_Contact" class="form-control editOrder" data-placeholder="" maxlength="100" style="width: 100%" required>
+                                    <input type="text" id="Delivery_Destination_Contact" name="Delivery_Destination_Contact" class="form-control editOrder" data-placeholder="" maxlength="100" style="width: 100%">
                                 </div>
                             </div>
                             <!-- /.form-group -->
