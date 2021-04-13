@@ -190,6 +190,7 @@ class OrdersAjax
                         "' . $value['Company'] . '",
                         "' . $value['Customer_PO'] . '",
                         "' . $value['PO_Reference'] . '",
+                        "' . $value['creationF'] . '",
                         "' . $value['Pickup_DateF'] . '",
                         "' . $value['Delivery_DateF'] . '",
                         "' . $value['Delivery_Real_DateF'] . '",

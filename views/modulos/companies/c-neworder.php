@@ -73,7 +73,7 @@ if ($ProductsAllowed == null) {
                             <div class="col-12 col-sm-6 col-lg-4">
                                 <div class="form-group">
                                     <label>Product</label>
-                                    <select class="form-control select2" name="id_products" style="width: 100%" required>
+                                    <select class="form-control select2 productsInput" name="id_products" style="width: 100%" required>
                                         <option value="" selected disabled>Choose an option</option>
                                         <?php foreach ($ProductsAllowed as $key => $value) : ?>
                                             <option value="<?= $value['id_products'] ?>"><?= $value['Name'] ?></option>
@@ -91,7 +91,7 @@ if ($ProductsAllowed == null) {
                                 <div class="form-group">
                                     <label>Weight of Each Bag</label>
                                     <div class="select2-purple">
-                                        <input type="text" class="form-control" name="Weight_Each_Bag" data-placeholder="lbs" style="width: 100%" maxlength="5" required>
+                                        <input type="text" class="form-control weight" name="Weight_Each_Bag" data-placeholder="lbs" style="width: 100%" maxlength="5" required readonly>
                                     </div>
                                 </div>
                                 <!-- /.form-group -->
@@ -130,7 +130,7 @@ if ($ProductsAllowed == null) {
                             <div class="col-12 col-sm-6 col-lg-4">
                                 <div class="form-group">
                                     <label>Customer PO#</label>
-                                    <input type="text" class="form-control" name="Customer_PO" data-placeholder="" style="width: 100%" maxlength="20" required>
+                                    <input type="text" class="form-control" name="Customer_PO" data-placeholder="" style="width: 100%" maxlength="40" required>
                                 </div>
                                 <!-- /.form-group -->
                             </div>
@@ -292,7 +292,7 @@ if ($ProductsAllowed == null) {
                     =================================================== -->
                             <div class="col-12 col-sm-6 col-lg-4">
                                 <div class="form-group">
-                                    <label>Delivered Date</label>
+                                    <label>Real Delivered Date</label>
                                     <div class="input-group date" id="reservationdate" data-target-input="nearest">
                                         <input type="date" name="Delivery_Real_Date" class="form-control datetimepicker-input" data-target="#reservationdate" required>
                                         <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">

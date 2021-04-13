@@ -161,7 +161,7 @@
                             <div class="form-group">
                                 <label>Weight of Each Bag</label>
                                 <div class="select2-purple">
-                                    <input type="text" class="form-control editOrder" id="Weight_Each_Bag" name="Weight_Each_Bag" data-placeholder="lbs" style="width: 100%" maxlength="5" required>
+                                    <input type="text" class="form-control weight editOrder" id="Weight_Each_Bag" name="Weight_Each_Bag" data-placeholder="lbs" style="width: 100%" maxlength="5" required readonly>
                                 </div>
                             </div>
                             <!-- /.form-group -->

@@ -8,6 +8,8 @@
 $Companies = CompaniesController::ctrShowCompanies();
 
 $Products = ProductsController::ctrShowProducts();
+
+$listOfStates = ['AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FM', 'FL', 'GA', 'GU', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MH', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'MP', 'OH', 'OK', 'OR', 'PW', 'PA', 'PR', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VI', 'VA', 'WA', 'WV', 'WI', 'WY'];
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -140,7 +142,7 @@ $Products = ProductsController::ctrShowProducts();
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-globe-americas"></i></span>
                                     </div>
-                                    <input value="United States" name="country" type="text" class="form-control" id="" placeholder="Country" maxlength="50" required>
+                                    <input value="United States" name="country" type="text" class="form-control" id="" placeholder="Country" maxlength="50" readonly required>
                                 </div>
                             </div>
                         </div>
@@ -230,7 +232,11 @@ $Products = ProductsController::ctrShowProducts();
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-map-marked-alt"></i></span>
                                     </div>
-                                    <input name="state" type="text" class="form-control" id="" placeholder="State/Province" maxlength="100" required>
+                                    <select name="state" class="form-control" id="" required>
+                                        <?php foreach ($listOfStates as $key => $value) : ?>
+                                            <option><?= $value ?></option>
+                                        <?php endforeach ?>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -353,7 +359,7 @@ $Products = ProductsController::ctrShowProducts();
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-globe-americas"></i></span>
                                     </div>
-                                    <input name="country" type="text" class="form-control editCompany" id="country" placeholder="Country" maxlength="50" required>
+                                    <input name="country" type="text" class="form-control editCompany" id="country" placeholder="Country" maxlength="50" required readonly>
                                 </div>
                             </div>
                         </div>
@@ -443,7 +449,12 @@ $Products = ProductsController::ctrShowProducts();
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-map-marked-alt"></i></span>
                                     </div>
-                                    <input name="state" type="text" class="form-control editCompany" id="state" placeholder="State/Province" maxlength="100" required>
+                                    <!-- <input name="state" type="text" class="form-control editCompany" id="state" placeholder="State/Province" maxlength="100" required> -->
+                                    <select name="state" class="form-control editCompany" id="state" required>
+                                        <?php foreach ($listOfStates as $key => $value) : ?>
+                                            <option><?= $value ?></option>
+                                        <?php endforeach ?>
+                                    </select>
                                 </div>
                             </div>
                         </div>

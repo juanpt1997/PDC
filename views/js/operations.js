@@ -390,7 +390,7 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
                         .subtract(1, "month")
                         .endOf("month")
                 ],
-                Everything: [moment().subtract(20, "years"), moment()]
+                Everything: [moment().subtract(20, "years"), moment().subtract(-3, "years")]
             },
             alwaysShowCalendars: true,
             //startDate: moment().startOf("month"),
@@ -434,9 +434,10 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
                             <th>Company</th>
                             <th>Customer PO</th>
                             <th>BOL REFERENCE</th>
+                            <th>CREATED</th>
                             <th>DATE ENTERED</th>
                             <th>DELIVER BY</th>
-                            <th>DELIVERED DATE</th>
+                            <th>REAL DELIVERED</th>
                             <th>Product</th>
                             <th>Quanty</th>
                             <th>Status</th>
@@ -728,6 +729,34 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
         $(document).on("click", "#btnPlaceNewOrder", function () {
             $(".clientInput").val("");
             $(".productsInput").val("");
+            $(".productsInput").html("");
+            $(".weight").val("");
+        });
+
+        /* ===================================================
+          DETECTS CHANGE ON INPUT PRODUCT TO SHOW WEIGHT FROM DB
+        ===================================================*/
+        $(document).on("change", ".productsInput", function () {
+            $(".weight").val("");
+            var idproduct = $(this).val();
+
+            var datos = new FormData();
+            datos.append('ProductInfo', "ok");
+            datos.append('idproduct', idproduct);
+            $.ajax({
+                type: 'post',
+                url: 'ajax/operations.ajax.php',
+                data: datos,
+                dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response != "") {
+                        $(".weight").val(response.Weight);
+                    }
+                }
+            });
         });
 
     });

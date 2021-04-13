@@ -26,7 +26,7 @@ if (window.location.href.includes("c-orders") || window.location.href.includes("
                             .subtract(1, "month")
                             .endOf("month")
                     ],
-                    Everything: [moment().subtract(20, "years"), moment()]
+                    Everything: [moment().subtract(20, "years"), moment().subtract(-3, "years")]
                 },
                 alwaysShowCalendars: true,
                 //startDate: moment().startOf("month"),
@@ -71,7 +71,7 @@ if (window.location.href.includes("c-orders") || window.location.href.includes("
                             <th>BOL REFERENCE</th>
                             <th>DATE ENTERED</th>
                             <th>DELIVER BY</th>
-                            <th>DELIVERED DATE</th>
+                            <th>REAL DELIVERED</th>
                             <th>Product</th>
                             <th>Quanty</th>
                             <th>Status</th>
@@ -285,6 +285,62 @@ if (window.location.href.includes("c-orders") || window.location.href.includes("
                 }
             });
         }
+
+        /* ===================================================
+          DETECTS CHANGE ON INPUT PRODUCT TO SHOW WEIGHT FROM DB
+        ===================================================*/
+        $(document).on("change", ".productsInput", function () {
+            $(".weight").val("");
+            var idproduct = $(this).val();
+
+            var datos = new FormData();
+            datos.append('ProductInfo', "ok");
+            datos.append('idproduct', idproduct);
+            $.ajax({
+                type: 'post',
+                url: 'ajax/operations.ajax.php',
+                data: datos,
+                dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response != "") {
+                        $(".weight").val(response.Weight);
+                    }
+                }
+            });
+        });
+    });
+}
+
+if (window.location.href.includes("c-orders") || window.location.href.includes("c-neworder")) {
+    $(document).ready(function () {
+        /* ===================================================
+          DETECTS CHANGE ON INPUT PRODUCT TO SHOW WEIGHT FROM DB
+        ===================================================*/
+        $(document).on("change", ".productsInput", function () {
+            $(".weight").val("");
+            var idproduct = $(this).val();
+
+            var datos = new FormData();
+            datos.append('ProductInfo', "ok");
+            datos.append('idproduct', idproduct);
+            $.ajax({
+                type: 'post',
+                url: 'ajax/operations.ajax.php',
+                data: datos,
+                dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response != "") {
+                        $(".weight").val(response.Weight);
+                    }
+                }
+            });
+        });
     });
 }
 

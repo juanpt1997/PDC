@@ -168,7 +168,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Weight of Each Bag</label>
                                 <div class="select2-purple">
-                                    <input type="text" class="form-control" name="Weight_Each_Bag" data-placeholder="lbs" style="width: 100%" maxlength="5" required>
+                                    <input type="text" class="form-control weight" name="Weight_Each_Bag" data-placeholder="lbs" style="width: 100%" maxlength="5" required readonly>
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -207,7 +207,7 @@ $Products = ProductsController::ctrShowProducts();
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
                                 <label>Customer PO#</label>
-                                <input type="text" class="form-control" name="Customer_PO" data-placeholder="" style="width: 100%" maxlength="20" required>
+                                <input type="text" class="form-control" name="Customer_PO" data-placeholder="" style="width: 100%" maxlength="40" required>
                             </div>
                             <!-- /.form-group -->
                         </div>
@@ -369,7 +369,7 @@ $Products = ProductsController::ctrShowProducts();
                     =================================================== -->
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
-                                <label>Delivered Date</label>
+                                <label>Real Delivered Date</label>
                                 <div class="input-group date" id="reservationdate" data-target-input="nearest">
                                     <input type="date" name="Delivery_Real_Date" class="form-control datetimepicker-input" data-target="#reservationdate" required>
                                     <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
@@ -543,7 +543,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Weight of Each Bag</label>
                                 <div class="select2-purple">
-                                    <input type="text" class="form-control editOrder" id="Weight_Each_Bag" name="Weight_Each_Bag" data-placeholder="lbs" style="width: 100%" maxlength="5" required>
+                                    <input type="text" class="form-control weight editOrder" id="Weight_Each_Bag" name="Weight_Each_Bag" data-placeholder="lbs" style="width: 100%" maxlength="5" required readonly>
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -582,7 +582,7 @@ $Products = ProductsController::ctrShowProducts();
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
                                 <label>Customer PO#</label>
-                                <input type="text" class="form-control editOrder" id="Customer_PO" name="Customer_PO" data-placeholder="" style="width: 100%" maxlength="20" required>
+                                <input type="text" class="form-control editOrder" id="Customer_PO" name="Customer_PO" data-placeholder="" style="width: 100%" maxlength="40" required>
                             </div>
                             <!-- /.form-group -->
                         </div>
@@ -744,7 +744,7 @@ $Products = ProductsController::ctrShowProducts();
                     =================================================== -->
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
-                                <label>Delivered Date</label>
+                                <label>Real Delivered Date</label>
                                 <div class="input-group date" id="reservationdate" data-target-input="nearest">
                                     <input type="date" id="Delivery_Real_Date" name="Delivery_Real_Date" class="form-control editOrder datetimepicker-input" data-target="#reservationdate" required>
                                     <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">

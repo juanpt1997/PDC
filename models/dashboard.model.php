@@ -18,7 +18,7 @@ class DashboardModel
     {
         $stmt = Conexion::conectar()->prepare("SELECT COUNT(id_orders) AS ordenes
                                                 FROM Orders
-                                                WHERE DATE_FORMAT(audit, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')");
+                                                WHERE DATE_FORMAT(creation, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')");
 
         if ($stmt->execute()) {
             $responseDB = $stmt->fetch();
