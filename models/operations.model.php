@@ -427,8 +427,8 @@ class OrdersModel
     static public function mdlNewOrder($datos)
     {
         $conexion = Conexion::conectar();
-        $stmt = $conexion->prepare("INSERT INTO Orders (id_companies, id_products, Weight_Each_Bag, Total_Bags, Total_Skids, Customer_PO, Arrange_Pickup, From_Release, Pickup_Date, PO_Reference, Delivery_Terms, Delivery_From_Name, Delivery_Address, Delivery_Phone, Delivery_Contact, Delivery_Date, Delivery_Real_Date, Delivery_Destination_Name, Delivery_Destination_Address, Delivery_Destination_Phone, Delivery_Destination_Contact, Delivery_Destination_Confirmed_Trucking_Charge, Delivery_Destination_Comments, audit_user) VALUES
-                                        (:id_companies, :id_products, :Weight_Each_Bag, :Total_Bags, :Total_Skids, :Customer_PO, :Arrange_Pickup, :From_Release, :Pickup_Date, :PO_Reference, :Delivery_Terms, :Delivery_From_Name, :Delivery_Address, :Delivery_Phone, :Delivery_Contact, :Delivery_Date, :Delivery_Real_Date, :Delivery_Destination_Name, :Delivery_Destination_Address, :Delivery_Destination_Phone, :Delivery_Destination_Contact, :Delivery_Destination_Confirmed_Trucking_Charge, :Delivery_Destination_Comments, :audit_user)");
+        $stmt = $conexion->prepare("INSERT INTO Orders (id_companies, id_products, Weight_Each_Bag, Total_Bags, Total_Skids, Customer_PO, Arrange_Pickup, From_Release, Pickup_Date, PO_Reference, Delivery_Terms, Delivery_From_Name, Delivery_Address, Delivery_Address2, Delivery_Phone, Delivery_Contact, Delivery_City, Delivery_ZipCode, Delivery_Date, Delivery_Real_Date, Delivery_Destination_Name, Delivery_Destination_Address, Delivery_Destination_Address2, Delivery_Destination_Phone, Delivery_Destination_Contact, Delivery_Destination_City, Delivery_Destination_ZipCode, Delivery_Destination_Confirmed_Trucking_Charge, Delivery_Destination_Comments, audit_user) VALUES
+                                        (:id_companies, :id_products, :Weight_Each_Bag, :Total_Bags, :Total_Skids, :Customer_PO, :Arrange_Pickup, :From_Release, :Pickup_Date, :PO_Reference, :Delivery_Terms, :Delivery_From_Name, :Delivery_Address, :Delivery_Address2, :Delivery_Phone, :Delivery_Contact, :Delivery_City, :Delivery_ZipCode, :Delivery_Date, :Delivery_Real_Date, :Delivery_Destination_Name, :Delivery_Destination_Address, :Delivery_Destination_Address2, :Delivery_Destination_Phone, :Delivery_Destination_Contact, :Delivery_Destination_City, :Delivery_Destination_ZipCode, :Delivery_Destination_Confirmed_Trucking_Charge, :Delivery_Destination_Comments, :audit_user)");
 
         $stmt->bindParam(":id_companies", $datos['id_companies'], PDO::PARAM_INT);
         $stmt->bindParam(":id_products", $datos['id_products'], PDO::PARAM_INT);
@@ -443,14 +443,20 @@ class OrdersModel
         $stmt->bindParam(":Delivery_Terms", $datos['Delivery_Terms'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_From_Name", $datos['Delivery_From_Name'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Address", $datos['Delivery_Address'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Address2", $datos['Delivery_Address2'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Phone", $datos['Delivery_Phone'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Contact", $datos['Delivery_Contact'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_City", $datos['Delivery_City'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_ZipCode", $datos['Delivery_ZipCode'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Date", $datos['Delivery_Date'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Real_Date", $datos['Delivery_Real_Date'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Destination_Name", $datos['Delivery_Destination_Name'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Destination_Address", $datos['Delivery_Destination_Address'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Destination_Address2", $datos['Delivery_Destination_Address2'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Destination_Phone", $datos['Delivery_Destination_Phone'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Destination_Contact", $datos['Delivery_Destination_Contact'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Destination_City", $datos['Delivery_Destination_City'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Destination_ZipCode", $datos['Delivery_Destination_ZipCode'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Destination_Confirmed_Trucking_Charge", $datos['Delivery_Destination_Confirmed_Trucking_Charge'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Destination_Comments", $datos['Delivery_Destination_Comments'], PDO::PARAM_STR);
         $stmt->bindParam(":audit_user", $datos['audit_user'], PDO::PARAM_INT);
@@ -506,14 +512,20 @@ class OrdersModel
                                     , Delivery_Terms = :Delivery_Terms
                                     , Delivery_From_Name = :Delivery_From_Name
                                     , Delivery_Address = :Delivery_Address
+                                    , Delivery_Address2 = :Delivery_Address2
                                     , Delivery_Phone = :Delivery_Phone
                                     , Delivery_Contact = :Delivery_Contact
+                                    , Delivery_City = :Delivery_City
+                                    , Delivery_ZipCode = :Delivery_ZipCode
                                     , Delivery_Date = :Delivery_Date
                                     , Delivery_Real_Date = :Delivery_Real_Date
                                     , Delivery_Destination_Name = :Delivery_Destination_Name
                                     , Delivery_Destination_Address = :Delivery_Destination_Address
+                                    , Delivery_Destination_Address2 = :Delivery_Destination_Address2
                                     , Delivery_Destination_Phone = :Delivery_Destination_Phone
                                     , Delivery_Destination_Contact = :Delivery_Destination_Contact
+                                    , Delivery_Destination_City = :Delivery_Destination_City
+                                    , Delivery_Destination_ZipCode = :Delivery_Destination_ZipCode
                                     , Delivery_Destination_Confirmed_Trucking_Charge = :Delivery_Destination_Confirmed_Trucking_Charge
                                     , Delivery_Destination_Comments = :Delivery_Destination_Comments
                                     WHERE id_orders = :id_orders");
@@ -532,14 +544,20 @@ class OrdersModel
         $stmt->bindParam(":Delivery_Terms", $datos['Delivery_Terms'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_From_Name", $datos['Delivery_From_Name'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Address", $datos['Delivery_Address'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Address2", $datos['Delivery_Address2'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Phone", $datos['Delivery_Phone'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Contact", $datos['Delivery_Contact'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_City", $datos['Delivery_City'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_ZipCode", $datos['Delivery_ZipCode'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Date", $datos['Delivery_Date'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Real_Date", $datos['Delivery_Real_Date'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Destination_Name", $datos['Delivery_Destination_Name'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Destination_Address", $datos['Delivery_Destination_Address'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Destination_Address2", $datos['Delivery_Destination_Address2'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Destination_Phone", $datos['Delivery_Destination_Phone'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Destination_Contact", $datos['Delivery_Destination_Contact'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Destination_City", $datos['Delivery_Destination_City'], PDO::PARAM_STR);
+        $stmt->bindParam(":Delivery_Destination_ZipCode", $datos['Delivery_Destination_ZipCode'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Destination_Confirmed_Trucking_Charge", $datos['Delivery_Destination_Confirmed_Trucking_Charge'], PDO::PARAM_STR);
         $stmt->bindParam(":Delivery_Destination_Comments", $datos['Delivery_Destination_Comments'], PDO::PARAM_STR);
 

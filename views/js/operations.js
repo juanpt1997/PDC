@@ -523,14 +523,20 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
                         $("#Delivery_Terms").val(response.Delivery_Terms);
                         $("#Delivery_From_Name").val(response.Delivery_From_Name);
                         $("#Delivery_Address").val(response.Delivery_Address);
+                        $("#Delivery_Address2").val(response.Delivery_Address2);
                         $("#Delivery_Phone").val(response.Delivery_Phone);
                         $("#Delivery_Contact").val(response.Delivery_Contact);
+                        $("#Delivery_City").val(response.Delivery_City);
+                        $("#Delivery_ZipCode").val(response.Delivery_ZipCode);
                         $("#Delivery_Date").val(response.Delivery_Date);
                         $("#Delivery_Real_Date").val(response.Delivery_Real_Date);
                         $("#Delivery_Destination_Name").val(response.Delivery_Destination_Name);
                         $("#Delivery_Destination_Address").val(response.Delivery_Destination_Address);
+                        $("#Delivery_Destination_Address2").val(response.Delivery_Destination_Address2);
                         $("#Delivery_Destination_Phone").val(response.Delivery_Destination_Phone);
                         $("#Delivery_Destination_Contact").val(response.Delivery_Destination_Contact);
+                        $("#Delivery_Destination_City").val(response.Delivery_Destination_City);
+                        $("#Delivery_Destination_ZipCode").val(response.Delivery_Destination_ZipCode);
                         $("#Delivery_Destination_Confirmed_Trucking_Charge").val(response.Delivery_Destination_Confirmed_Trucking_Charge);
                         $("#Delivery_Destination_Comments").val(response.Delivery_Destination_Comments);
 

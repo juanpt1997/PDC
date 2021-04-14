@@ -91,7 +91,7 @@ if ($ProductsAllowed == null) {
                                 <div class="form-group">
                                     <label>Weight of Each Bag</label>
                                     <div class="select2-purple">
-                                        <input type="text" class="form-control weight" name="Weight_Each_Bag" data-placeholder="lbs" style="width: 100%" maxlength="5" required readonly>
+                                        <input type="text" class="form-control weight" name="Weight_Each_Bag" data-placeholder="lbs" style="width: 100%" maxlength="5" required>
                                     </div>
                                 </div>
                                 <!-- /.form-group -->
@@ -229,13 +229,27 @@ if ($ProductsAllowed == null) {
                             <!-- /.col -->
 
                             <!-- ===================================================
-                        Address
+                        Address 1
                     =================================================== -->
                             <div class="col-12 col-sm-6 col-lg-4">
                                 <div class="form-group">
-                                    <label>Address</label>
+                                    <label>Address 1</label>
                                     <div class="select2-purple">
-                                        <input type="text" class="form-control" name="Delivery_Address" data-placeholder="" style="width: 100%" maxlength="50" required>
+                                        <input type="text" class="form-control" name="Delivery_Address" data-placeholder="" style="width: 100%" maxlength="100" required>
+                                    </div>
+                                </div>
+                                <!-- /.form-group -->
+                            </div>
+                            <!-- /.col -->
+
+                            <!-- ===================================================
+                        Address 2
+                    =================================================== -->
+                            <div class="col-12 col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    <label>Address 2</label>
+                                    <div class="select2-purple">
+                                        <input type="text" class="form-control" name="Delivery_Address2" data-placeholder="" style="width: 100%" maxlength="100">
                                     </div>
                                 </div>
                                 <!-- /.form-group -->
@@ -261,7 +275,35 @@ if ($ProductsAllowed == null) {
                                 <div class="form-group">
                                     <label>Contact</label>
                                     <div class="select2-purple">
-                                        <input type="text" name="Delivery_Contact" class="form-control" data-placeholder="" style="width: 100%" maxlength="50">
+                                        <input type="text" name="Delivery_Contact" class="form-control" data-placeholder="" style="width: 100%" maxlength="100" required>
+                                    </div>
+                                </div>
+                                <!-- /.form-group -->
+                            </div>
+                            <!-- /.col -->
+
+                            <!-- ===================================================
+                        Delivery_City
+                    =================================================== -->
+                            <div class="col-12 col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    <label>City</label>
+                                    <div class="select2-purple">
+                                        <input type="text" name="Delivery_City" class="form-control" data-placeholder="" style="width: 100%" maxlength="100" required>
+                                    </div>
+                                </div>
+                                <!-- /.form-group -->
+                            </div>
+                            <!-- /.col -->
+
+                            <!-- ===================================================
+                        Delivery_ZipCode
+                    =================================================== -->
+                            <div class="col-12 col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    <label>Zip Code</label>
+                                    <div class="select2-purple">
+                                        <input type="text" name="Delivery_ZipCode" class="form-control" data-placeholder="" style="width: 100%" maxlength="20">
                                     </div>
                                 </div>
                                 <!-- /.form-group -->
@@ -325,13 +367,27 @@ if ($ProductsAllowed == null) {
                             <!-- /.col -->
 
                             <!-- ===================================================
-                        Delivery_Destination_Address
+                        Delivery_Destination_Address 1
                     =================================================== -->
                             <div class="col-12 col-sm-6 col-lg-4">
                                 <div class="form-group">
-                                    <label>Address</label>
+                                    <label>Address 1</label>
                                     <div class="select2-purple">
                                         <input type="text" name="Delivery_Destination_Address" class="form-control" data-placeholder="" style="width: 100%" maxlength="100" required>
+                                    </div>
+                                </div>
+                                <!-- /.form-group -->
+                            </div>
+                            <!-- /.col -->
+
+                            <!-- ===================================================
+                        Delivery_Destination_Address 2
+                    =================================================== -->
+                            <div class="col-12 col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    <label>Address 2</label>
+                                    <div class="select2-purple">
+                                        <input type="text" name="Delivery_Destination_Address2" class="form-control" data-placeholder="" style="width: 100%" maxlength="100">
                                     </div>
                                 </div>
                                 <!-- /.form-group -->
@@ -357,7 +413,35 @@ if ($ProductsAllowed == null) {
                                 <div class="form-group">
                                     <label>Contact</label>
                                     <div class="select2-purple">
-                                        <input type="text" name="Delivery_Destination_Contact" class="form-control" data-placeholder="" maxlength="100" style="width: 100%">
+                                        <input type="text" name="Delivery_Destination_Contact" class="form-control" data-placeholder="" maxlength="100" style="width: 100%" required>
+                                    </div>
+                                </div>
+                                <!-- /.form-group -->
+                            </div>
+                            <!-- /.col -->
+
+                            <!-- ===================================================
+                        Delivery_Destination_City
+                    =================================================== -->
+                            <div class="col-12 col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    <label>City</label>
+                                    <div class="select2-purple">
+                                        <input type="text" name="Delivery_Destination_City" class="form-control" data-placeholder="" maxlength="100" style="width: 100%" required>
+                                    </div>
+                                </div>
+                                <!-- /.form-group -->
+                            </div>
+                            <!-- /.col -->
+
+                            <!-- ===================================================
+                        Delivery_Destination_ZipCode
+                    =================================================== -->
+                            <div class="col-12 col-sm-6 col-lg-4">
+                                <div class="form-group">
+                                    <label>Zip Code</label>
+                                    <div class="select2-purple">
+                                        <input type="text" name="Delivery_Destination_ZipCode" class="form-control" data-placeholder="" maxlength="20" style="width: 100%">
                                     </div>
                                 </div>
                                 <!-- /.form-group -->
