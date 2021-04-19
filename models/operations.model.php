@@ -66,12 +66,13 @@ class CompaniesModel
     /* ===================================================
        SINGLE COMPANY INFORMATION
     ===================================================*/
-    static public function mdlCompanyInfo($value)
+    static public function mdlCompanyInfo($item, $value)
     {
         $stmt = Conexion::conectar()->prepare("SELECT *
                                                 FROM Companies
-                                                WHERE id_companies = :idcompany");
-        $stmt->bindParam(":idcompany", $value, PDO::PARAM_INT);
+                                                WHERE $item = :$item");
+        /* $stmt->bindParam(":idcompany", $value, PDO::PARAM_INT); */
+        $stmt->bindParam(":" . $item, $value, PDO::PARAM_STR);
 
         $stmt->execute();
 
@@ -387,7 +388,7 @@ class OrdersModel
                                                         INNER JOIN Companies c ON c.id_companies = o.id_companies
                                                         INNER JOIN Products p ON p.id_products = o.id_products
                                                         WHERE DATE(o.Pickup_Date) BETWEEN '{$fechas['fecha1']}' AND '{$fechas['fecha2']}' AND o.active = 1");
-                                                        //WHERE DATE(o.Pickup_Date) BETWEEN '2020-12-01' AND '2020-12-31'");
+                    //WHERE DATE(o.Pickup_Date) BETWEEN '2020-12-01' AND '2020-12-31'");
                     // $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, o.*, DATE_FORMAT(o.Pickup_Date, '%m-%d-%Y') as Pickup_DateF, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF, DATE_FORMAT(o.Delivery_Real_Date, '%m-%d-%Y') as Delivery_Real_DateF
                     //                                     FROM Orders o
                     //                                     INNER JOIN Companies c ON c.id_companies = o.id_companies
@@ -395,7 +396,7 @@ class OrdersModel
                 }
                 # Ordenes de companies
                 else {
-                    if ($fechas != null){
+                    if ($fechas != null) {
                         $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, o.*, DATE_FORMAT(o.Pickup_Date, '%m-%d-%Y') as Pickup_DateF, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF, DATE_FORMAT(o.Delivery_Real_Date, '%m-%d-%Y') as Delivery_Real_DateF
                                                             FROM Orders o
                                                             INNER JOIN Companies c ON c.id_companies = o.id_companies
@@ -434,7 +435,7 @@ class OrdersModel
         $stmt->bindParam(":id_products", $datos['id_products'], PDO::PARAM_INT);
         $stmt->bindParam(":Weight_Each_Bag", $datos['Weight_Each_Bag'], PDO::PARAM_STR);
         $stmt->bindParam(":Total_Bags", $datos['Total_Bags'], PDO::PARAM_STR);
-        $stmt->bindParam(":Total_Skids", $datos['Total_Skids'], PDO::PARAM_STR);
+        $stmt->bindParam(":Total_Skids", $datos['Total_Skids'], PDO::PARAM_INT);
         $stmt->bindParam(":Customer_PO", $datos['Customer_PO'], PDO::PARAM_STR);
         $stmt->bindParam(":Arrange_Pickup", $datos['Arrange_Pickup'], PDO::PARAM_STR);
         $stmt->bindParam(":From_Release", $datos['From_Release'], PDO::PARAM_STR);
@@ -535,7 +536,7 @@ class OrdersModel
         $stmt->bindParam(":id_products", $datos['id_products'], PDO::PARAM_INT);
         $stmt->bindParam(":Weight_Each_Bag", $datos['Weight_Each_Bag'], PDO::PARAM_STR);
         $stmt->bindParam(":Total_Bags", $datos['Total_Bags'], PDO::PARAM_STR);
-        $stmt->bindParam(":Total_Skids", $datos['Total_Skids'], PDO::PARAM_STR);
+        $stmt->bindParam(":Total_Skids", $datos['Total_Skids'], PDO::PARAM_INT);
         $stmt->bindParam(":Customer_PO", $datos['Customer_PO'], PDO::PARAM_STR);
         $stmt->bindParam(":Arrange_Pickup", $datos['Arrange_Pickup'], PDO::PARAM_STR);
         $stmt->bindParam(":From_Release", $datos['From_Release'], PDO::PARAM_STR);
@@ -634,5 +635,108 @@ class OrdersModel
         $stmt->closeCursor();
         $conexion = null;
         return $id;
+    }
+}
+
+/* ===================================================
+   CONTROLADOR DE BOL (BILL OF LADING)
+===================================================*/
+class BOLModel
+{
+    /* ===================================================
+        Validar que BOL REFERENCE si exista
+    ===================================================*/
+    static public function mdlValidarBOL($bol)
+    {
+        $stmt = Conexion::conectar()->prepare("SELECT o.*, p.Description AS productDescription
+                                                FROM Orders o
+                                                INNER JOIN Products p ON p.id_products = o.id_products
+                                                WHERE o.PO_Reference = :PO_Reference");
+        $stmt->bindParam(":PO_Reference", $bol, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        $retorno = $stmt->fetch();
+
+        $stmt->closeCursor();
+        $stmt = null;
+
+        return $retorno;
+    }
+
+    /* ===================================================
+       TABLA CON LOS BOL
+    ===================================================*/
+    static public function mdlTablaBOL($bolreference)
+    {
+            $stmt = Conexion::conectar()->prepare("SELECT b.id_bol, o.PO_Reference, o.Customer_PO, b.Lot, b.RefC, f.Name AS Cfrom, t.Name AS Cto, b.Shippingdate, b.Carrier, b.Pallets, b.Bags, p.Description, b.Weight
+                                                    FROM Orders o
+                                                    INNER JOIN BOL b ON b.PO_Reference = o.PO_Reference
+                                                    INNER JOIN Companies f ON f.id_companies = b.`From`
+                                                    INNER JOIN Companies t ON t.id_companies = b.`To`
+                                                    INNER JOIN Products p ON p.id_products = o.id_products
+                                                    WHERE b.PO_Reference = :bolreference");
+        $stmt->bindParam(":bolreference", $bolreference, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $retorno = $stmt->fetchAll();
+
+        $stmt->closeCursor();
+        $stmt = null;
+
+        return $retorno;
+    }
+
+    /* ===================================================
+       AGREGAR BOL
+    ===================================================*/
+    static public function mdlAgregarBOL($datos)
+    {
+        $conexion = Conexion::conectar();
+        $stmt = $conexion->prepare("INSERT INTO BOL 
+                                    (PO_Reference, Lot, RefC, `FROM`, `TO`, Shippingdate, Carrier, Pallets, Bags, Weight) VALUES 
+                                    (:bolReference, :lot, :refC, :fromId, :toId, :shippingDate, :carrier, :pallets, :bags, :weight)");
+
+        $stmt->bindParam(":bolReference", $datos['bolReference'], PDO::PARAM_STR);
+        $stmt->bindParam(":lot", $datos['lot'], PDO::PARAM_STR);
+        $stmt->bindParam(":refC", $datos['refC'], PDO::PARAM_STR);
+        $stmt->bindParam(":fromId", $datos['fromId'], PDO::PARAM_INT);
+        $stmt->bindParam(":toId", $datos['toId'], PDO::PARAM_INT);
+        $stmt->bindParam(":shippingDate", $datos['shippingDate'], PDO::PARAM_STR);
+        $stmt->bindParam(":carrier", $datos['carrier'], PDO::PARAM_STR);
+        $stmt->bindParam(":pallets", $datos['pallets'], PDO::PARAM_INT);
+        $stmt->bindParam(":bags", $datos['bags'], PDO::PARAM_INT);
+        $stmt->bindParam(":weight", $datos['weight'], PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            $id = $conexion->lastInsertId();
+        } else {
+            $id = "error";
+        }
+        $stmt->closeCursor();
+        $conexion = null;
+        return $id;
+    }
+
+    /* ===================================================
+       DELETE BOL
+    ===================================================*/
+    static public function mdlDeleteBOL($id_bol)
+    {
+        $stmt = Conexion::conectar()->prepare("DELETE
+                                                FROM BOL
+                                                WHERE id_bol = :id_bol");
+        $stmt->bindParam(":id_bol", $id_bol, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            $retorno = "ok";
+        } else {
+            $retorno = "error";
+        }
+
+        $stmt->closeCursor();
+        $stmt = null;
+
+        return $retorno;
     }
 }

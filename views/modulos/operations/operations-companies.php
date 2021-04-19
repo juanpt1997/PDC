@@ -233,6 +233,7 @@ $listOfStates = ['AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FM
                                         <span class="input-group-text"><i class="fas fa-map-marked-alt"></i></span>
                                     </div>
                                     <select name="state" class="form-control" id="" required>
+                                        <option value="">Select an option</option>
                                         <?php foreach ($listOfStates as $key => $value) : ?>
                                             <option><?= $value ?></option>
                                         <?php endforeach ?>
@@ -451,6 +452,7 @@ $listOfStates = ['AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FM
                                     </div>
                                     <!-- <input name="state" type="text" class="form-control editCompany" id="state" placeholder="State/Province" maxlength="100" required> -->
                                     <select name="state" class="form-control editCompany" id="state" required>
+                                        <option value="">Select an option</option>
                                         <?php foreach ($listOfStates as $key => $value) : ?>
                                             <option><?= $value ?></option>
                                         <?php endforeach ?>
@@ -586,7 +588,7 @@ $listOfStates = ['AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FM
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
             <?php
-                $updateAllowedProducts = CompaniesController::ctrSaveAllowedProducts();
+            $updateAllowedProducts = CompaniesController::ctrSaveAllowedProducts();
             ?>
         </div>
     </div>

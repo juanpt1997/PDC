@@ -263,7 +263,7 @@ class PdfOrder
         $pdf->SetFont('helvetica', 'B', '10');
         $pdf->Cell(30, 5, 'ADDRESS:');
         $pdf->SetFont('helvetica', '', '10');
-        $pdf->Cell(105, 5, '', $complex_cell_border);
+        $pdf->Cell(105, 5, $info['Delivery_Address2'], $complex_cell_border);
         $pdf->Ln();
 
         //Phone
@@ -274,13 +274,28 @@ class PdfOrder
         $pdf->Cell(105, 5, $info['Delivery_Phone'], $complex_cell_border);
         $pdf->Ln();
 
+        //City
+        $pdf->SetX(60);
+        $pdf->SetFont('helvetica', 'B', '10');
+        $pdf->Cell(30, 5, 'CITY:');
+        $pdf->SetFont('helvetica', '', '10');
+        $pdf->Cell(105, 5, $info['Delivery_City'], $complex_cell_border);
+        $pdf->Ln();
+
+        //Zip Code
+        $pdf->SetX(60);
+        $pdf->SetFont('helvetica', 'B', '10');
+        $pdf->Cell(30, 5, 'ZIP CODE:');
+        $pdf->SetFont('helvetica', '', '10');
+        $pdf->Cell(105, 5, $info['Delivery_ZipCode'], $complex_cell_border);
+        $pdf->Ln();
+
         //Contact
         $pdf->SetX(60);
         $pdf->SetFont('helvetica', 'B', '10');
         $pdf->Cell(30, 5, 'CONTACT:');
         $pdf->SetFont('helvetica', '', '10');
         $pdf->Cell(105, 5, $info['Delivery_Contact'], $complex_cell_border);
-        $pdf->Ln();
         $pdf->Ln();
         $pdf->Ln();
 
@@ -332,7 +347,7 @@ class PdfOrder
         $pdf->SetFont('helvetica', 'B', '10');
         $pdf->Cell(30, 5, 'ADDRESS:');
         $pdf->SetFont('helvetica', '', '10');
-        $pdf->Cell(105, 5, "", $complex_cell_border);
+        $pdf->Cell(105, 5, $info['Delivery_Destination_Address2'], $complex_cell_border);
         $pdf->Ln();
 
         //PHONE
@@ -343,13 +358,28 @@ class PdfOrder
         $pdf->Cell(105, 5, $info['Delivery_Destination_Phone'], $complex_cell_border);
         $pdf->Ln();
 
+        //CITY
+        $pdf->SetX(60);
+        $pdf->SetFont('helvetica', 'B', '10');
+        $pdf->Cell(30, 5, 'CITY:');
+        $pdf->SetFont('helvetica', '', '10');
+        $pdf->Cell(105, 5, $info['Delivery_Destination_City'], $complex_cell_border);
+        $pdf->Ln();
+
+        //ZIP CODE
+        $pdf->SetX(60);
+        $pdf->SetFont('helvetica', 'B', '10');
+        $pdf->Cell(30, 5, 'ZIP CODE:');
+        $pdf->SetFont('helvetica', '', '10');
+        $pdf->Cell(105, 5, $info['Delivery_Destination_ZipCode'], $complex_cell_border);
+        $pdf->Ln();
+
         //CONTACT
         $pdf->SetX(60);
         $pdf->SetFont('helvetica', 'B', '10');
         $pdf->Cell(30, 5, 'CONTACT:');
         $pdf->SetFont('helvetica', '', '10');
         $pdf->Cell(105, 5, $info['Delivery_Destination_Contact'], $complex_cell_border);
-        $pdf->Ln();
         $pdf->Ln();
         $pdf->Ln();
 

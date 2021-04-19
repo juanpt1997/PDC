@@ -21,7 +21,8 @@ if (window.location.href.includes("operations-companies")) {
 
             var datos = new FormData();
             datos.append('CompanyInfo', "ok");
-            datos.append('idcompany', idcompany);
+            datos.append('item', "id_companies");
+            datos.append('value', idcompany);
             $.ajax({
                 type: 'post',
                 url: 'ajax/operations.ajax.php',
@@ -443,6 +444,7 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
                             <th>Status</th>
                             <th>COA</th>
                             <th>POD</th>
+                            <th>BOL</th>
                             <th>PDF</th>
                             <th>Actions</th>
                         </tr>
@@ -737,6 +739,8 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
             $(".productsInput").val("");
             $(".productsInput").html("");
             $(".weight").val("");
+            $(".from").val("");
+            $(".dest").val("");
         });
 
         /* ===================================================
@@ -765,6 +769,218 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
             });
         });
 
+        /* ===================================================
+          DETECTS CHANGE ON INPUT DELIVER FROM NAME OR DELIVER DESTINATION TO LOAD COMPANIES DATA
+        ===================================================*/
+        $(document).on("change", ".C-Name", function () {
+            $mainElement = $(this);
+            var tipo = $(this).hasClass("from") ? "from" : "dest";
+
+            $(`.${tipo}`).each(function (i) { 
+                if (!$(this).hasClass("C-Name")){
+                    $(this).val("");
+                }
+            });
+            
+            var nameCompany = $(this).val();
+
+            var datos = new FormData();
+            datos.append('CompanyInfo', "ok");
+            datos.append('item', "Name");
+            datos.append('value', nameCompany);
+            $.ajax({
+                type: 'post',
+                url: 'ajax/operations.ajax.php',
+                data: datos,
+                dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response != "") {
+                        // Inputs de la modal
+                        $(`.C-Address1.${tipo}`).val(response.Address_Line1);
+                        $(`.C-Address2.${tipo}`).val(response.Address_Line2);
+                        $(`.C-Phone.${tipo}`).val(response.Phone_Number);
+                        $(`.C-Contact.${tipo}`).val(response.Contact_Name);
+                        $(`.C-City.${tipo}`).val(response.City);
+                        $(`.C-ZipCode.${tipo}`).val(response.Zip_Code);
+
+                    }
+                }
+            });
+        });
+        
+        /* ===================================================
+          CLICK ON BOL BUTTON
+        ===================================================*/
+        $(document).on("click", ".btn-bol", function () {
+            var bol_reference = $(this).attr("bolreference");
+            var datos = new FormData();
+            datos.append('SetSessionVar', "ok");
+            datos.append('variable', "bol_reference");
+            datos.append('value', bol_reference);
+            $.ajax({
+                type: 'post',
+                url: 'ajax/operations.ajax.php',
+                data: datos,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    window.location = 'bol';
+                }
+            });
+        });
+
     });
 
+}
+
+/* ===================================================
+  * BOL
+===================================================*/
+if (window.location.href.includes("bol")) {
+    $(document).ready(function () {
+        /* ===================================================
+          DATATABLE
+        ===================================================*/
+        $('.tabla-bol').DataTable({
+            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todo"]]
+        });
+
+        /* ===================================================
+          CUANDO SELECCIONA UN CLIENTE (FROM - TO)
+        ===================================================*/
+        $(document).on("change", ".company", function () {
+            var id_companies = $(this).val();
+            var tipo = $(this).hasClass("from") ? "from" : "to";
+            $(`.${tipo}-details`).html(`<div class='spinner-grow' role='status'>
+                                        <span class='sr-only'>Loading...</span>
+                                        </div>`);
+
+            var datos = new FormData();
+            datos.append('CompanyInfo', "ok");
+            datos.append('item', "id_companies");
+            datos.append('value', id_companies);
+            $.ajax({
+                type: 'post',
+                url: 'ajax/operations.ajax.php',
+                data: datos,
+                dataType: 'json',
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response != ""){
+                        // Concatenar address
+                        let address = response.Address_Line1;
+                        if (response.Address_Line2 != ""){
+                            address += ", " + response.Address_Line2;
+                        }
+
+                        // Concatenar datos como ciudad, state y zip code
+                        let cityStateZip = response.City + ", " + response.State_Province_Region + ", " + response.Zip_Code
+                        
+                        // Mostrar dato en recuadro
+                        $(`.${tipo}-details`).html(`<p class="text-monospace">${address}</p>
+                                                    <p class="text-monospace">${cityStateZip}</p>`);
+                    }
+                }
+            });
+            
+        });
+
+        /* ===================================================
+          ESCRIBE EN EL CAMPO PALLET
+        ===================================================*/
+        $(document).on("keyup change", ".pallets", function () {
+            var bags = $(this).val() * $("#bagsxpallet").val();
+            var weight = bags * $("#WeightEaBag").val();
+
+            $(".bags").val(bags);
+            $(".weight").val(weight);
+        });
+
+        /* ===================================================
+          BOTON VOLVER PARA UNSET DE LA VARIABLE POR SESION bol_reference
+        ===================================================*/
+        $(document).on("click", "#botonVolver", function () {
+            var datos = new FormData();
+            datos.append('UnsetSessionVar', "ok");
+            datos.append('variable', "bol_reference");
+            $.ajax({
+                type: 'post',
+                url: 'ajax/operations.ajax.php',
+                data: datos,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    window.location.href = window.location.href;
+                }
+            });
+        });
+
+        /* ===================================================
+          DELETE POSICION
+        ===================================================*/
+        $(document).on("click", ".btn-deleteBOL", function () {
+            var id_bol = $(this).attr("id_bol");
+            
+            Swal.fire({
+                html:
+                    `
+                    <p>Do you really want to <b>delete</b> this BOL data?</p>
+                    `
+                ,
+                /* text: 'Do you really want to delete this company?', */
+                footer: 'You will not be able to reverse this action',
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#0275d8',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Sure!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.value) {
+                    var datos = new FormData();
+                    datos.append('DeleteBOL', "ok");
+                    datos.append('id_bol', id_bol);
+                    $.ajax({
+                        type: 'post',
+                        url: 'ajax/operations.ajax.php',
+                        data: datos,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            if (response == "ok") {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: '¡BOL deleted successfully!',
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'Close',
+                                    allowOutsideClick: false,
+                                }).then((result) => {
+                                    if (result.value) {
+                                        window.location = 'bol';
+                                    }
+                                })
+                            }
+                            else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops, there was a problem, please try again later',
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'Close',
+                                    closeOnConfirm: false
+                                })
+                            }
+                        }
+                    });
+                }
+            })
+        });
+    });
 }

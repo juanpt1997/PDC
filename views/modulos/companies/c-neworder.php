@@ -117,7 +117,7 @@ if ($ProductsAllowed == null) {
                                 <div class="form-group">
                                     <label>Total Skids</label>
                                     <div class="select2-purple">
-                                        <input type="text" class="form-control" name="Total_Skids" data-placeholder="" style="width: 100%" maxlength="5" required>
+                                        <input type="number" class="form-control" name="Total_Skids" data-placeholder="" style="width: 100%" required>
                                     </div>
                                 </div>
                                 <!-- /.form-group -->

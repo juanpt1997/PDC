@@ -6,6 +6,11 @@ $lifetime = (60 * 60 * 24 * 1); //Duracion de la session_cookie
 // session_set_cookie_params($lifetime, $path = $_SERVER["DOCUMENT_ROOT"] . '', $domain = $_SERVER['HTTP_HOST'], $secure = false, $httponly = false);
 session_start();
 
+# BORRAR VARIABLE DE SESIÓN DE BOL_REFERENCE PARA CUALQUIER PÁGINA DISTINTA A BILL OF LADING
+if (isset($_GET['page']) && $_GET['page'] != "bol"){
+    unset($_SESSION['bol_reference']);
+}
+
 // if (isset($_SERVER['HTTPS'])) {
 //     $dominioApp = 'https://' . $_SERVER['SERVER_NAME'];
 // } else {
@@ -128,7 +133,8 @@ session_start();
                     $ruta == "operations-index" ||
                     $ruta == "operations-companies" ||
                     $ruta == "operations-products" ||
-                    $ruta == "orders"
+                    $ruta == "orders" ||
+                    $ruta == "bol"
                 ) {
                     include "modulos/operations/" . $ruta . ".php";
                 } else if ( # Companies

@@ -194,7 +194,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Total Skids</label>
                                 <div class="select2-purple">
-                                    <input type="text" class="form-control" name="Total_Skids" data-placeholder="" style="width: 100%" maxlength="5" required>
+                                    <input type="number" class="form-control" name="Total_Skids" data-placeholder="" style="width: 100%" required>
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -277,8 +277,8 @@ $Products = ProductsController::ctrShowProducts();
 
                     <div class="row mt-3">
                         <!-- ===================================================
-                        Delivery Terms
-                    =================================================== -->
+                            Delivery Terms
+                        =================================================== -->
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
                                 <label>Delivery Terms</label>
@@ -294,30 +294,31 @@ $Products = ProductsController::ctrShowProducts();
                         <!-- /.col -->
 
                         <!-- ===================================================
-                        From Name
-                    =================================================== -->
+                            From Name
+                        =================================================== -->
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
                                 <label>From Name</label>
-                                <input type="text" class="form-control" name="Delivery_From_Name" data-placeholder="" style="width: 100%" maxlength="100" required>
-                                <!-- <select class="form-control" name="Delivery_From_Name" required>
+                                <!-- <input type="text" class="form-control Delivery_From_Name from" name="Delivery_From_Name" data-placeholder="" style="width: 100%" maxlength="100" required> -->
+                                <select class="form-control C-Name from" name="Delivery_From_Name" required>
+                                    <option value=""></option>
                                     <?php foreach ($Companies as $key => $value) : ?>
                                         <option><?= $value['Name'] ?></option>
                                     <?php endforeach ?>
-                                </select> -->
+                                </select>
                             </div>
                             <!-- /.form-group -->
                         </div>
                         <!-- /.col -->
 
                         <!-- ===================================================
-                        Address 1
-                    =================================================== -->
+                            Address 1
+                        =================================================== -->
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
                                 <label>Address 1</label>
                                 <div class="select2-purple">
-                                    <input type="text" class="form-control" name="Delivery_Address" data-placeholder="" style="width: 100%" maxlength="100" required>
+                                    <input type="text" class="form-control C-Address1 from" name="Delivery_Address" data-placeholder="" style="width: 100%" maxlength="100" required>
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -331,7 +332,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Address 2</label>
                                 <div class="select2-purple">
-                                    <input type="text" class="form-control" name="Delivery_Address2" data-placeholder="" style="width: 100%" maxlength="100">
+                                    <input type="text" class="form-control C-Address2 from" name="Delivery_Address2" data-placeholder="" style="width: 100%" maxlength="100">
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -344,7 +345,7 @@ $Products = ProductsController::ctrShowProducts();
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
                                 <label>Phone</label>
-                                <input type="text" name="Delivery_Phone" class="form-control" data-placeholder="" style="width: 100%" maxlength="50" required>
+                                <input type="text" name="Delivery_Phone" class="form-control C-Phone from" data-placeholder="" style="width: 100%" maxlength="50" required>
                             </div>
                             <!-- /.form-group -->
                         </div>
@@ -357,7 +358,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Contact</label>
                                 <div class="select2-purple">
-                                    <input type="text" name="Delivery_Contact" class="form-control" data-placeholder="" style="width: 100%" maxlength="100" required>
+                                    <input type="text" name="Delivery_Contact" class="form-control C-Contact from" data-placeholder="" style="width: 100%" maxlength="100" required>
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -371,7 +372,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>City</label>
                                 <div class="select2-purple">
-                                    <input type="text" name="Delivery_City" class="form-control" data-placeholder="" style="width: 100%" maxlength="100" required>
+                                    <input type="text" name="Delivery_City" class="form-control C-City from" data-placeholder="" style="width: 100%" maxlength="100" required>
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -385,7 +386,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Zip Code</label>
                                 <div class="select2-purple">
-                                    <input type="text" name="Delivery_ZipCode" class="form-control" data-placeholder="" style="width: 100%" maxlength="20">
+                                    <input type="text" name="Delivery_ZipCode" class="form-control C-ZipCode from" data-placeholder="" style="width: 100%" maxlength="20">
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -442,20 +443,26 @@ $Products = ProductsController::ctrShowProducts();
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
                                 <label>Name</label>
-                                <input type="text" name="Delivery_Destination_Name" class="form-control" data-placeholder="" style="width: 100%" maxlength="100" required>
+                                <!-- <input type="text" name="Delivery_Destination_Name" class="form-control" data-placeholder="" style="width: 100%" maxlength="100" required> -->
+                                <select class="form-control C-Name dest" name="Delivery_Destination_Name" required>
+                                    <option value=""></option>
+                                    <?php foreach ($Companies as $key => $value) : ?>
+                                        <option><?= $value['Name'] ?></option>
+                                    <?php endforeach ?>
+                                </select>
                             </div>
                             <!-- /.form-group -->
                         </div>
                         <!-- /.col -->
 
                         <!-- ===================================================
-                        Delivery_Destination_Address
+                        Delivery_Destination_Address 1
                     =================================================== -->
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
                                 <label>Address 1</label>
                                 <div class="select2-purple">
-                                    <input type="text" name="Delivery_Destination_Address" class="form-control" data-placeholder="" style="width: 100%" maxlength="100" required>
+                                    <input type="text" name="Delivery_Destination_Address" class="form-control C-Address1 dest" data-placeholder="" style="width: 100%" maxlength="100" required>
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -469,7 +476,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Address 2</label>
                                 <div class="select2-purple">
-                                    <input type="text" name="Delivery_Destination_Address2" class="form-control" data-placeholder="" style="width: 100%" maxlength="100">
+                                    <input type="text" name="Delivery_Destination_Address2" class="form-control C-Address2 dest" data-placeholder="" style="width: 100%" maxlength="100">
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -482,7 +489,7 @@ $Products = ProductsController::ctrShowProducts();
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
                                 <label>Phone</label>
-                                <input type="text" name="Delivery_Destination_Phone" class="form-control" data-placeholder="" maxlength="100" style="width: 100%" required>
+                                <input type="text" name="Delivery_Destination_Phone" class="form-control C-Phone dest" data-placeholder="" maxlength="100" style="width: 100%" required>
                             </div>
                             <!-- /.form-group -->
                         </div>
@@ -495,7 +502,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Contact</label>
                                 <div class="select2-purple">
-                                    <input type="text" name="Delivery_Destination_Contact" class="form-control" data-placeholder="" maxlength="100" style="width: 100%" required>
+                                    <input type="text" name="Delivery_Destination_Contact" class="form-control C-Contact dest" data-placeholder="" maxlength="100" style="width: 100%" required>
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -509,7 +516,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>City</label>
                                 <div class="select2-purple">
-                                    <input type="text" name="Delivery_Destination_City" class="form-control" data-placeholder="" maxlength="100" style="width: 100%" required>
+                                    <input type="text" name="Delivery_Destination_City" class="form-control C-City dest" data-placeholder="" maxlength="100" style="width: 100%" required>
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -523,7 +530,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Zip Code</label>
                                 <div class="select2-purple">
-                                    <input type="text" name="Delivery_Destination_ZipCode" class="form-control" data-placeholder="" maxlength="20" style="width: 100%">
+                                    <input type="text" name="Delivery_Destination_ZipCode" class="form-control C-ZipCode dest" data-placeholder="" maxlength="20" style="width: 100%">
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -658,7 +665,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Total Skids</label>
                                 <div class="select2-purple">
-                                    <input type="text" class="form-control editOrder" id="Total_Skids" name="Total_Skids" data-placeholder="" style="width: 100%" maxlength="5" required>
+                                    <input type="number" class="form-control editOrder" id="Total_Skids" name="Total_Skids" data-placeholder="" style="width: 100%" required>
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -763,12 +770,13 @@ $Products = ProductsController::ctrShowProducts();
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
                                 <label>From Name</label>
-                                <input type="text" class="form-control editOrder" id="Delivery_From_Name" name="Delivery_From_Name" data-placeholder="" style="width: 100%" maxlength="100" required>
-                                <!-- <select class="form-control editOrder" id="Delivery_From_Name" name="Delivery_From_Name" required>
+                                <!-- <input type="text" class="form-control editOrder" id="Delivery_From_Name" name="Delivery_From_Name" data-placeholder="" style="width: 100%" maxlength="100" required> -->
+                                <select class="form-control editOrder C-Name from" id="Delivery_From_Name" name="Delivery_From_Name" required>
+                                    <option value=""></option>
                                     <?php foreach ($Companies as $key => $value) : ?>
                                         <option><?= $value['Name'] ?></option>
                                     <?php endforeach ?>
-                                </select> -->
+                                </select>
                             </div>
                             <!-- /.form-group -->
                         </div>
@@ -781,7 +789,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Address 1</label>
                                 <div class="select2-purple">
-                                    <input type="text" class="form-control editOrder" id="Delivery_Address" name="Delivery_Address" data-placeholder="" style="width: 100%" maxlength="100" required>
+                                    <input type="text" class="form-control editOrder C-Address1 from" id="Delivery_Address" name="Delivery_Address" data-placeholder="" style="width: 100%" maxlength="100" required>
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -795,7 +803,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Address 2</label>
                                 <div class="select2-purple">
-                                    <input type="text" class="form-control editOrder" id="Delivery_Address2" name="Delivery_Address2" data-placeholder="" style="width: 100%" maxlength="100">
+                                    <input type="text" class="form-control editOrder C-Address2 from" id="Delivery_Address2" name="Delivery_Address2" data-placeholder="" style="width: 100%" maxlength="100">
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -808,7 +816,7 @@ $Products = ProductsController::ctrShowProducts();
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
                                 <label>Phone</label>
-                                <input type="text" id="Delivery_Phone" name="Delivery_Phone" class="form-control editOrder" data-placeholder="" style="width: 100%" maxlength="50" required>
+                                <input type="text" id="Delivery_Phone" name="Delivery_Phone" class="form-control editOrder C-Phone from" data-placeholder="" style="width: 100%" maxlength="50" required>
                             </div>
                             <!-- /.form-group -->
                         </div>
@@ -821,7 +829,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Contact</label>
                                 <div class="select2-purple">
-                                    <input type="text" id="Delivery_Contact" name="Delivery_Contact" class="form-control editOrder" data-placeholder="" style="width: 100%" maxlength="100">
+                                    <input type="text" id="Delivery_Contact" name="Delivery_Contact" class="form-control editOrder C-Contact from" data-placeholder="" style="width: 100%" maxlength="100">
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -835,7 +843,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>City</label>
                                 <div class="select2-purple">
-                                    <input type="text" id="Delivery_City" name="Delivery_City" class="form-control editOrder" data-placeholder="" style="width: 100%" maxlength="100" required>
+                                    <input type="text" id="Delivery_City" name="Delivery_City" class="form-control editOrder C-City from" data-placeholder="" style="width: 100%" maxlength="100" required>
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -849,7 +857,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Zip Code</label>
                                 <div class="select2-purple">
-                                    <input type="text" id="Delivery_ZipCode" name="Delivery_ZipCode" class="form-control editOrder" data-placeholder="" style="width: 100%" maxlength="20">
+                                    <input type="text" id="Delivery_ZipCode" name="Delivery_ZipCode" class="form-control editOrder C-ZipCode from" data-placeholder="" style="width: 100%" maxlength="20">
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -906,7 +914,13 @@ $Products = ProductsController::ctrShowProducts();
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
                                 <label>Name</label>
-                                <input type="text" id="Delivery_Destination_Name" name="Delivery_Destination_Name" class="form-control editOrder" data-placeholder="" style="width: 100%" maxlength="100" required>
+                                <!-- <input type="text" id="Delivery_Destination_Name" name="Delivery_Destination_Name" class="form-control editOrder C-Name dest" data-placeholder="" style="width: 100%" maxlength="100" required> -->
+                                <select class="form-control editOrder C-Name dest" id="Delivery_Destination_Name" name="Delivery_Destination_Name" required>
+                                    <option value=""></option>
+                                    <?php foreach ($Companies as $key => $value) : ?>
+                                        <option><?= $value['Name'] ?></option>
+                                    <?php endforeach ?>
+                                </select>
                             </div>
                             <!-- /.form-group -->
                         </div>
@@ -919,7 +933,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Address 1</label>
                                 <div class="select2-purple">
-                                    <input type="text" id="Delivery_Destination_Address" name="Delivery_Destination_Address" class="form-control editOrder" data-placeholder="" style="width: 100%" maxlength="100" required>
+                                    <input type="text" id="Delivery_Destination_Address" name="Delivery_Destination_Address" class="form-control editOrder C-Address1 dest" data-placeholder="" style="width: 100%" maxlength="100" required>
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -933,7 +947,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Address 2</label>
                                 <div class="select2-purple">
-                                    <input type="text" id="Delivery_Destination_Address2" name="Delivery_Destination_Address2" class="form-control editOrder" data-placeholder="" style="width: 100%" maxlength="100">
+                                    <input type="text" id="Delivery_Destination_Address2" name="Delivery_Destination_Address2" class="form-control editOrder C-Address2 dest" data-placeholder="" style="width: 100%" maxlength="100">
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -946,7 +960,7 @@ $Products = ProductsController::ctrShowProducts();
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
                                 <label>Phone</label>
-                                <input type="text" id="Delivery_Destination_Phone" name="Delivery_Destination_Phone" class="form-control editOrder" data-placeholder="" maxlength="100" style="width: 100%" required>
+                                <input type="text" id="Delivery_Destination_Phone" name="Delivery_Destination_Phone" class="form-control editOrder C-Phone dest" data-placeholder="" maxlength="100" style="width: 100%" required>
                             </div>
                             <!-- /.form-group -->
                         </div>
@@ -959,7 +973,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Contact</label>
                                 <div class="select2-purple">
-                                    <input type="text" id="Delivery_Destination_Contact" name="Delivery_Destination_Contact" class="form-control editOrder" data-placeholder="" maxlength="100" style="width: 100%" required>
+                                    <input type="text" id="Delivery_Destination_Contact" name="Delivery_Destination_Contact" class="form-control editOrder C-Contact dest" data-placeholder="" maxlength="100" style="width: 100%" required>
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -973,7 +987,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>City</label>
                                 <div class="select2-purple">
-                                    <input type="text" id="Delivery_Destination_City" name="Delivery_Destination_City" class="form-control editOrder" data-placeholder="" maxlength="100" style="width: 100%" required>
+                                    <input type="text" id="Delivery_Destination_City" name="Delivery_Destination_City" class="form-control editOrder C-City dest" data-placeholder="" maxlength="100" style="width: 100%" required>
                                 </div>
                             </div>
                             <!-- /.form-group -->
@@ -987,7 +1001,7 @@ $Products = ProductsController::ctrShowProducts();
                             <div class="form-group">
                                 <label>Zip Code</label>
                                 <div class="select2-purple">
-                                    <input type="text" id="Delivery_Destination_ZipCode" name="Delivery_Destination_ZipCode" class="form-control editOrder" data-placeholder="" maxlength="20" style="width: 100%">
+                                    <input type="text" id="Delivery_Destination_ZipCode" name="Delivery_Destination_ZipCode" class="form-control editOrder C-ZipCode dest" data-placeholder="" maxlength="20" style="width: 100%">
                                 </div>
                             </div>
                             <!-- /.form-group -->

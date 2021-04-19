@@ -187,7 +187,7 @@
                             <div class="form-group">
                                 <label>Total Skids</label>
                                 <div class="select2-purple">
-                                    <input type="text" class="form-control editOrder" id="Total_Skids" name="Total_Skids" data-placeholder="" style="width: 100%" maxlength="5" required>
+                                    <input type="number" class="form-control editOrder" id="Total_Skids" name="Total_Skids" data-placeholder="" style="width: 100%" required>
                                 </div>
                             </div>
                             <!-- /.form-group -->

@@ -59,8 +59,8 @@
 									<p>Orders</p>
 								</a>
 							</li>
-							<li class="nav-item d-none">
-								<a href="bol.html" class="nav-link">
+							<li class="nav-item">
+								<a href="bol" class="nav-link">
 									<i class="far fa-circle nav-icon"></i>
 									<p>Bill of Lading</p>
 								</a>

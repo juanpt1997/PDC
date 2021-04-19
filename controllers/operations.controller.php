@@ -99,9 +99,9 @@ class CompaniesController
     /* ===================================================
            SINGLE COMPANY INFORMATION
         ===================================================*/
-    static public function ctrCompanyInfo($value)
+    static public function ctrCompanyInfo($item, $value)
     {
-        $response = CompaniesModel::mdlCompanyInfo($value);
+        $response = CompaniesModel::mdlCompanyInfo($item, $value);
 
         return $response;
     }
@@ -870,4 +870,119 @@ class OrdersController
         //     return "File downloading failed.";
         // }
     }
+}
+
+/* ===================================================
+    CONTROLADOR DE BOL (BILL OF LADING)
+===================================================*/
+class BOLController
+{
+    /* ===================================================
+       VALIDAR BOL REFERENCE
+    ===================================================*/
+    static public function ctrValidarBOL()
+    {
+        if (isset($_POST['bol-reference'])) {
+            $respuesta = BOLModel::mdlValidarBOL($_POST['bol-reference']);
+            if (is_array($respuesta)) {
+                $_SESSION['bol_reference'] = $_POST['bol-reference'];
+                echo "<script>window.location.href = window.location.href</script>";
+            } else {
+                echo "
+						<script>
+							Swal.fire({
+								icon: 'error',
+								title: 'THE BOL REFERENCE DOES NOT EXIST',						
+								showConfirmButton: true,
+								confirmButtonText: 'Cerrar',
+								closeOnConfirm: false
+							})
+						</script>
+					    ";
+            }
+        }
+    }
+
+    /* ===================================================
+       DATOS DE LA ORDEN CON EL BOL REFERENCE
+    ===================================================*/
+    static public function ctrOrderInfo($bol)
+    {
+        $respuesta = BOLModel::mdlValidarBOL($bol);
+        return $respuesta;
+    }
+
+    /* ===================================================
+       TABLA BOL
+    ===================================================*/
+    static public function ctrTablaBOL($bolreference)
+    {
+        $respuesta = BOLModel::mdlTablaBOL($bolreference);
+        return $respuesta;
+    }
+
+    /* ===================================================
+       AGREGAR BOL
+    ===================================================*/
+    static public function ctrAgregarBOL()
+    {
+        if (isset($_POST['bolReference'])) {
+            $datos = array(
+                'bolReference' => $_POST['bolReference'],
+                'lot' => $_POST['lot'],
+                'refC' => $_POST['refC'],
+                'fromId' => $_POST['fromId'],
+                'toId' => $_POST['toId'],
+                'shippingDate' => $_POST['shippingDate'],
+                'carrier' => $_POST['carrier'],
+                'pallets' => $_POST['pallets'],
+                'bags' => $_POST['bags'],
+                'weight' => $_POST['weight']
+            );
+            $agregarBOL = BOLModel::mdlAgregarBOL($datos);
+            if ($agregarBOL != "error") {
+                if (!isset($_SESSION['bol_reference'])){
+                    $_SESSION['bol_reference'] = $_POST['bolReference'];
+                }
+                echo "
+						<script>
+							Swal.fire({
+								icon: 'success',
+								title: '¡BOL successfully added!',						
+								showConfirmButton: true,
+								confirmButtonText: 'Cerrar',
+								allowOutsideClick: false,
+							}).then((result)=>{
+								if(result.value){
+									window.location = 'bol';
+								}
+
+							})
+						</script>
+					    ";
+            } else {
+                echo "
+						<script>
+							Swal.fire({
+								icon: 'error',
+								title: 'Oops, there was a problem, please try again later',						
+								showConfirmButton: true,
+								confirmButtonText: 'Cerrar',
+								closeOnConfirm: false
+							})
+						</script>
+					    ";
+            }
+        }
+    }
+
+    /* ===================================================
+       DELETE BOL
+    ===================================================*/
+    static public function ctrDeleteBOL($id_bol)
+    {
+        $response = BOLModel::mdlDeleteBOL($id_bol);
+        return $response;
+    }
+
 }

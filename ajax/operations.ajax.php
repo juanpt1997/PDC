@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 /* if (!isset($_SESSION['logged_in'])) {
     header("Location: {$_SERVER['SERVER_NAME']}");
 }
@@ -16,9 +18,9 @@ class CompaniesAjax
     /* ===================================================
        SINGLE COMPANY INFORMATION
     ===================================================*/
-    static public function ajaxCompanyInfo($value)
+    static public function ajaxCompanyInfo($item, $value)
     {
-        $response = CompaniesController::ctrCompanyInfo($value);
+        $response = CompaniesController::ctrCompanyInfo($item, $value);
         echo json_encode($response);
     }
 
@@ -42,7 +44,7 @@ class CompaniesAjax
 }
 
 if (isset($_POST['CompanyInfo']) && $_POST['CompanyInfo'] == "ok") {
-    CompaniesAjax::ajaxCompanyInfo($_POST['idcompany']);
+    CompaniesAjax::ajaxCompanyInfo($_POST['item'], $_POST['value']);
 }
 
 if (isset($_POST['AllowedProducts']) && $_POST['AllowedProducts'] == "ok") {
@@ -155,6 +157,8 @@ class OrdersAjax
                 $BtnCOA = "<button type='button' class='btn btn-default btn-docs' idorder='{$value['id_orders']}' tipodoc='COA' data-toggle='modal' data-target='#modal-docs'><i class='far fa-file-pdf'></i></button>";
 
                 $BtnPOD = "<button type='button' class='btn btn-default btn-docs' idorder='{$value['id_orders']}' tipodoc='POD' data-toggle='modal' data-target='#modal-docs'><i class='far fa-file-pdf'></i></button>";
+                
+                $BtnBOL = "<button type='button' class='btn btn-info btn-bol' bolreference='{$value['PO_Reference']}'><i class='fas fa-file-alt'></i></button>";
 
                 switch ($value['Status']) {
                     case 'In Process':
@@ -199,6 +203,7 @@ class OrdersAjax
                         "' . $Status . '",
                         "' . $BtnCOA . '",
                         "' . $BtnPOD . '",
+                        "' . $BtnBOL . '",
                         "' . $BtnPDF . '",
                         "' . $btnActions . '"
                     ],';
@@ -284,4 +289,49 @@ if (isset($_POST['DownloadFile']) && $_POST['DownloadFile'] == "ok") {
         'tipodoc' => $_POST['tipodoc']
     );
     OrdersAjax::ajaxDownloadFile($datos);
+}
+
+/* ===================================================
+   * AJAX BOL
+===================================================*/
+class BOLAjax
+{
+    /* ===================================================
+       UNSET SESSION VARIABLE BOL
+    ===================================================*/
+    static public function ajaxUnsetSessionVar($variable)
+    {
+        unset($_SESSION["{$variable}"]);
+        echo "ok";
+    }
+
+    /* ===================================================
+       SET SESSION VARIABLE BOL (used when clicked bol on orders table)
+    ===================================================*/
+    static public function ajaxSetSessionVar($variable, $value)
+    {
+        $_SESSION["{$variable}"] = $value;
+        echo "ok";
+    }
+
+    /* ===================================================
+       DELETE BOL
+    ===================================================*/
+    static public function ajaxDeleteBOL($id_bol)
+    {
+        $response = BOLController::ctrDeleteBOL($id_bol);
+        echo $response;
+    }
+}
+
+if (isset($_POST['UnsetSessionVar']) && $_POST['UnsetSessionVar'] == "ok") {
+    BOLAjax::ajaxUnsetSessionVar($_POST['variable']);
+}
+
+if (isset($_POST['SetSessionVar']) && $_POST['SetSessionVar'] == "ok") {
+    BOLAjax::ajaxSetSessionVar($_POST['variable'], $_POST['value']);
+}
+
+if (isset($_POST['DeleteBOL']) && $_POST['DeleteBOL'] == "ok") {
+    BOLAjax::ajaxDeleteBOL($_POST['id_bol']);
 }
