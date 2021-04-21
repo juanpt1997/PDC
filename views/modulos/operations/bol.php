@@ -98,9 +98,13 @@ if (isset($_SESSION['bol_reference'])) {
                             <tbody>
                                 <?php foreach ($TablaBOL as $key => $value) : ?>
                                     <?php
+                                    $botonDescargarBOL = "<button class='btn btn-secondary btn-sm btn-descargarbol' type='button' id_bol='{$value['id_bol']}'><i class='fas fa-file-pdf'></i></button>";
+                                    $btnBOLPDF = "<div class='row d-flex flex-nowrap justify-content-center m-1'>" . $botonDescargarBOL . "</div>";
+
+                                    //$btnBOLPDF = "<button class='btn btn-secondary btn-sm m-1' type='button' id_bol='{$value['id_bol']}'><i class='fas fa-file-pdf'></i></button>";
                                     # DELETE BOL
-                                    $btnBOLPDF = "<button class='btn btn-secondary btn-sm m-1' type='button' id_bol='{$value['id_bol']}'><i class='fas fa-file-pdf'></i></button>";
                                     $btnDeleteBOL = "<button class='btn btn-danger btn-sm m-1 btn-deleteBOL' type='button' id_bol='{$value['id_bol']}'><i class='fas fa-trash-alt'></i></button>";
+                                    # Btn Actions
                                     $btnActions = "<div class='row d-flex flex-nowrap justify-content-center'>" . $btnBOLPDF . $btnDeleteBOL . "</div>";
 
                                     // $btnDeleteOrder = "<button class='btn btn-danger btn-sm btnBorrarOrder m-1' id_orders='{$value['id_orders']}'><i class='fas fa-trash-alt'></i></button>";

@@ -1,7 +1,9 @@
 <?php
+# PETICION DE OFERTA NACIONAL
+
 # CONFIGURACION DE LA SESION
-include '../session-config.php';
-$url = $_SERVER['REQUEST_SCHEME'] . '://' .  $_SERVER['HTTP_HOST'] . "/cac/crm ";
+include '../config.php';
+$url = $_SERVER['REQUEST_SCHEME'] . '://' .  $_SERVER['HTTP_HOST'] . "/cac/crm";
 # Si no existe una sesion se redireciona directamente al inicio
 if (!isset($_SESSION["crm_cedula"])) {
     header("Location: $url");
@@ -14,8 +16,6 @@ if (isset($_REQUEST['idOferta']) && preg_match('/^[0-9]+$/', $_REQUEST['idOferta
     header("Location: $url");
 }
 
-// var_dump($_SESSION);die();
-
 #SE ESTABLECE EL HORARIO 
 date_default_timezone_set('America/Bogota');
 
@@ -26,147 +26,85 @@ require $_SERVER['DOCUMENT_ROOT'] . '/cac/crm/vendor/autoload.php';
 require '../controllers/peticion-oferta.controlador.php';
 require '../models/peticion-oferta.modelo.php';
 
+
 $resultado = ControladorPeticionOferta::ctrInfoPO($idOferta);
+// var_dump($resultado);die();
 $informacion = $resultado['informacion'];
 $cotizacion = $resultado['cotizacion'];
 
 /* ===================== 
   SI LA INFORMACIÓN VIENE FALSA SE REDIRECCIONA A LA PETICION DE OFEERTAS 
 ========================= */
+
 if ($informacion === false) {
     $redireccion = $url . "/c-leads";
     header("Location: $redireccion");
 }
 
-/*     
-    var_dump($resultado);
-    die();
-*/
-# Espacio de trabajo
-use Fpdf\Fpdf;
 
-class PDF extends FPDF
+/* ===================== 
+  CONFIGURACIÓN DEL HEADER Y FOOTER EN EL ARCHIVO PDF 
+========================= */
+// Extend the TCPDF class to create custom Header and Footer
+class MYPDF extends TCPDF
 {
 
-    //la cabecera de nuestro reporte
-    function Header()
+    //Page header
+    public function Header()
     {
 
-        $ofertaNo = ControladorPeticionOferta::ctrInfoPO($_REQUEST['idOferta'])['informacion']['idOferta'];
+        # INFORMACION DE LA DB
+        $infoPO = ControladorPeticionOferta::ctrInfoPO($_REQUEST['idOferta'])['informacion'];
+        $ofertaNo = $infoPO['idOferta'];
 
-        // Logo X,Y, MEDIDA
-        $this->Image('../views/img/logos/logo_coytex.png', 1, 0.8, 4, 3);
-        // Arial bold 15
-        $this->SetFont('Arial', '', 10);
-        $this->Cell(4); //CORREMOS LA CELDA 4 CM
-        $this->MultiCell(7, 0.5, "CO & TEX S.A.S \nNIT 800122420-6 \nCALLE 11 No. 17 # 27 LOS CAMBULOS \nTEL : (576) 3301036 \nDOSQUEBRADAS/RLDA, COLOMBIA", 0, 'L');
-        $this->Cell(15);
-        $this->SetXY(15, 1.5);
-        $this->SetFont('Arial', 'B', 12);
-        $this->MultiCell(4, 0.5, "OFERTA No. \n$ofertaNo", 0, 'C');
-        $this->Ln(2);
+        if ($infoPO['sociedad'] == 'COYTEX') {
+            // Logo
+            $image_file =  '../views/img/logos/logo_coytex.png';
+            $this->Image($image_file, 10, 10, 40, 30,  'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+            // Set font
+            $this->SetFont('helvetica', 'B', 10);
+            // Title
+
+            # POSICION DEL EJE X & Y  INFORMACIÓN DE LA SOCIEDAD
+            $this->SetXY(50, 13);
+            $this->MultiCell(100, 0.5, "CO & TEX S.A.S \nNIT 800122420-6 \nCALLE 11 No. 17 # 27 LOS CAMBULOS \nTEL : (576) 3301036 \nDOSQUEBRADAS/RLDA, COLOMBIA", 0, 'L');
+            // $this->Cell(0, 15, '<< TCPDF Example 003 >>', 0, false, 'C', 0, '', 0, false, 'M', 'M');
+        } else {
+            // Logo
+            $image_file =  '../views/img/logos/logo_onzas.png';
+            $this->Image($image_file, 15, 12.5, 25, 28,  'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+            // Set font
+            $this->SetFont('helvetica', 'B', 10);
+            // Title
+
+            # POSICION DEL EJE X & Y  INFORMACIÓN DE LA SOCIEDAD
+            $this->SetXY(42.5, 13);
+            $this->MultiCell(120, 1, "ONZAS S.A.S NIT 900676198-5 \nKM 9 VÍA CERRITOS LA VIRGINIA \nCORREGIMIENTO CAIMALITO BOD.1 ZONA FRANCA \nINTERNACIONAL DE PEREIRA \nPEREIRA/RLDA,COLOMBIA TEL : (576) 3301036, \nFACTURAS.CLIENTES@ONZAS.COM.CO", 0, 'L');
+        }
+
+
+
+
+        # POSICION DEL EJE X & Y INFORMACION DEL NUMERO DE LA PETICION DE OFERTA
+        $this->SetXY(150, 15);
+        $this->SetFont('helvetica', 'B', '12');
+        $this->MultiCell(40, 50, "OFERTA No. \n$ofertaNo", 0, 'C');
     }
 
-    //pie de pagina de nuestro reporte
-    function Footer()
+    // Page footer
+    public function Footer()
     {
-        //posicion del pie de pagina
-        $this->SetY(-2.5);
-        //establecemos fuente(tipo de letra,estilo y tamaño)
-        #$this->SetFont('Arial','I',7);
-        //funcion para saber el numero de paginas que se tiene en el reporte
-        //cuando colocamos 0 indicamos que este ocupa el centro de nuestra hoja
-        #$this->Cell(0,28, utf8_decode('Página').$this->PageNo().'/{nb}',0,0,'C');      
-    }
-
-
-    #  https://gist.github.com/johnballantyne/4089627
-    // Funcion para multilinea fpdf
-
-    function GetMultiCellHeight($w, $h, $txt, $border = null, $align = 'J')
-    {
-        // Calculate MultiCell with automatic or explicit line breaks height
-        // $border is un-used, but I kept it in the parameters to keep the call
-        //   to this function consistent with MultiCell()
-        $cw = &$this->CurrentFont['cw'];
-        if ($w == 0)
-            $w = $this->w - $this->rMargin - $this->x;
-        $wmax = ($w - 2 * $this->cMargin) * 1000 / $this->FontSize;
-        $s = str_replace("\r", '', $txt);
-        $nb = strlen($s);
-        if ($nb > 0 && $s[$nb - 1] == "\n")
-            $nb--;
-        $sep = -1;
-        $i = 0;
-        $j = 0;
-        $l = 0;
-        $ns = 0;
-        $height = 0;
-        while ($i < $nb) {
-            // Get next character
-            $c = $s[$i];
-            if ($c == "\n") {
-                // Explicit line break
-                if ($this->ws > 0) {
-                    $this->ws = 0;
-                    $this->_out('0 Tw');
-                }
-                //Increase Height
-                $height += $h;
-                $i++;
-                $sep = -1;
-                $j = $i;
-                $l = 0;
-                $ns = 0;
-                continue;
-            }
-            if ($c == ' ') {
-                $sep = $i;
-                $ls = $l;
-                $ns++;
-            }
-            $l += $cw[$c];
-            if ($l > $wmax) {
-                // Automatic line break
-                if ($sep == -1) {
-                    if ($i == $j)
-                        $i++;
-                    if ($this->ws > 0) {
-                        $this->ws = 0;
-                        $this->_out('0 Tw');
-                    }
-                    //Increase Height
-                    $height += $h;
-                } else {
-                    if ($align == 'J') {
-                        $this->ws = ($ns > 1) ? ($wmax - $ls) / 1000 * $this->FontSize / ($ns - 1) : 0;
-                        $this->_out(sprintf('%.3F Tw', $this->ws * $this->k));
-                    }
-                    //Increase Height
-                    $height += $h;
-                    $i = $sep + 1;
-                }
-                $sep = -1;
-                $j = $i;
-                $l = 0;
-                $ns = 0;
-            } else
-                $i++;
-        }
-        // Last chunk
-        if ($this->ws > 0) {
-            $this->ws = 0;
-            $this->_out('0 Tw');
-        }
-        //Increase Height
-        $height += $h;
-
-        return $height;
+        // Position at 15 mm from bottom
+        $this->SetY(-10);
+        // Set font
+        $this->SetFont('helvetica', 'I', 8);
+        // Page number
+        $this->Cell(0, 10, 'Página ' . $this->getAliasNumPage() . '/' . $this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
     }
 }
 
 
-class ControladorPdf
+class PdfOferta
 {
     /* ===================== 
     BUSCAR EL MES Y RETORNARLO EN TEXTO 
@@ -197,121 +135,222 @@ class ControladorPdf
     }
 
     /* ===================== 
-      CONTROLADOR PARA LA GENERACIÓN DE ARCHIVO  PDF DE LA PETICION DE OFERTA
+      GENERACION DE ARCHIVOS PDF DE LA PETICION DE OFERTA 
     ========================= */
-    static public function pdfPO($informacion, $cotizacion)
+    static public function pdfPO($informacion, $cotizacion, $archivo = '')
     {
-        //creamos objeto de la libreria fpdf
-        $pdf = new PDF('P', 'cm', 'Letter');
-        //variable aliaspages para indicar el numero de paginas
-        $pdf->AliasNbPages();
 
-        //la funcion addpage crea una pagina
-        $pdf->AddPage('P', 'Letter');
+        /* ===================== 
+            UTILIZANDO LA VERSION DE TCPDF PARA GENERAR EL ARCHIVO 
+        ========================= */
+        # orientacion => p || unidade medida => cm
+        $pdf = new MYPDF(PDF_PAGE_ORIENTATION, 'mm', PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
-        $pdf->SetY(4);
-        //titulo => ancho, alto, stingn, border, salto de linea , centrado
-        $pdf->SetFont('Arial', '', 12);
-        // $pdf->Cell(20, 1, 'Dosquebradas, 5 de Agosto del 2020', 0, 1, 'L');
-        $pdf->Cell(20, 1, 'Dosquebradas, ' . date('d') . ' de ' . self::mesNombre(date('m')) . ' del ' . date('Y'), 0, 1, 'L');
+
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor($informacion['sociedad']);
+        $pdf->SetTitle('Petición de Oferta ' . $informacion['idOferta']);
+        $pdf->SetSubject('TCPDF Tutorial');
+        $pdf->SetKeywords('TCPDF, PDF, COYTEX, test, guide');
+
+        // set default header data
+        $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
+        // $pdf->setFooterData(array(0,64,0), array(0,64,128));
+
+        // set header and footer fonts
+        // $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        // $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+        // set default monospaced font
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+        // set margins
+        // $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetMargins(PDF_MARGIN_LEFT, 45, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+        // set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+        // set image scale factor
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+        // set some language-dependent strings (optional)
+        if (@file_exists(dirname(__FILE__) . '/lang/eng.php')) {
+            require_once(dirname(__FILE__) . '/lang/eng.php');
+            $pdf->setLanguageArray($l);
+        }
+
+        // ---------------------------------------------------------
+
+        // set default font subsetting mode
+        $pdf->setFontSubsetting(true);
+
+        // Set font
+        // dejavusans is a UTF-8 Unicode font, if you only need to
+        // print standard ASCII chars, you can use core fonts like
+        // helvetica or times to reduce file size.
+        $pdf->SetFont('dejavusans', '', 14, '', true);
+
+        // Add a page
+        // This method has several options, check the source code documentation for more information.
+        $pdf->AddPage();
+
+        // set text shadow effect
+        // $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'color'=>array(196,196,196), 'opacity'=>1, 'blend_mode'=>'Normal'));
+
+        # INFORMACION DE LA CIUDAD Y LA FECHA
+        $pdf->SetFont('helvetica', '', '12');
+        $municipio = $informacion['sociedad'] == 'COYTEX' ? 'Dosquebradas, ' : 'Pereira, ';
+        $pdf->Cell(20, 1, $municipio . date('d') . ' de ' . self::mesNombre(date('m')) . ' del ' . date('Y'), 0, 1, 'L');
+
         $pdf->Ln();
 
-
-        $pdf->Cell(20, 0.5, utf8_decode($informacion['tratoCont']), 0, 1, 'L');
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(20, 0.5, utf8_decode($informacion['nombreCont']), 0, 1, 'L');
-
-        $pdf->SetFont('Arial', '', 12);
-        $pdf->Cell(20, 0.5, utf8_decode($informacion['razonSocial']), 0, 1, 'L');
-
-        $pdf->Ln();
-
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(20, 0.5, 'ASUNTO: ' . utf8_decode($informacion['asunto']), 0, 1, 'L');
+        # INFORMACION DEL CLIENTE
+        $pdf->Cell(20, 0.5, $informacion['tratoCont'], 0, 1, 'L');
+        $pdf->SetFont('helvetica', 'B', '12');
+        $pdf->Cell(20, 0.5, $informacion['nombreCont'], 0, 1, 'L');
+        $pdf->SetFont('helvetica', '', '12');
+        $pdf->Cell(20, 0.5, $informacion['razonSocial'], 0, 1, 'L');
 
         $pdf->Ln();
 
-        $pdf->SetFont('Arial', '', 12);
-        $pdf->MultiCell(20, 0.5, "Reciba un cordial saludo, de acuerdo a su solicitud estamos enviando la \ncotizacion correspondiente: ", 0, 'L');
+        # ASUNTO
+        $pdf->SetFont('helvetica', 'B', '12');
+        $pdf->Cell(20, 0.5, 'ASUNTO: ' . $informacion['asunto'], 0, 1, 'L');
+
+        $pdf->ln();
+
+        # SALUDO
+        $pdf->SetFont('helvetica', '', '12');
+        $pdf->MultiCell(170, 0.5, "Reciba un cordial saludo, de acuerdo a su solicitud estamos enviando la \ncotizacion correspondiente: ", 0, 'L');
 
         $pdf->Ln();
 
-        #TABLA 
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(3.5, 0.7, 'IMAGEN', 1, 0, 'C');
-        $pdf->Cell(2.5, 0.7, 'MODELO', 1, 0, 'C');
-        $pdf->Cell(8, 0.7, utf8_decode('DESCRIPCIÓN'), 1, 0, 'C');
-        $pdf->Cell(2.5, 0.7, 'CANTIDAD', 1, 0, 'C');
-        $pdf->Cell(2, 0.7, 'PRECIO', 1, 1, 'C');
+        # TABLA PAR LOS DATOS
+        $tablaDatos = '
+            <table cellspacing="0" cellpadding="2" border="1">
+                <tr style="color:#000 ;font-weight:bold; text-align: center;">
+                    <th>IMAGEN</th>
+                    <th>MODELO</th>
+                    <th>DESCRIPCIÓN</th>
+                    <th>COMPOSICIÓN</th>
+                    <th>CANTIDAD</th>
+                    <th>PRECIO UNITARIO</th>
+                    <th>SUBTOTAL</th>
+                </tr> 
+        ';
+
+        $pdf->SetFont('helvetica', '', '9');
+        # RECORRO LAS OFERTAS PARA IMPRIMIRLAS EN EL DOCUMENTO PDF
+        $moneda = '';
+        $total = 0;
+        $contador = 0;
+        foreach ($cotizacion as $value) {
+            // $imagen= $_SERVER['DOCUMENT_ROOT'] . "/" . $value['rutaImg'];
+            $imagen = $_SERVER['DOCUMENT_ROOT'] . "/" . $value['rutaImg'];
+            $modelo = $value['modelo'];
+            $descripcion = $value['descripcion'];
+            $composicion = $value['composicion'];
+            $cantidad = $value['cantidad'];
+            $precio = $value['precioItem'];
+            $subtotal = $value['subtotal'];
+            $moneda = $value['moneda'];
+            $precioItemNormal = $value['precioItemNormal'] * $value['cantidad'];
+            $total += $precioItemNormal;
 
 
-        $pdf->SetFont('Arial', '', 10);
-
-
-        $columnaX = 15;
-        $columnaY = 11.2;
-
-        foreach ($cotizacion as $key => $value) {
-            $imagen = $_SESSION['dominio'] . "/" . $value['rutaImg'];
-
-            $pdf->Cell(3.5, 2, $pdf->Image($imagen, $pdf->GetX(), $pdf->GetY(), 3, 2), 1, 0, 'C');
-
-            $pdf->Cell(2.5, 2, utf8_decode($value['modelo']), 1, 0, 'C');
-
-            
-            $pdf->MultiCell(8,2,utf8_decode($value['descripcion']),1,'C');
-            
-            # SE ASIGNA NUEVA POSICIÓN
-            $pdf->SetXY($columnaX, $columnaY);
-
-            $pdf->Cell(2.5, 2, utf8_decode($value['cantidad']), 1, 0, 'C');
-            $pdf->Cell(2, 2, utf8_decode($value['precio']), 1, 1, 'C');
-
-            # SE REASIGNA DE ACUREDO A Y SU VALOR
-            $columnaY += 2;
+            $tablaDatos .= '
+                <tr style="text-align: center;">
+                    <td>
+                        <img src="' . $imagen . '" width="80" height="70">
+                    </td>       
+                    <td>' . $modelo . '</td>       
+                    <td>' . $descripcion . '</td>       
+                    <td>' . $composicion . '</td>       
+                    <td>' . $cantidad . '</td>       
+                    <td>' . $precio . '</td>       
+                    <td>' . $subtotal . '</td>       
+                </tr>
+            ';
+            // if ($contador >= 3) {
+            //     $tablaDatos .= '<br><br><br>';
+            // }
+            $contador += 1;
         }
 
 
-        /* for ($i = 0; $i < 10; $i++) {
-            $pdf->Cell(4, 0.5, '', 1, 0, 'C');
-            $pdf->Cell(4, 0.5, '', 1, 0, 'C');
-            $pdf->Cell(4, 0.5, '', 1, 0, 'C');
-            $pdf->Cell(4, 0.5, '', 1, 0, 'C');
-            $pdf->Cell(4, 0.5, '', 1, 1, 'C');
-        } */
 
-        $pdf->Ln(0.5);
-        $pdf->SetFont('Arial', 'B', 12);
+
+        $tablaDatos .= "</table>";
+
+
+        # IMPRIMIMOS EL HTML DE LA TABLA
+        $pdf->writeHTML($tablaDatos);
+
+        $pdf->SetFont('helvetica', 'B', 12);
         $pdf->Cell(20, 0.5, 'LOS PRECIOS NO INCLUYEN I.V.A.', 0, 1, 'L');
+        $pdf->Cell(20, 0.5, 'MONEDA: ' . $moneda, 0, 1, 'L');
+        $totalCotizacion = number_format($total, 0);
+        $pdf->Cell(20, 0.5, 'TOTAL: ' . str_replace(',', '.', $totalCotizacion), 0, 1, 'L');
 
-        $pdf->Ln();
+        // $pdf->Ln();
+        if ($pdf->GetY() > 234) {
+            $pdf->AddPage();
+        }
 
-        $pdf->SetFont('Arial', '', 10);
-        // $pdf->MultiCell(20,1,utf8_decode("OBSERVACIÓN: "),1,'L');
-        $pdf->MultiCell(18.5, 0.5, utf8_decode("OBSERVACIÓN: " . $informacion['observacion']), 1, 'L');
+        
+        // $pdf->Cell(20,1,$pdf->GetY(),0,1);
 
+        $pdf->SetFont('helvetica', '', 12);
 
-
-
-        $pdf->Ln(2);
-
-        // $pdf->SetY(22);
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(10, 0.5, 'Atentamente,', 0, 1);
-
-        $pdf->Ln(2);
+        // $pdf->MultiCell(180, 1, 'OBSERVACIÓN: ' . $informacion['observacion'], 0, 'L');
+        $obaservacion = '<p style="text-align: justify;" ><b>OBSERVACIÓN: </b> ' . $informacion['observacion'] . '<p>';
+        $pdf->writeHTML($obaservacion);
 
 
-        $pdf->Cell(10, 0.5, 'DIEGO PINEDA JIMENEZ', 0, 1);
-        $pdf->Cell(10, 0.5, 'PRESIDENTE CO & TEX S.A.S', 0, 1);
+        // $pdf->SetY(235);
+        $pdf->SetFont('helvetica', 'B', 12);
 
+        $pdf->Cell(100, 0.5, 'Atentamente,', 0, 1);
+
+        $pdf->Ln(20);
+        // $pdf->SetY(261);
+
+        // $pdf->Cell(100, 0.3, 'DIEGO PINEDA JIMENEZ', 0, 1);
+        // $presidente = $informacion['sociedad'] == 'COYTEX' ? 'PRESIDENTE CO & TEX S.A.S' : 'PRESIDENTE ONZAS S.A.S';
+        // $pdf->Cell(100, 0.3, $presidente, 0, 1);
+        $pdf->Cell(100, 0.3, 'HECTOR FABIO GUTIERREZ', 0, 1);
+        $pdf->Cell(100, 0.3, 'DIRECTOR COMERCIAL ', 0, 1);
+
+
+
+        # EJEMPLO HTML DE LA LIBRERIA
+        // Set some content to print
+        /* $html = <<<EOD
+            <br>
+            <h1>Welcome to <a href="http://www.tcpdf.org" style="text-decoration:none;background-color:#CC0000;color:black;">&nbsp;<span style="color:black;">TC</span><span style="color:white;">PDF</span>&nbsp;</a>!</h1>
+            <i>This is the first example of TCPDF library.</i>
+            <p>This text is printed using the <i>writeHTMLCell()</i> method but you can also use: <i>Multicell(), writeHTML(), Write(), Cell() and Text()</i>.</p>
+            <p>Please check the source code documentation and other examples for further information.</p>
+            <p style="color:#CC0000;">TO IMPROVE AND EXPAND TCPDF I NEED YOUR SUPPORT, PLEASE <a href="http://sourceforge.net/donate/index.php?group_id=128076">MAKE A DONATION!</a></p>
+        EOD; */
+
+        // Print text using writeHTMLCell()
+        // $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+
+        // ---------------------------------------------------------
 
         $nombrePdf = $informacion['idOferta'] . '_' . date('Y-m-d') . '_' . date('His') . '.pdf';
 
-        # SALIDA DEL DOCUMENTO
-        $pdf->Output('I', $nombrePdf);
+
+        // Close and output PDF document
+        // This method has several options, check the source code documentation for more information.
+        $pdf->Output($nombrePdf, 'I');
     }
 }
 
-# GENERO EL DOCUEMENTO PDF
-ControladorPdf::pdfPO($informacion, $cotizacion);
+# SE INSTANCIA LA CLASE PARA LA GENERACION DEL ARCHIVO PDF
+PdfOferta::pdfPO($informacion, $cotizacion);

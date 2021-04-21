@@ -982,5 +982,13 @@ if (window.location.href.includes("bol")) {
                 }
             })
         });
+
+        /* ===================================================
+          CLICK DESCARGAR PDF BOL
+        ===================================================*/
+        $(document).on("click", ".btn-descargarbol", function () {
+            var id_bol = $(this).attr("id_bol");
+            window.open(`./pdf/pdfbol.php?bol=${id_bol}`, '', 'width=1280,height=720,left=50,top=50,toolbar=yes')
+        });
     });
 }

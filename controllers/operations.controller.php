@@ -985,4 +985,13 @@ class BOLController
         return $response;
     }
 
+    /* ===================================================
+       DATOS BOL POR POSICION
+    ===================================================*/
+    static public function ctrBOLPosicion($id_bol)
+    {
+        $response = BOLModel::mdlBOLPosicion($id_bol);
+        return $response;
+    }
+
 }

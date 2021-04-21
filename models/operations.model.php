@@ -428,7 +428,7 @@ class OrdersModel
     static public function mdlNewOrder($datos)
     {
         $conexion = Conexion::conectar();
-        $stmt = $conexion->prepare("INSERT INTO Orders (id_companies, id_products, Weight_Each_Bag, Total_Bags, Total_Skids, Customer_PO, Arrange_Pickup, From_Release, Pickup_Date, PO_Reference, Delivery_Terms, Delivery_From_Name, Delivery_Address, Delivery_Address2, Delivery_Phone, Delivery_Contact, Delivery_City, Delivery_ZipCode, Delivery_Date, Delivery_Real_Date, Delivery_Destination_Name, Delivery_Destination_Address, Delivery_Destination_Address2, Delivery_Destination_Phone, Delivery_Destination_Contact, Delivery_Destination_City, Delivery_Destination_ZipCode, Delivery_Destination_Confirmed_Trucking_Charge, Delivery_Destination_Comments, audit_user) VALUES
+        $stmt = $conexion->prepare("INSERT INTO Orders (id_companies, id_products, Weight_Each_Bag, Total_Bags, Total_Skids, Customer_PO, Arrange_Pickup, From_Release, Pickup_Date, id_bol, Delivery_Terms, Delivery_From_Name, Delivery_Address, Delivery_Address2, Delivery_Phone, Delivery_Contact, Delivery_City, Delivery_ZipCode, Delivery_Date, Delivery_Real_Date, Delivery_Destination_Name, Delivery_Destination_Address, Delivery_Destination_Address2, Delivery_Destination_Phone, Delivery_Destination_Contact, Delivery_Destination_City, Delivery_Destination_ZipCode, Delivery_Destination_Confirmed_Trucking_Charge, Delivery_Destination_Comments, audit_user) VALUES
                                         (:id_companies, :id_products, :Weight_Each_Bag, :Total_Bags, :Total_Skids, :Customer_PO, :Arrange_Pickup, :From_Release, :Pickup_Date, :PO_Reference, :Delivery_Terms, :Delivery_From_Name, :Delivery_Address, :Delivery_Address2, :Delivery_Phone, :Delivery_Contact, :Delivery_City, :Delivery_ZipCode, :Delivery_Date, :Delivery_Real_Date, :Delivery_Destination_Name, :Delivery_Destination_Address, :Delivery_Destination_Address2, :Delivery_Destination_Phone, :Delivery_Destination_Contact, :Delivery_Destination_City, :Delivery_Destination_ZipCode, :Delivery_Destination_Confirmed_Trucking_Charge, :Delivery_Destination_Comments, :audit_user)");
 
         $stmt->bindParam(":id_companies", $datos['id_companies'], PDO::PARAM_INT);
@@ -669,7 +669,7 @@ class BOLModel
     ===================================================*/
     static public function mdlTablaBOL($bolreference)
     {
-            $stmt = Conexion::conectar()->prepare("SELECT b.id_bol, o.PO_Reference, o.Customer_PO, b.Lot, b.RefC, f.Name AS Cfrom, t.Name AS Cto, b.Shippingdate, b.Carrier, b.Pallets, b.Bags, p.Description, b.Weight
+        $stmt = Conexion::conectar()->prepare("SELECT b.id_bol, o.PO_Reference, o.Customer_PO, b.Lot, b.RefC, f.Name AS Cfrom, t.Name AS Cto, b.Shippingdate, b.Carrier, b.Pallets, b.Bags, p.Description, b.Weight
                                                     FROM Orders o
                                                     INNER JOIN BOL b ON b.PO_Reference = o.PO_Reference
                                                     INNER JOIN Companies f ON f.id_companies = b.`From`
@@ -733,6 +733,30 @@ class BOLModel
         } else {
             $retorno = "error";
         }
+
+        $stmt->closeCursor();
+        $stmt = null;
+
+        return $retorno;
+    }
+
+    /* ===================================================
+       DATOS BOL POR POSICION
+    ===================================================*/
+    static public function mdlBOLPosicion($id_bol)
+    {
+        $stmt = Conexion::conectar()->prepare("SELECT b.id_bol, o.PO_Reference, o.Customer_PO, b.Lot, b.RefC, f.Name AS Cfrom, t.Name AS Cto, b.Shippingdate, DATE_FORMAT(b.Shippingdate, '%m/%d/%Y') as ShippingdateFormat, b.Carrier, b.Pallets, b.Bags, p.Description, b.Weight, b.`From`, b.`To`
+                                                FROM Orders o
+                                                INNER JOIN BOL b ON b.PO_Reference = o.PO_Reference
+                                                INNER JOIN Companies f ON f.id_companies = b.`From`
+                                                INNER JOIN Companies t ON t.id_companies = b.`To`
+                                                INNER JOIN Products p ON p.id_products = o.id_products
+                                                WHERE b.id_bol = :id_bol");
+        $stmt->bindParam(":id_bol", $id_bol, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        $retorno = $stmt->fetch();
 
         $stmt->closeCursor();
         $stmt = null;
