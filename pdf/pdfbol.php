@@ -502,7 +502,7 @@ class PdfBOL
         ===================================================*/
         $x = $pdf->GetX();
         $y = $pdf->GetY();
-        $image_sello =  '../views/dist/img/stamp jpg.jpg';
+        $image_sello =  '../views/dist/img/STAMP.jpg';
         $pdf->Image($image_sello, 140, $y + 5, 65, 25,  'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
 
 
