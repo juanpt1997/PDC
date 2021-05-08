@@ -69,6 +69,7 @@
             <div class="modal-footer justify-content-end">
                 <button class="btn btn-success" type="submit" form="frmSubirDocumento" id="btnGuardarArchivo"><i class="fas fa-save"></i> Save</button>
                 <button class="btn btn-success" type="button" id="btnDescargarArchivo"><i class="fas fa-download"></i> Download</button>
+                <button class="btn btn-danger" type="button" id="btnDeleteArchivo"><i class="fas fa-trash-alt"></i> Delete</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">
                     Close
                 </button>

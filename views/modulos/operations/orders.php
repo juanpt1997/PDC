@@ -8,6 +8,11 @@
 //$Orders = OrdersController::ctrShowOrders(null, null, null);
 $Companies = CompaniesController::ctrShowCompanies();
 $Products = ProductsController::ctrShowProducts();
+
+# filtro para el datatable
+$filtervalueDT = isset($_SESSION['filtervalueDT']) ? $_SESSION['filtervalueDT'] : "";
+unset($_SESSION['filtervalueDT']);
+
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -65,7 +70,7 @@ $Products = ProductsController::ctrShowProducts();
                     <div class="card card-primary card-outline">
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <div class="table-responsive tablaOrders">
+                            <div class="table-responsive tablaOrders" filtro="<?= $filtervalueDT ?>">
                                 <table class="table table-sm">
                                     <thead class="text-uppercase">
                                         <tr>

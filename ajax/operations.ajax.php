@@ -255,6 +255,15 @@ class OrdersAjax
         //echo $response;
         echo json_encode($response);
     }
+
+    /* ===================================================
+       DELETE FILE
+    ===================================================*/
+    static public function ajaxDeleteFile($datos)
+    {
+        $response = OrdersController::ctrDeleteFile($datos);
+        echo $response;
+    }
 }
 
 if (isset($_REQUEST['TablaOrders']) && $_REQUEST['TablaOrders'] == 'ok') {
@@ -290,6 +299,17 @@ if (isset($_POST['DownloadFile']) && $_POST['DownloadFile'] == "ok") {
     );
     OrdersAjax::ajaxDownloadFile($datos);
 }
+
+if (isset($_POST['DeleteFile']) && $_POST['DeleteFile'] == "ok") {
+    $datos = array(
+        'id_orders' => $_POST['idorder'],
+        'item' => $_POST['tipodoc'],
+        'value' => NULL
+    );
+    OrdersAjax::ajaxDeleteFile($datos);
+}
+
+
 
 /* ===================================================
    * AJAX BOL

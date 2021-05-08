@@ -78,15 +78,61 @@ class DashboardModel
     }
 
     /* ===================================================
-       PALLETS DELIVERED THIS MONTH
+       PALLETS DELIVERED BY RANGE OF DATES
     ===================================================*/
+    static public function mdlPalletsDelivered($fecha1, $fecha2)
+    {
+        $stmt = Conexion::conectar()->prepare("SELECT SUM(Total_Skids) AS pallets
+                                                FROM Orders
+                                                WHERE Delivery_Real_Date BETWEEN '$fecha1' AND '$fecha2';");
+
+        if ($stmt->execute()) {
+            $responseDB = $stmt->fetch();
+            $retorno = $responseDB['pallets'];
+        } else {
+            $retorno = "error";
+        }
+
+        $stmt->closeCursor();
+        $stmt = null;
+
+        return $retorno;
+    }
+
+    /* ===================================================
+       PALLETS NEEDED BY RANGE OF DATES
+    ===================================================*/
+    static public function mdlPalletsNeeded($fecha1, $fecha2)
+    {
+        $stmt = Conexion::conectar()->prepare("SELECT SUM(Total_Skids) AS pallets
+                                                FROM Orders
+                                                WHERE Delivery_Date BETWEEN '$fecha1' AND '$fecha2' AND NOT Delivery_Real_Date <= NOW();");
+
+        if ($stmt->execute()) {
+            $responseDB = $stmt->fetch();
+            $retorno = $responseDB['pallets'];
+        } else {
+            $retorno = "error";
+        }
+
+        $stmt->closeCursor();
+        $stmt = null;
+
+        return $retorno;
+    }
+
+
 
     /* ===================================================
        ORDERS DELIVERED THIS MONTH
     ===================================================*/
     static public function mdlChartOrdersDeliveredThisMonth()
     {
-        $stmt = Conexion::conectar()->prepare("SELECT COUNT(id_orders) AS ordenesEntregadasMes, (SELECT COUNT(id_orders) FROM Orders WHERE DATE_FORMAT(Delivery_Real_Date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')) AS totalOrdenesMes
+        $stmt = Conexion::conectar()->prepare("SELECT COUNT(id_orders) AS ordenesEntregadasMes, 
+                                                (
+                                                    SELECT COUNT(id_orders)
+                                                    FROM Orders
+                                                    WHERE DATE_FORMAT(Delivery_Date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')) AS totalOrdenesMes
                                                 FROM Orders
                                                 WHERE DATE_FORMAT(Delivery_Real_Date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m') AND Delivery_Real_Date <= NOW()");
 

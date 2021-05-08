@@ -8,8 +8,8 @@
 if (isset($_SESSION['bol_reference'])) {
     # Datos de la orden
     $orderData = BOLController::ctrOrderInfo($_SESSION['bol_reference']);
-    $bagsxpallet = intval($orderData['Total_Bags']) / $orderData['Total_Skids'];
-    $WeightEaBag = intval($orderData['Weight_Each_Bag']);
+    $bagsxpallet = doubleval($orderData['Total_Bags']) / $orderData['Total_Skids'];
+    $WeightEaBag = doubleval($orderData['Weight_Each_Bag']);
     $bolreference = $orderData['PO_Reference'];
 
     # Clientes
@@ -24,7 +24,20 @@ if (isset($_SESSION['bol_reference'])) {
         $contPallets += $value['Pallets'];
     }
 
-    # OCULTAR TEXTO EN EL TITULO
+    /* ===================================================
+       CONSECUTIVOS DEL ARCHIVO
+    ===================================================*/
+    # Array con los consecutivos ya seleccionados para el bol_reference de la BD
+    $arrConsecutivosSelec = array();
+    foreach ($TablaBOL as $key => $value) {
+        array_push($arrConsecutivosSelec, $value['Consecutive']);
+    }
+    # Array con las opciones que hay
+    $arrConsecutivos = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'];
+
+    /* ===================================================
+        OCULTAR TEXTO EN EL TITULO, AL IGUAL QUE CIERTA INFO QUE DEPENDE SI EXISTE LA VARIABLE DE bol_reference
+    ===================================================*/
     $dnone = "";
 } else {
     $dnone = "d-none";
@@ -111,7 +124,7 @@ if (isset($_SESSION['bol_reference'])) {
                                     // $btnActions = "<div class='row d-flex flex-nowrap justify-content-center'>" . $btnDeleteOrder . "</div>";
                                     ?>
                                     <tr>
-                                        <td><?= $value['PO_Reference'] ?></td>
+                                        <td><?= $value['PO_Reference'] . $value['Consecutive'] ?></td>
                                         <td><?= $value['Customer_PO'] ?></td>
                                         <td><?= $value['Lot'] ?></td>
                                         <td><?= $value['RefC'] ?></td>
@@ -187,11 +200,30 @@ if (isset($_SESSION['bol_reference'])) {
                         BOL #
                     =================================================== -->
                         <div class="col-12 col-sm-6">
-                            <div class="form-group">
+                            <div class="form-group d-none">
                                 <label>BOL #</label>
                                 <input type="text" class="form-control" name="bolReference" data-placeholder="" style="width: 100%" maxlength="20" readonly value="<?= $orderData['PO_Reference'] ?>">
                             </div>
                             <!-- /.form-group -->
+
+                            <div class="form-group">
+                                <label>BOL #</label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" name="bolReference" data-placeholder="" style="width: 80%" maxlength="20" readonly value="<?= $orderData['PO_Reference'] ?>">
+                                    <div class="input-group-append" style="width: 20%">
+                                        <select id="filecons" class="form-control" name="consecutive">
+                                            <?php foreach ($arrConsecutivos as $key => $value) : ?>
+                                                <?php
+                                                $key2 = array_search($value, $arrConsecutivosSelec);
+                                                ?>
+                                                <?php if (false === $key2) : ?>
+                                                    <option><?= $value ?></option>
+                                                <?php endif ?>
+                                            <?php endforeach ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <!-- /.col -->
 
@@ -205,6 +237,26 @@ if (isset($_SESSION['bol_reference'])) {
                             </div>
                             <!-- /.form-group -->
                         </div>
+                        <!-- /.col -->
+
+                        <!-- ===================================================
+                        FILE CONSECUTIVE
+                    =================================================== -->
+                        <!-- <div class="col-12 col-sm-6">
+                            <div class="form-group">
+                                <label>File consecutive</label>
+                                <select id="filecons" class="form-control" name="consecutive">
+                                    <?php foreach ($arrConsecutivos as $key => $value) : ?>
+                                        <?php
+                                        $key2 = array_search($value, $arrConsecutivosSelec);
+                                        ?>
+                                        <?php if (false === $key2) : ?>
+                                            <option><?= $value ?></option>
+                                        <?php endif ?>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                        </div> -->
                         <!-- /.col -->
 
 
@@ -328,7 +380,7 @@ if (isset($_SESSION['bol_reference'])) {
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
                                 <label>PALLETS</label>
-                                <input class="form-control pallets" type="number" name="pallets" max="<?= $orderData['Total_Skids'] - $contPallets ?>" required>
+                                <input class="form-control pallets" type="number" name="pallets" min="1" max="<?= $orderData['Total_Skids'] - $contPallets ?>" required>
                             </div>
                             <!-- /.form-group -->
                         </div>
@@ -364,7 +416,7 @@ if (isset($_SESSION['bol_reference'])) {
                         <div class="col-12 col-sm-6">
                             <div class="form-group">
                                 <label>WEIGHT/LB</label>
-                                <input class="form-control weight" type="number" name="weight" required>
+                                <input class="form-control weight" type="number" name="weight" step="0.01" required>
                             </div>
                             <!-- /.form-group -->
                         </div>

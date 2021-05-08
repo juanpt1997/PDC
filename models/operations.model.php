@@ -16,9 +16,10 @@ class CompaniesModel
     ===================================================*/
     static public function mdlShowCompanies()
     {
-        $stmt = Conexion::conectar()->prepare("SELECT *
+        $stmt = Conexion::conectar()->prepare("SELECT *, IF(id_companies = 34, 1, 2) AS orden
                                                 FROM Companies
-                                                where Active = 1");
+                                                WHERE Active = 1
+                                                ORDER BY orden, id_companies ASC");
 
         $stmt->execute();
 
@@ -218,9 +219,11 @@ class ProductsModel
     ===================================================*/
     static public function mdlShowProducts()
     {
-        $stmt = Conexion::conectar()->prepare("SELECT *
-                                                FROM Products
-                                                where Active = 1");
+        $sql = "SELECT *
+                    FROM Products
+                    where Active = 1";
+
+        $stmt = Conexion::conectar()->prepare($sql);
 
         $stmt->execute();
 
@@ -368,49 +371,50 @@ class OrdersModel
     static public function mdlShowOrders($value, $status, $fechas)
     {
         switch ($status) {
-                # Mostrar solo las ordenes con el estado Shipped
+            # Mostrar solo las ordenes con el estado Shipped
             case 'Shipped':
                 # Ordenes de companies
-                $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, o.*, DATE_FORMAT(o.Pickup_Date, '%m-%d-%Y') as Pickup_DateF, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF, DATE_FORMAT(o.Delivery_Real_Date, '%m-%d-%Y') as Delivery_Real_DateF
-                                                        FROM Orders o
-                                                        INNER JOIN Companies c ON c.id_companies = o.id_companies
-                                                        INNER JOIN Products p ON p.id_products = o.id_products
-                                                        WHERE o.id_companies = $value AND o.Status = '$status' AND o.active = 1");
+                $sql = "SELECT p.Name AS Product, c.Name AS Company, o.*, DATE_FORMAT(o.Pickup_Date, '%m-%d-%Y') as Pickup_DateF, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF, DATE_FORMAT(o.Delivery_Real_Date, '%m-%d-%Y') as Delivery_Real_DateF
+                            FROM Orders o
+                            INNER JOIN Companies c ON c.id_companies = o.id_companies
+                            INNER JOIN Products p ON p.id_products = o.id_products
+                            WHERE o.id_companies = $value AND o.Status = '$status' AND o.active = 1";
                 break;
 
-                # Mostrar todas las ordenes con cualquier estado
+            # Lo que se debe mostrar en el tv, unicamente las que estan en process y shipped
+            case 'TV':
+                $sql = "SELECT p.Name AS Product, c.Name AS Company, o.*, DATE_FORMAT(o.creation, '%m-%d-%Y') as creationF, DATE_FORMAT(o.Pickup_Date, '%m-%d-%Y') as Pickup_DateF, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF, DATE_FORMAT(o.Delivery_Real_Date, '%m-%d-%Y') as Delivery_Real_DateF
+                                FROM Orders o
+                                INNER JOIN Companies c ON c.id_companies = o.id_companies
+                                INNER JOIN Products p ON p.id_products = o.id_products
+                                WHERE DATE(o.Delivery_Date) BETWEEN '{$fechas['fecha1']}' AND '{$fechas['fecha2']}' AND o.active = 1 AND o.`Status` IN('In Process', 'Shipped') 
+                                order by o.Delivery_Date ASC
+                                LIMIT 15";
+                break;
+
+            # Mostrar todas las ordenes con cualquier estado
             default:
                 # Ordenes de operations
                 if ($value == null && $fechas != null) {
-
-                    $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, o.*, DATE_FORMAT(o.creation, '%m-%d-%Y') as creationF, DATE_FORMAT(o.Pickup_Date, '%m-%d-%Y') as Pickup_DateF, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF, DATE_FORMAT(o.Delivery_Real_Date, '%m-%d-%Y') as Delivery_Real_DateF
-                                                        FROM Orders o
-                                                        INNER JOIN Companies c ON c.id_companies = o.id_companies
-                                                        INNER JOIN Products p ON p.id_products = o.id_products
-                                                        WHERE DATE(o.Pickup_Date) BETWEEN '{$fechas['fecha1']}' AND '{$fechas['fecha2']}' AND o.active = 1");
-                    //WHERE DATE(o.Pickup_Date) BETWEEN '2020-12-01' AND '2020-12-31'");
-                    // $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, o.*, DATE_FORMAT(o.Pickup_Date, '%m-%d-%Y') as Pickup_DateF, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF, DATE_FORMAT(o.Delivery_Real_Date, '%m-%d-%Y') as Delivery_Real_DateF
-                    //                                     FROM Orders o
-                    //                                     INNER JOIN Companies c ON c.id_companies = o.id_companies
-                    //                                     INNER JOIN Products p ON p.id_products = o.id_products");
+                    $sql = "SELECT p.Name AS Product, c.Name AS Company, o.*, DATE_FORMAT(o.creation, '%m-%d-%Y') as creationF, DATE_FORMAT(o.Pickup_Date, '%m-%d-%Y') as Pickup_DateF, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF, DATE_FORMAT(o.Delivery_Real_Date, '%m-%d-%Y') as Delivery_Real_DateF
+                                FROM Orders o
+                                INNER JOIN Companies c ON c.id_companies = o.id_companies
+                                INNER JOIN Products p ON p.id_products = o.id_products
+                                WHERE DATE(o.Pickup_Date) BETWEEN '{$fechas['fecha1']}' AND '{$fechas['fecha2']}' AND o.active = 1";
                 }
                 # Ordenes de companies
                 else {
                     if ($fechas != null) {
-                        $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, o.*, DATE_FORMAT(o.Pickup_Date, '%m-%d-%Y') as Pickup_DateF, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF, DATE_FORMAT(o.Delivery_Real_Date, '%m-%d-%Y') as Delivery_Real_DateF
-                                                            FROM Orders o
-                                                            INNER JOIN Companies c ON c.id_companies = o.id_companies
-                                                            INNER JOIN Products p ON p.id_products = o.id_products
-                                                            WHERE o.id_companies = $value AND DATE(o.Pickup_Date) BETWEEN '{$fechas['fecha1']}' AND '{$fechas['fecha2']}' AND o.active = 1");
-                        // $stmt = Conexion::conectar()->prepare("SELECT p.Name AS Product, c.Name AS Company, o.*, DATE_FORMAT(o.Pickup_Date, '%m-%d-%Y') as Pickup_DateF, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF, DATE_FORMAT(o.Delivery_Real_Date, '%m-%d-%Y') as Delivery_Real_DateF
-                        //                                     FROM Orders o
-                        //                                     INNER JOIN Companies c ON c.id_companies = o.id_companies
-                        //                                     INNER JOIN Products p ON p.id_products = o.id_products
-                        //                                     WHERE o.id_companies = $value");
+                        $sql = "SELECT p.Name AS Product, c.Name AS Company, o.*, DATE_FORMAT(o.Pickup_Date, '%m-%d-%Y') as Pickup_DateF, DATE_FORMAT(o.Delivery_Date, '%m-%d-%Y') as Delivery_DateF, DATE_FORMAT(o.Delivery_Real_Date, '%m-%d-%Y') as Delivery_Real_DateF
+                                FROM Orders o
+                                INNER JOIN Companies c ON c.id_companies = o.id_companies
+                                INNER JOIN Products p ON p.id_products = o.id_products
+                                WHERE o.id_companies = $value AND DATE(o.Pickup_Date) BETWEEN '{$fechas['fecha1']}' AND '{$fechas['fecha2']}' AND o.active = 1";
                     }
                 }
                 break;
         }
+        $stmt = Conexion::conectar()->prepare($sql);
 
         $stmt->execute();
 
@@ -428,7 +432,7 @@ class OrdersModel
     static public function mdlNewOrder($datos)
     {
         $conexion = Conexion::conectar();
-        $stmt = $conexion->prepare("INSERT INTO Orders (id_companies, id_products, Weight_Each_Bag, Total_Bags, Total_Skids, Customer_PO, Arrange_Pickup, From_Release, Pickup_Date, id_bol, Delivery_Terms, Delivery_From_Name, Delivery_Address, Delivery_Address2, Delivery_Phone, Delivery_Contact, Delivery_City, Delivery_ZipCode, Delivery_Date, Delivery_Real_Date, Delivery_Destination_Name, Delivery_Destination_Address, Delivery_Destination_Address2, Delivery_Destination_Phone, Delivery_Destination_Contact, Delivery_Destination_City, Delivery_Destination_ZipCode, Delivery_Destination_Confirmed_Trucking_Charge, Delivery_Destination_Comments, audit_user) VALUES
+        $stmt = $conexion->prepare("INSERT INTO Orders (id_companies, id_products, Weight_Each_Bag, Total_Bags, Total_Skids, Customer_PO, Arrange_Pickup, From_Release, Pickup_Date, PO_Reference, Delivery_Terms, Delivery_From_Name, Delivery_Address, Delivery_Address2, Delivery_Phone, Delivery_Contact, Delivery_City, Delivery_ZipCode, Delivery_Date, Delivery_Real_Date, Delivery_Destination_Name, Delivery_Destination_Address, Delivery_Destination_Address2, Delivery_Destination_Phone, Delivery_Destination_Contact, Delivery_Destination_City, Delivery_Destination_ZipCode, Delivery_Destination_Confirmed_Trucking_Charge, Delivery_Destination_Comments, audit_user) VALUES
                                         (:id_companies, :id_products, :Weight_Each_Bag, :Total_Bags, :Total_Skids, :Customer_PO, :Arrange_Pickup, :From_Release, :Pickup_Date, :PO_Reference, :Delivery_Terms, :Delivery_From_Name, :Delivery_Address, :Delivery_Address2, :Delivery_Phone, :Delivery_Contact, :Delivery_City, :Delivery_ZipCode, :Delivery_Date, :Delivery_Real_Date, :Delivery_Destination_Name, :Delivery_Destination_Address, :Delivery_Destination_Address2, :Delivery_Destination_Phone, :Delivery_Destination_Contact, :Delivery_Destination_City, :Delivery_Destination_ZipCode, :Delivery_Destination_Confirmed_Trucking_Charge, :Delivery_Destination_Comments, :audit_user)");
 
         $stmt->bindParam(":id_companies", $datos['id_companies'], PDO::PARAM_INT);
@@ -669,7 +673,7 @@ class BOLModel
     ===================================================*/
     static public function mdlTablaBOL($bolreference)
     {
-        $stmt = Conexion::conectar()->prepare("SELECT b.id_bol, o.PO_Reference, o.Customer_PO, b.Lot, b.RefC, f.Name AS Cfrom, t.Name AS Cto, b.Shippingdate, b.Carrier, b.Pallets, b.Bags, p.Description, b.Weight
+        $stmt = Conexion::conectar()->prepare("SELECT b.id_bol, o.PO_Reference, o.Customer_PO, b.Lot, b.RefC, f.Name AS Cfrom, t.Name AS Cto, b.Shippingdate, b.Carrier, b.Pallets, b.Bags, p.Description, b.Weight, b.Consecutive
                                                     FROM Orders o
                                                     INNER JOIN BOL b ON b.PO_Reference = o.PO_Reference
                                                     INNER JOIN Companies f ON f.id_companies = b.`From`
@@ -694,8 +698,8 @@ class BOLModel
     {
         $conexion = Conexion::conectar();
         $stmt = $conexion->prepare("INSERT INTO BOL 
-                                    (PO_Reference, Lot, RefC, `FROM`, `TO`, Shippingdate, Carrier, Pallets, Bags, Weight) VALUES 
-                                    (:bolReference, :lot, :refC, :fromId, :toId, :shippingDate, :carrier, :pallets, :bags, :weight)");
+                                    (PO_Reference, Lot, RefC, `FROM`, `TO`, Shippingdate, Carrier, Pallets, Bags, Weight, Consecutive) VALUES 
+                                    (:bolReference, :lot, :refC, :fromId, :toId, :shippingDate, :carrier, :pallets, :bags, :weight, :consecutive)");
 
         $stmt->bindParam(":bolReference", $datos['bolReference'], PDO::PARAM_STR);
         $stmt->bindParam(":lot", $datos['lot'], PDO::PARAM_STR);
@@ -706,7 +710,8 @@ class BOLModel
         $stmt->bindParam(":carrier", $datos['carrier'], PDO::PARAM_STR);
         $stmt->bindParam(":pallets", $datos['pallets'], PDO::PARAM_INT);
         $stmt->bindParam(":bags", $datos['bags'], PDO::PARAM_INT);
-        $stmt->bindParam(":weight", $datos['weight'], PDO::PARAM_INT);
+        $stmt->bindParam(":weight", $datos['weight'], PDO::PARAM_STR);
+        $stmt->bindParam(":consecutive", $datos['consecutive'], PDO::PARAM_STR);
 
         if ($stmt->execute()) {
             $id = $conexion->lastInsertId();
@@ -745,7 +750,7 @@ class BOLModel
     ===================================================*/
     static public function mdlBOLPosicion($id_bol)
     {
-        $stmt = Conexion::conectar()->prepare("SELECT b.id_bol, o.PO_Reference, o.Customer_PO, b.Lot, b.RefC, f.Name AS Cfrom, t.Name AS Cto, b.Shippingdate, DATE_FORMAT(b.Shippingdate, '%m/%d/%Y') as ShippingdateFormat, b.Carrier, b.Pallets, b.Bags, p.Description, b.Weight, b.`From`, b.`To`
+        $stmt = Conexion::conectar()->prepare("SELECT b.id_bol, o.PO_Reference, o.Customer_PO, b.Lot, b.RefC, f.Name AS Cfrom, t.Name AS Cto, b.Shippingdate, DATE_FORMAT(b.Shippingdate, '%m/%d/%Y') as ShippingdateFormat, b.Carrier, b.Pallets, b.Bags, p.Description, b.Weight, b.`From`, b.`To`, b.Consecutive
                                                 FROM Orders o
                                                 INNER JOIN BOL b ON b.PO_Reference = o.PO_Reference
                                                 INNER JOIN Companies f ON f.id_companies = b.`From`

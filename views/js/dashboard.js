@@ -14,7 +14,6 @@ $(document).ready(function () {
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    console.log(response);
                     var labelsfromJson = Array();
                     var datafromJson = Array();
                     for (let index = 0; index < response.length; index++) {

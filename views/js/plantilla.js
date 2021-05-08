@@ -10,7 +10,6 @@ var dominioApp = protocolo + "://" + window.document.domain;
 
 console.log(dominioApp);
 
-
 /* ===================================================
       FUNCION PARA VISUALIZAR UN PDF
     ===================================================*/
@@ -133,7 +132,7 @@ function VisualizarPDF(ruta) {
             icon: 'warning',
             showConfirmButton: true,
             text: 'There was a problem trying to read the document',
-            confirmButtonText: 'Cerrar',
+            confirmButtonText: 'Close',
             allowOutsideClick: false,
         }).then((result) => {
             if (result.value) {
@@ -165,6 +164,7 @@ $(document).on("click", ".btn-docs", function () {
     $("#frmSubirDocumento").addClass("d-none");
     $("#btnGuardarArchivo").addClass("d-none");
     $("#btnDescargarArchivo").addClass("d-none");
+    $("#btnDeleteArchivo").addClass("d-none");
 
 
     // Cambiar valor de hidden input
@@ -198,6 +198,8 @@ $(document).on("click", ".btn-docs", function () {
                 }
                 // Mostrar boton para descargar el archivo
                 $("#btnDescargarArchivo").removeClass("d-none");
+                // Mostrar boton para eliminar el archivo
+                $("#btnDeleteArchivo").removeClass("d-none");
             }
             // NO HAY DOCUMENTO, POR TANTO SE MUESTRA EL FORMULARIO PARA SUBIR UNO
             else {
@@ -214,7 +216,7 @@ $(document).on("click", ".btn-docs", function () {
 $(document).on("click", "#btnDescargarArchivo", function () {
     var idorder = $(".idorder").first().val();
     var tipodoc = $(".tipodoc").first().val();
-    
+
     var datos = new FormData();
     datos.append('DownloadFile', "ok");
     datos.append('idorder', idorder);
@@ -233,5 +235,55 @@ $(document).on("click", "#btnDescargarArchivo", function () {
             window.open(url, '_blank');
         }
     });
-    
+
+});
+
+/* ===================================================
+  CLICK EN ELIMINAR ARCHIVO
+===================================================*/
+$(document).on("click", "#btnDeleteArchivo", function () {
+    var idorder = $(".idorder").first().val();
+    var tipodoc = $(".tipodoc").first().val();
+
+    // Pedir confirmación para eliminar
+    Swal.fire({
+        icon: 'warning',
+        showConfirmButton: true,
+        showCancelButton: true,
+        text: 'Are you sure to delete this document?',
+        confirmButtonText: 'Confirm',
+        cancelButtonText: 'Close',
+        confirmButtonColor: '#d9534f',
+        cancelButtonColor: '#0275d8'
+    }).then((result) => {
+        if (result.value) {
+            var datos = new FormData();
+            datos.append('DeleteFile', "ok");
+            datos.append('idorder', idorder);
+            datos.append('tipodoc', tipodoc);
+            $.ajax({
+                type: 'post',
+                url: 'ajax/operations.ajax.php',
+                data: datos,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response == "ok") {
+                        //Esconder otros modals
+                        $('.modal').modal('hide') // closes all active pop ups.
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops, there was a problem, please try again later',
+                            showConfirmButton: true,
+                            confirmButtonText: 'Close',
+                            closeOnConfirm: false
+                        })
+
+                    }
+                }
+            });
+        }
+    });
 });

@@ -352,25 +352,6 @@ if (window.location.href.includes("operations-products")) {
 if (window.location.href.includes("orders") && !window.location.href.includes("c-orders") && !window.location.href.includes("c-shippedorders")) {
     $(document).ready(function () {
         /* ===================================================
-          ? PRUEBA AJAX
-        ===================================================*/
-        // var datos = new FormData();
-        // datos.append('TablaOrders', "ok");
-        // datos.append('fecha1', "2020-12-01");
-        // datos.append('fecha2', "2020-12-31");
-        // $.ajax({
-        //     type: 'post',
-        //     url: 'ajax/operations.ajax.php',
-        //     data: datos,
-        //     dataType: 'json',
-        //     cache: false,
-        //     contentType: false,
-        //     processData: false,
-        //     success: function (response) {
-        //         console.log(response);
-        //     }
-        // });
-        /* ===================================================
           DATE RANGE PICKER ORDERS
         ===================================================*/
         $("#rango-fechas").daterangepicker({
@@ -471,12 +452,21 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
                 .on('error.dt', function (e, settings, techNote, message) {
                     $('.spinner-border').removeClass("spinner-border float-left").html("No results found");
                     //console.log('An error has been reported by DataTables: ', message);
+                })
+                .on('draw.dt', function () {
+                    // Cuando cargue la página y haya un valor en el campo del filtro 
+                    if (contadorFiltroPersonalizado == 0) {
+                        $(".dataTables_filter input").val($(".tablaOrders").attr("filtro"));
+                        $(".dataTables_filter input").keyup();;
+                        contadorFiltroPersonalizado++;
+                    }
                 });
         }
         //Ejecutar Funcion cuando cargue la pagina
         //let fechaInicio = moment().startOf("month").format("YYYY-MM-DD");
         let fechaInicio = moment().startOf("year").format("YYYY-MM-DD");
         let fechaFin = moment().endOf("month").format("YYYY-MM-DD");
+        var contadorFiltroPersonalizado = 0;
         mostrarDatatableOrders(fechaInicio, fechaFin);
 
         // /* ===================================================
@@ -776,12 +766,12 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
             $mainElement = $(this);
             var tipo = $(this).hasClass("from") ? "from" : "dest";
 
-            $(`.${tipo}`).each(function (i) { 
-                if (!$(this).hasClass("C-Name")){
+            $(`.${tipo}`).each(function (i) {
+                if (!$(this).hasClass("C-Name")) {
                     $(this).val("");
                 }
             });
-            
+
             var nameCompany = $(this).val();
 
             var datos = new FormData();
@@ -810,7 +800,7 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
                 }
             });
         });
-        
+
         /* ===================================================
           CLICK ON BOL BUTTON
         ===================================================*/
@@ -832,7 +822,6 @@ if (window.location.href.includes("orders") && !window.location.href.includes("c
                 }
             });
         });
-
     });
 
 }
@@ -846,7 +835,7 @@ if (window.location.href.includes("bol")) {
           DATATABLE
         ===================================================*/
         $('.tabla-bol').DataTable({
-            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todo"]]
+            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
         });
 
         /* ===================================================
@@ -872,23 +861,23 @@ if (window.location.href.includes("bol")) {
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    if (response != ""){
+                    if (response != "") {
                         // Concatenar address
                         let address = response.Address_Line1;
-                        if (response.Address_Line2 != ""){
+                        if (response.Address_Line2 != "") {
                             address += ", " + response.Address_Line2;
                         }
 
                         // Concatenar datos como ciudad, state y zip code
                         let cityStateZip = response.City + ", " + response.State_Province_Region + ", " + response.Zip_Code
-                        
+
                         // Mostrar dato en recuadro
                         $(`.${tipo}-details`).html(`<p class="text-monospace">${address}</p>
                                                     <p class="text-monospace">${cityStateZip}</p>`);
                     }
                 }
             });
-            
+
         });
 
         /* ===================================================
@@ -927,7 +916,7 @@ if (window.location.href.includes("bol")) {
         ===================================================*/
         $(document).on("click", ".btn-deleteBOL", function () {
             var id_bol = $(this).attr("id_bol");
-            
+
             Swal.fire({
                 html:
                     `

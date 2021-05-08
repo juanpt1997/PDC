@@ -70,7 +70,7 @@ class MYPDF extends TCPDF
                     
                     <tr>
                         <th style="color:#000 ;font-weight:bold;">BOL #</th>
-                        <th colspan="2">' . $info['PO_Reference'] . '</th>
+                        <th colspan="2">' . $info['PO_Reference'] . $info['Consecutive'] . '</th>
                     </tr>
                     <tr>
                         <th style="color:#000 ;font-weight:bold;">PO. REF #</th>
@@ -126,7 +126,7 @@ class PdfBOL
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('PDC');
-        $pdf->SetTitle($info['PO_Reference']);
+        $pdf->SetTitle($info['PO_Reference'] . $info['Consecutive']);
         $pdf->SetSubject('TCPDF Tutorial');
         $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
@@ -373,7 +373,7 @@ class PdfBOL
 
         # TABLA
         $tabla = '
-                <table cellspacing="0" cellpadding="2" border="1" style="width: 30%;">
+                <table cellspacing="0" cellpadding="2" border="1" style="width: 45%;">
                     
                     <tr>
                         <th style="color:#000 ;font-weight:bold;">CARRIER SIG</th>
@@ -398,7 +398,7 @@ class PdfBOL
             CUSTOMER SIG, NAME, DATE
         ===================================================*/
         # POSICION DEL EJE X & Y 
-        $pdf->SetXY(90, 140);
+        $pdf->SetXY(110, 140);
         $pdf->SetFont('helvetica', 'B', '12');
 
         # TABLA
@@ -521,7 +521,7 @@ class PdfBOL
 
         // Close and output PDF document
         // This method has several options, check the source code documentation for more information.
-        $pdf->Output($info['PO_Reference'], 'I');
+        $pdf->Output($info['PO_Reference'] . $info['Consecutive'], 'I');
 
         //============================================================+
         // END OF FILE

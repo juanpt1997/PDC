@@ -6,6 +6,7 @@
 
 <?php
 //$Orders = OrdersController::ctrShowOrders($_SESSION['idCompany'], null, null);
+$AllowedProducts = CompaniesController::ctrAllowedProducts($_SESSION['idCompany']);
 ?>
 
 <!-- Content Wrapper. Contains page content -->
@@ -60,6 +61,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <a href="c-neworder" type="button" class="btn btn-sm btn-info float-left">Place New Order</a>
+                            <!-- <a href="completed_orders.html" class="btn btn-sm btn-success float-right">Delivered Orders</a> -->
+                            <button class="btn btn-sm btn-primary float-right" type="button" data-toggle="modal" data-target="#modal-c-productsAllowed">Products</button>
+                        </div>
                         <!-- /.card-header -->
                         <div class="card-body">
                             <div class="table-responsive tablaOrders">
@@ -83,15 +89,13 @@
                                     </thead>
                                     <tbody>
                                     </tbody>
-                                    
+
                                 </table>
                             </div>
                             <!-- /.table-responsive -->
                         </div>
                         <!-- /.card-body -->
                         <div class="card-footer clearfix">
-                            <a href="c-neworder" type="button" class="btn btn-sm btn-info float-left">Place New Order</a>
-                            <!-- <a href="completed_orders.html" class="btn btn-sm btn-success float-right">Delivered Orders</a> -->
 
                         </div>
                         <!-- /.card-footer -->
@@ -561,3 +565,51 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+
+<!-- ===================================================
+    MODAL SEE TABLE WITH PRODUCTS ALLOWED
+=================================================== -->
+<div id="modal-c-productsAllowed" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="my-modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="my-modal-title">Products</h5>
+                <button class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-light table-sm table-bordered table-striped tablaProductsAllowed w-100">
+                        <thead class="text-center">
+                            <tr>
+                                <td>#</td>
+                                <td>Name</td>
+                                <td>Item</td>
+                                <td>Weight</td>
+                                <td>Unit</td>
+                                <td>Price</td>
+                                <td>Image</td>
+                                <td>Description</td>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            <?php foreach ($AllowedProducts as $key => $value) : ?>
+                                <tr>
+                                    <td><?= $value['id_products'] ?></td>
+                                    <td><?= $value['Name'] ?></td>
+                                    <td><?= $value['Reference'] ?></td>
+                                    <td><?= $value['Weight'] ?></td>
+                                    <td><?= $value['Unit'] ?></td>
+                                    <td><?= $value['Price'] ?></td>
+                                    <td><img class="img-thumbnail img-fluid btn-imgproduct" idproduct="<?= $value['id_products'] ?>" src="<?= "." . $value['Image'] ?>" width="100" alt="" style="cursor: pointer;" data-target="#modal-imgproduct" data-toggle="modal"></td>
+                                    <td class="text-sm" style="max-width: 150px"><?= $value['Description'] ?></td>
+                                </tr>
+                            <?php endforeach ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

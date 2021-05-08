@@ -120,17 +120,17 @@
 				<?php endif ?>
 
 
-
-  				<li class="nav-header">EXTERNAL LINKS</li>
-  				<li class="nav-item">
-  					<a href="#" class="nav-link">
-  						<i class="nav-icon fas fa-tachometer-alt"></i>
-  						<p>
-  							Monitor 1
-  						</p>
-  					</a>
-
-  				</li>
+				<?php if (array_search('OPERATIONS', $_SESSION['options'])) : ?>
+					<li class="nav-header">EXTERNAL LINKS</li>
+					<li class="nav-item">
+						<a href="tv" class="nav-link" target="_blank">
+							<i class="nav-icon fas fa-tachometer-alt"></i>
+							<p>
+								Monitor
+							</p>
+						</a>
+					</li>
+				<?php endif ?>
 
 
   			</ul>

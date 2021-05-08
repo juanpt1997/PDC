@@ -4,7 +4,7 @@ if (window.location.href.includes("users")) {
           DATATABLE
         ===================================================*/
         $('.tablaUsuarios').DataTable({
-            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todo"]]
+            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
         });
 
         /*================================================ 
@@ -72,7 +72,7 @@ if (window.location.href.includes("users")) {
                             icon: 'success',
                             title: '¡Password has been reseted successfully!',
                             showConfirmButton: true,
-                            confirmButtonText: 'Cerrar',
+                            confirmButtonText: 'Close',
                         });
                     }
                     else {
@@ -80,7 +80,7 @@ if (window.location.href.includes("users")) {
                             icon: 'error',
                             title: '¡There was a problem, please try again!',
                             showConfirmButton: true,
-                            confirmButtonText: 'Cerrar',
+                            confirmButtonText: 'Close',
                         });
                     }
                 }

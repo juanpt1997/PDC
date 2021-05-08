@@ -241,7 +241,7 @@ class UsersController
 								icon: 'success',
 								title: '¡User created successfully!',					
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								
 							}).then((result)=>{
 
@@ -259,7 +259,7 @@ class UsersController
 								icon: 'error',
 								title: 'There was a problem, please check your connection or maybe there is already a user with the same DNI or email',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								closeOnConfirm: false
 								
 							})
@@ -273,7 +273,7 @@ class UsersController
 						icon: 'error',
 						title: '¡The user cannot be empty or carry special characters!',						
 						showConfirmButton: true,
-						confirmButtonText: 'Cerrar',
+						confirmButtonText: 'Close',
 						closeOnConfirm: false
 						
 					}).then((result)=>{
@@ -344,7 +344,7 @@ class UsersController
 								icon: 'success',
 								title: '¡User modified successfully!',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								
 							}).then((result)=>{
 
@@ -362,7 +362,7 @@ class UsersController
 								icon: 'error',
 								title: 'There was a problem, please check your connection or maybe there is already a user with the same DNI or email',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								closeOnConfirm: false								
 							})
 						</script>
@@ -375,7 +375,7 @@ class UsersController
 						icon: 'error',
 						title: '¡The user cannot be empty or carry special characters!',						
 						showConfirmButton: true,
-						confirmButtonText: 'Cerrar',
+						confirmButtonText: 'Close',
 						closeOnConfirm: false
 						
 					}).then((result)=>{
@@ -483,7 +483,7 @@ class UsersController
 									icon: 'success',
 									title: 'Password successfully updated',						
 									showConfirmButton: true,
-									confirmButtonText: 'Cerrar',
+									confirmButtonText: 'Close',
 									allowOutsideClick: false
 									
 								}).then((result)=>{
@@ -502,7 +502,7 @@ class UsersController
 									icon: 'error',
 									title: '¡There was a problem changing the password!',						
 									showConfirmButton: true,
-									confirmButtonText: 'Cerrar',
+									confirmButtonText: 'Close',
 									closeOnConfirm: false,
 									allowOutsideClick: false
 									
@@ -523,7 +523,7 @@ class UsersController
 								icon: 'error',
 								title: '¡Passwords do not match!',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								closeOnConfirm: false,
 								allowOutsideClick: false
 								

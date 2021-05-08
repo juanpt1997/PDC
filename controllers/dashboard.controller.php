@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /* ===================================================
    CONTROLADOR DEL DASHBOARD
@@ -33,8 +33,22 @@ class DashboardController
     }
 
     /* ===================================================
-       PALLETS DELIVERED THIS MONTH
+       PALLETS DELIVERED BY RANGE OF DATES
     ===================================================*/
+    static public function ctrPalletsDelivered($fecha1, $fecha2)
+    {
+        $respuesta = DashboardModel::mdlPalletsDelivered($fecha1, $fecha2);
+        return $respuesta;
+    }
+
+    /* ===================================================
+       PALLETS NEEDED BY RANGE OF DATES
+    ===================================================*/
+    static public function ctrPalletsNeeded($fecha1, $fecha2)
+    {
+        $respuesta = DashboardModel::mdlPalletsNeeded($fecha1, $fecha2);
+        return $respuesta;
+    }
 
     /* ===================================================
        ORDERS DELIVERED THIS MONTH

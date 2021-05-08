@@ -9,6 +9,7 @@
 $NewOrdersToday = DashboardController::ctrOrdersToday();
 $OrdersInProcess = DashboardController::ctrOrdersInProcess();
 $OrdersDeliveredThisWeek = DashboardController::ctrOrdersDeliveredThisWeek();
+$PalletsDeliveredThisMonth = DashboardController::ctrPalletsDelivered(date('Y-m-01'), date('Y-m-d'));
 $DataOrdersDeliveredMonth = DashboardController::ctrChartOrdersDeliveredThisMonth();
 $OrdersShipped = DashboardController::ctrOrderShipped();
 ?>
@@ -111,7 +112,7 @@ $OrdersShipped = DashboardController::ctrOrderShipped();
                                     <div class="info-box-content">
                                         <span class="info-box-text text-uppercase">Total pallets delivered this month</span>
                                         <span class="info-box-number">
-                                            <h1>750</h1>
+                                            <h1><?= $PalletsDeliveredThisMonth ?></h1>
                                         </span>
                                     </div>
                                     <!-- /.info-box-content -->

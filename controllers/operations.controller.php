@@ -57,7 +57,7 @@ class CompaniesController
 								icon: 'success',
 								title: '¡Company successfully created!',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								allowOutsideClick: false,
 							}).then((result)=>{
 								if(result.value){
@@ -74,7 +74,7 @@ class CompaniesController
 								icon: 'error',
 								title: 'Oops, there was a problem, please try again later',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								closeOnConfirm: false
 							})
 						</script>
@@ -87,7 +87,7 @@ class CompaniesController
 								icon: 'warning',
 								title: 'some fields are empty or may have special characters',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								closeOnConfirm: false
 							})
 						</script>
@@ -150,7 +150,7 @@ class CompaniesController
 								icon: 'success',
 								title: '¡Company successfully updated!',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								allowOutsideClick: false,
 							}).then((result)=>{
 								if(result.value){
@@ -167,7 +167,7 @@ class CompaniesController
 								icon: 'error',
 								title: 'Oops, there was a problem, please try again later',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								closeOnConfirm: false
 							})
 						</script>
@@ -180,7 +180,7 @@ class CompaniesController
 								icon: 'warning',
 								title: 'some fields are empty or may have special characters',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								closeOnConfirm: false
 							})
 						</script>
@@ -249,7 +249,7 @@ class CompaniesController
 								icon: 'error',
 								title: 'Oops, there was a problem, please try again later',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								closeOnConfirm: false
 							})
 						</script>
@@ -349,7 +349,7 @@ class ProductsController
 								icon: 'success',
 								title: 'Product successfully created!',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								allowOutsideClick: false,
 							}).then((result)=>{
 								if(result.value){
@@ -366,7 +366,7 @@ class ProductsController
 								icon: 'error',
 								title: 'Oops, there was a problem, please try again later',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								closeOnConfirm: false
 							})
 						</script>
@@ -379,7 +379,7 @@ class ProductsController
 								icon: 'warning',
 								title: 'some fields are empty or may have special characters',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								closeOnConfirm: false
 							})
 						</script>
@@ -470,7 +470,7 @@ class ProductsController
 								icon: 'success',
 								title: 'Product successfully updated!',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								allowOutsideClick: false,
 							}).then((result)=>{
 								if(result.value){
@@ -487,7 +487,7 @@ class ProductsController
 								icon: 'error',
 								title: 'Oops, there was a problem, please try again later',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								closeOnConfirm: false
 							})
 						</script>
@@ -500,7 +500,7 @@ class ProductsController
 								icon: 'warning',
 								title: 'some fields are empty or may have special characters',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								closeOnConfirm: false
 							})
 						</script>
@@ -573,42 +573,59 @@ class OrdersController
                 'audit_user' => $_SESSION['user_id']
             );
 
-            $newOrder = OrdersModel::mdlNewOrder($datos);
+            # Revisar que no exista una orden previamente creada con el mismo PO_Reference
+            $validarOrden = BOLModel::mdlValidarBOL($_POST['PO_Reference']);
+            if (!is_array($validarOrden)) {
+                $newOrder = OrdersModel::mdlNewOrder($datos);
 
-            if ($newOrder != "error") {
-                $datos = array(
-                    'id_orders' => $newOrder,
-                    'Status' => 'In Process'
-                );
-                OrdersModel::mdlInsertStatusHistory($datos);
-                echo "
-						<script>
-							Swal.fire({
-								icon: 'success',
-								title: '¡Order successfully created!',						
-								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
-								allowOutsideClick: false,
-							}).then((result)=>{
-								if(result.value){
-									window.location = 'orders';
-								}
+                if ($newOrder != "error") {
+                    $datos = array(
+                        'id_orders' => $newOrder,
+                        'Status' => 'In Process'
+                    );
+                    OrdersModel::mdlInsertStatusHistory($datos);
+                    echo "
+                            <script>
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: '¡Order successfully created!',						
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'Close',
+                                    allowOutsideClick: false,
+                                }).then((result)=>{
+                                    if(result.value){
+                                        window.location = 'orders';
+                                    }
 
-							})
-						</script>
-					    ";
+                                })
+                            </script>
+                            ";
+                } else {
+
+                    echo "
+                            <script>
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops, there was a problem, please try again later',						
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'Close',
+                                    closeOnConfirm: false
+                                })
+                            </script>
+                            ";
+                }
             } else {
                 echo "
-						<script>
-							Swal.fire({
-								icon: 'error',
-								title: 'Oops, there was a problem, please try again later',						
-								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
-								closeOnConfirm: false
-							})
-						</script>
-					    ";
+                            <script>
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'An order already exists with that BOL Reference',						
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'Close',
+                                    closeOnConfirm: false
+                                })
+                            </script>
+                            ";
             }
         }
     }
@@ -661,7 +678,7 @@ class OrdersController
 								icon: 'success',
 								title: '¡Order successfully updated!',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								allowOutsideClick: false,
 							}).then((result)=>{
 								if(result.value){
@@ -679,7 +696,7 @@ class OrdersController
 								icon: 'error',
 								title: 'Oops, there was a problem, please try again later',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								closeOnConfirm: false
 							})
 						</script>
@@ -769,13 +786,17 @@ class OrdersController
                 $actualizarRutaDoc = self::ctrModificarCampo($datos);
 
                 if ($actualizarRutaDoc == "ok") {
+                    # Variable de sesión para el filtro del datatable
+                    $_SESSION['filtervalueDT'] = $_POST['idorderDoc'];
+
+                    # Mensaje de éxito
                     echo "
 						<script>
 							Swal.fire({
 								icon: 'success',
 								title: '¡Document successfully uploaded!',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								allowOutsideClick: false,
 							}).then((result)=>{
 								if(result.value){
@@ -793,7 +814,7 @@ class OrdersController
                                 icon: 'error',
                                 title: 'Oops, there was a problem, please try again later',						
                                 showConfirmButton: true,
-                                confirmButtonText: 'Cerrar',
+                                confirmButtonText: 'Close',
                                 closeOnConfirm: false
                             })
                         </script>
@@ -806,7 +827,7 @@ class OrdersController
                                 icon: 'error',
                                 title: 'Oops, there was a problem, please check your file',						
                                 showConfirmButton: true,
-                                confirmButtonText: 'Cerrar',
+                                confirmButtonText: 'Close',
                                 closeOnConfirm: false
                             })
                         </script>
@@ -870,6 +891,15 @@ class OrdersController
         //     return "File downloading failed.";
         // }
     }
+
+    /* ===================================================
+       DELETE FILE (POD OR COA)
+    ===================================================*/
+    static public function ctrDeleteFile($datos)
+    {
+        $eliminarRutaDoc = self::ctrModificarCampo($datos);
+        return $eliminarRutaDoc;
+    }
 }
 
 /* ===================================================
@@ -894,7 +924,7 @@ class BOLController
 								icon: 'error',
 								title: 'THE BOL REFERENCE DOES NOT EXIST',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								closeOnConfirm: false
 							})
 						</script>
@@ -929,6 +959,7 @@ class BOLController
         if (isset($_POST['bolReference'])) {
             $datos = array(
                 'bolReference' => $_POST['bolReference'],
+                'consecutive' => $_POST['consecutive'],
                 'lot' => $_POST['lot'],
                 'refC' => $_POST['refC'],
                 'fromId' => $_POST['fromId'],
@@ -941,7 +972,7 @@ class BOLController
             );
             $agregarBOL = BOLModel::mdlAgregarBOL($datos);
             if ($agregarBOL != "error") {
-                if (!isset($_SESSION['bol_reference'])){
+                if (!isset($_SESSION['bol_reference'])) {
                     $_SESSION['bol_reference'] = $_POST['bolReference'];
                 }
                 echo "
@@ -950,7 +981,7 @@ class BOLController
 								icon: 'success',
 								title: '¡BOL successfully added!',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								allowOutsideClick: false,
 							}).then((result)=>{
 								if(result.value){
@@ -967,7 +998,7 @@ class BOLController
 								icon: 'error',
 								title: 'Oops, there was a problem, please try again later',						
 								showConfirmButton: true,
-								confirmButtonText: 'Cerrar',
+								confirmButtonText: 'Close',
 								closeOnConfirm: false
 							})
 						</script>
@@ -993,5 +1024,4 @@ class BOLController
         $response = BOLModel::mdlBOLPosicion($id_bol);
         return $response;
     }
-
 }

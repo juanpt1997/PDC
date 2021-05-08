@@ -2,12 +2,13 @@
 /* ===================================================
    SESION
 ===================================================*/
-$lifetime = (60 * 60 * 24 * 1); //Duracion de la session_cookie
+$lifetime = (60 * 60 * 8 * 1000); //Duracion de la session_cookie -  horas
 // session_set_cookie_params($lifetime, $path = $_SERVER["DOCUMENT_ROOT"] . '', $domain = $_SERVER['HTTP_HOST'], $secure = false, $httponly = false);
+session_set_cookie_params($lifetime,"/");
 session_start();
 
 # BORRAR VARIABLE DE SESIÓN DE BOL_REFERENCE PARA CUALQUIER PÁGINA DISTINTA A BILL OF LADING
-if (isset($_GET['page']) && $_GET['page'] != "bol"){
+if (isset($_GET['page']) && $_GET['page'] != "bol") {
     unset($_SESSION['bol_reference']);
 }
 
@@ -102,90 +103,116 @@ if (isset($_GET['page']) && $_GET['page'] != "bol"){
     <script src="views/js/companies.js?v=<?= time() ?>"></script>
     <script src="views/js/users.js?v=<?= time() ?>"></script>
     <script src="views/js/dashboard.js?v=<?= time() ?>"></script>
+    <script src="views/js/tv.js?v=<?= time() ?>"></script>
 
 
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed sidebar-collapse">
+<!-- ===================================================
+    CAPTURAR PAGE EN LA QUE SE ENCUENTRA
+=================================================== -->
+<?php
+if (isset($_GET['page'])) {
+    $rutaUrl = explode("/", $_GET['page']);
 
-    <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == "ok") : ?>
-        <div class="wrapper">
+    //$ruta = $_GET['ruta'];
+    $ruta = $rutaUrl[0];
+}else{
+    $ruta = "";
+}
+?>
 
-            <!-- =================================================== NAVBAR (Header)=================================================== -->
-            <?php include('includes/header.php'); ?>
+<!-- ===================================================
+    REVISAR SI ES UN TELEVISOR
+=================================================== -->
+<?php if ($ruta == "tv") : ?>
+    <body>
+        <?php include("modulos/tvs/{$ruta}.php"); ?>
+    </body>
+<?php else : ?>
+    <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed sidebar-collapse">
 
-            <!-- =================================================== MAIN SIDE BAR CONTAINER (menu) =================================================== -->
-            <?php include('includes/menu.php'); ?>
+        <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == "ok") : ?>
+            <div class="wrapper">
 
-            <!-- =================================================== CONTENT(contenido) =================================================== -->
-            <?php
-            if (isset($_GET['page'])) {
-                $rutaUrl = explode("/", $_GET['page']);
+                <!-- =================================================== NAVBAR (Header)=================================================== -->
+                <?php include('includes/header.php'); ?>
 
-                //$ruta = $_GET['ruta'];
-                $ruta = $rutaUrl[0];
+                <!-- =================================================== MAIN SIDE BAR CONTAINER (menu) =================================================== -->
+                <?php include('includes/menu.php'); ?>
 
-                if (
-                    $ruta == "logout"
-                ) {
-                    include "modulos/{$ruta}.php";
-                } else if ( # Operations
-                    $ruta == "operations-index" ||
-                    $ruta == "operations-companies" ||
-                    $ruta == "operations-products" ||
-                    $ruta == "orders" ||
-                    $ruta == "bol"
-                ) {
-                    include "modulos/operations/" . $ruta . ".php";
-                } else if ( # Companies
-                    $ruta == "c-neworder" ||
-                    $ruta == "c-orders" ||
-                    $ruta == "c-shippedorders"
-                ) {
-                    include "modulos/companies/" . $ruta . ".php";
-                } else if ( # Users
-                    $ruta == "users"
-                ) {
-                    include "modulos/users/" . $ruta . ".php";
-                } else { # Página no válida
-                    include "includes/error404.php";
+                <!-- =================================================== CONTENT(contenido) =================================================== -->
+                <?php
+                if (isset($_GET['page'])) {
+                    /* $rutaUrl = explode("/", $_GET['page']);
+
+                    //$ruta = $_GET['ruta'];
+                    $ruta = $rutaUrl[0]; */
+
+                    if (
+                        $ruta == "logout"
+                    ) {
+                        include "modulos/{$ruta}.php";
+                    } else if ( # Operations
+                        $ruta == "operations-index" ||
+                        $ruta == "operations-companies" ||
+                        $ruta == "operations-products" ||
+                        $ruta == "orders" ||
+                        $ruta == "bol"
+                    ) {
+                        include "modulos/operations/" . $ruta . ".php";
+                    } else if ( # Companies
+                        $ruta == "c-neworder" ||
+                        $ruta == "c-orders" ||
+                        $ruta == "c-shippedorders"
+                    ) {
+                        include "modulos/companies/" . $ruta . ".php";
+                    } else if ( # Users
+                        $ruta == "users"
+                    ) {
+                        include "modulos/users/" . $ruta . ".php";
+                    } else { # Página no válida
+                        include "includes/error404.php";
+                    }
+                } else {
+                    include "modulos/operations/operations-index.php";
                 }
-            } else {
-                include "modulos/operations/operations-index.php";
-            }
-            ?>
+                ?>
 
-            <!-- =================================================== MAIN FOOTER =================================================== -->
-            <?php include('includes/modals.php'); ?>
-            <?php include('includes/footer.php'); ?>
+                <!-- =================================================== MAIN FOOTER =================================================== -->
+                <?php include('includes/modals.php'); ?>
+                <?php include('includes/footer.php'); ?>
 
-        </div>
-        <!-- ./wrapper -->
-    <?php else : ?>
-        <div class="hold-transition login-page">
-            <?php
-            if (isset($_GET['page'])) {
-                $rutaUrl = explode("/", $_GET['page']);
+            </div>
+            <!-- ./wrapper -->
+        <?php else : ?>
+            <div class="hold-transition login-page">
+                <?php
+                if (isset($_GET['page'])) {
+                    $rutaUrl = explode("/", $_GET['page']);
 
-                //$ruta = $_GET['ruta'];
-                $ruta = $rutaUrl[0];
+                    //$ruta = $_GET['ruta'];
+                    $ruta = $rutaUrl[0];
 
-                if (
-                    $ruta == "operations-login" ||
-                    $ruta == "clients-login"
-                ) {
-                    include "modulos/login/" . $ruta . ".php";
+                    if (
+                        $ruta == "operations-login" ||
+                        $ruta == "clients-login"
+                    ) {
+                        include "modulos/login/" . $ruta . ".php";
+                    } else {
+                        include('modulos/login/login.php');
+                    }
                 } else {
                     include('modulos/login/login.php');
                 }
-            } else {
-                include('modulos/login/login.php');
-            }
 
-            ?>
-        </div>
-    <?php endif ?>
+                ?>
+            </div>
+        <?php endif ?>
 
-</body>
+    </body>
+<?php endif ?>
+
+
 
 </html>

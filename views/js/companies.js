@@ -216,7 +216,7 @@ if (window.location.href.includes("c-orders") || window.location.href.includes("
                                     icon: 'success',
                                     title: '¡Status updated successfully!',
                                     showConfirmButton: true,
-                                    confirmButtonText: 'Cerrar',
+                                    confirmButtonText: 'Close',
                                     allowOutsideClick: false,
                                 }).then((result) => {
                                     if (result.value) {
@@ -229,7 +229,7 @@ if (window.location.href.includes("c-orders") || window.location.href.includes("
                                     icon: 'error',
                                     title: 'Oops, there was a problem, please try again later',
                                     showConfirmButton: true,
-                                    confirmButtonText: 'Cerrar',
+                                    confirmButtonText: 'Close',
                                     closeOnConfirm: false
                                 })
                             }
@@ -316,6 +316,13 @@ if (window.location.href.includes("c-orders") || window.location.href.includes("
                     }
                 }
             });
+        });
+
+        /* ===================================================
+          INICIALIZAR DATATABLE PRODUCTS ALLOWED
+        ===================================================*/
+        $('.tablaProductsAllowed').DataTable({
+            "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]]
         });
     });
 }
