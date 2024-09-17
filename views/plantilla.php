@@ -1,25 +1,10 @@
 <?php
-/* ===================================================
-   SESION
-===================================================*/
-$lifetime = (60 * 60 * 8 * 1000); //Duracion de la session_cookie -  horas
-// session_set_cookie_params($lifetime, $path = $_SERVER["DOCUMENT_ROOT"] . '', $domain = $_SERVER['HTTP_HOST'], $secure = false, $httponly = false);
-session_set_cookie_params($lifetime,"/");
-session_start();
-
 # BORRAR VARIABLE DE SESIÓN DE BOL_REFERENCE PARA CUALQUIER PÁGINA DISTINTA A BILL OF LADING
 if (isset($_GET['page']) && $_GET['page'] != "bol") {
     unset($_SESSION['bol_reference']);
 }
-
-// if (isset($_SERVER['HTTPS'])) {
-//     $dominioApp = 'https://' . $_SERVER['SERVER_NAME'];
-// } else {
-//     $dominioApp = 'http://' . $_SERVER['SERVER_NAME'];
-// }
-
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -117,7 +102,7 @@ if (isset($_GET['page'])) {
 
     //$ruta = $_GET['ruta'];
     $ruta = $rutaUrl[0];
-}else{
+} else {
     $ruta = "";
 }
 ?>
@@ -126,10 +111,12 @@ if (isset($_GET['page'])) {
     REVISAR SI ES UN TELEVISOR
 =================================================== -->
 <?php if ($ruta == "tv") : ?>
+
     <body>
         <?php include("modulos/tvs/{$ruta}.php"); ?>
     </body>
 <?php else : ?>
+
     <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed sidebar-collapse">
 
         <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == "ok") : ?>

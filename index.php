@@ -1,5 +1,19 @@
 <?php
 /* ===================================================
+   SESION
+===================================================*/
+$lifetime = (60 * 60 * 8); //Duracion de la session_cookie -  horas
+// session_set_cookie_params($lifetime, $path = $_SERVER["DOCUMENT_ROOT"] . '', $domain = $_SERVER['HTTP_HOST'], $secure = false, $httponly = false);
+session_set_cookie_params($lifetime,"/");
+session_start();
+
+// if (isset($_SERVER['HTTPS'])) {
+//     $dominioApp = 'https://' . $_SERVER['SERVER_NAME'];
+// } else {
+//     $dominioApp = 'http://' . $_SERVER['SERVER_NAME'];
+// }
+
+/* ===================================================
        INDEX: We will show the responses of the views to the user, also we will send the different actions that the user have to the controller
 
     ===================================================*/
